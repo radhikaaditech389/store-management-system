@@ -5,48 +5,43 @@ import DataTable from "react-data-table-component";
 import axios from "axios";
 import { getCookie } from "../utils/cookies";
 
-const Branch = () => {
+const Category = () => {
   const [search, setSearch] = useState("");
-  const [branches, setBranches] = useState([]);
-  const [filteredData, setFilteredData] = useState(branches);
-  const user_data = JSON.parse(localStorage.getItem("user_detail"))
+  const [categories, setCategories] = useState([]);
+  const [filteredData, setFilteredData] = useState(categories);
+  const user_data = JSON.parse(localStorage.getItem("user_detail"));
 
-    const fetchBranch = async () => {
+  const fetchCategory = async () => {
     try {
-      
       await axios.get("http://localhost:8000/sanctum/csrf-cookie", {
-      withCredentials: true,
-    });
-    const response = await axios.get(
-      "http://localhost:8000/api/branches",
-      {
+        withCredentials: true,
+      });
+      const response = await axios.get("http://localhost:8000/api/categories", {
         headers: {
           Accept: "application/json",
           Authorization: `Bearer ${user_data.token}`,
           "X-XSRF-TOKEN": getCookie("XSRF-TOKEN"),
         },
         withCredentials: true,
-      }
-    );
-
-      setBranches(response.data.data);
+      });
+      setCategories(response.data.categories);
     } catch (error) {
       console.error("Error fetching categories:", error);
     }
   };
   useEffect(() => {
-    fetchBranch();
+    fetchCategory();
   }, []);
 
   const columns = [
-     {
+    {
       name: "Id",
       selector: (row) => row.id,
       sortable: true,
     },
     {
       name: "Store Name",
-      selector: (row) => row.store.name,
+      selector: (row) => row?.store?.name,
       sortable: true,
     },
     {
@@ -55,13 +50,8 @@ const Branch = () => {
       sortable: true,
     },
     {
-      name: "Address",
-      selector: (row) => row.address,
-      sortable: true,
-    },
-    {
-      name: "Phone",
-      selector: (row) => row.phone,
+      name: "Description",
+      selector: (row) => row.description,
       sortable: true,
     },
     {
@@ -82,25 +72,8 @@ const Branch = () => {
     },
   ];
 
-  const fetchBranches = async () => {
-    try {
-      const response = await axios.get("http://localhost:8000/api/branches", {
-        headers: {
-          accept: "application/json",
-           Authorization: `Bearer ${user_data.token}`,
-        },
-        withCredentials: true,
-      });     
-      setBranches(response.data.data);
-    } catch (error) {
-      console.error("Error fetching categories:", error);
-    }
-  };
   useEffect(() => {
-    fetchBranches();
-  }, []);
-  useEffect(() => {
-    const result = branches.filter((item) => {
+    const result = categories.filter((item) => {
       return Object.values(item)
         .join(" ")
         .toLowerCase()
@@ -108,14 +81,14 @@ const Branch = () => {
     });
 
     setFilteredData(result);
-  }, [search, branches]);
+  }, [search, categories]);
   return (
     <Layout>
       <div className="main-content-inner">
         {/* <!-- main-content-wrap --> */}
         <div className="main-content-wrap">
           <div className="flex items-center flex-wrap justify-between gap20 mb-27">
-            <h3>All Branch</h3>
+            <h3>All Category</h3>
             <ul className="breadcrumbs flex items-center flex-wrap justify-start gap10">
               <li>
                 <Link to="/">
@@ -127,14 +100,14 @@ const Branch = () => {
               </li>
               <li>
                 <Link to="#">
-                  <div className="text-tiny">User</div>
+                  <div className="text-tiny">Category</div>
                 </Link>
               </li>
               <li>
                 <i className="icon-chevron-right"></i>
               </li>
               <li>
-                <div className="text-tiny">All User</div>
+                <div className="text-tiny">All Category</div>
               </li>
             </ul>
           </div>
@@ -168,7 +141,6 @@ const Branch = () => {
               }}
             />
             <div className="divider"></div>
-         
           </div>
           {/* <!-- /all-user --> */}
         </div>
@@ -177,4 +149,4 @@ const Branch = () => {
     </Layout>
   );
 };
-export default Branch;
+export default Category;

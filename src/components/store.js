@@ -3,10 +3,12 @@ import DataTable from "react-data-table-component";
 import { Link } from "react-router-dom";
 import axios from "axios";
 import Layout from "./layout";
+import { getCookie } from "../utils/cookies";
 const Store = () => {
   const [stores, setStores] = useState([]);
   const [search, setSearch] = useState("");
   const [filteredData, setFilteredData] = useState(stores);
+  const user_data = JSON.parse(localStorage.getItem("user_detail"))
 
   const columns = [
     {
@@ -49,7 +51,13 @@ const Store = () => {
 
   const fetchStore = async () => {
     try {
-      const response = await axios.get("http://localhost:8000/api/stores");
+      const response = await axios.get("http://localhost:8000/api/stores", {
+        headers: {
+          accept: "application/json",
+           Authorization: `Bearer ${user_data.token}`,
+        },
+        withCredentials: true,
+      });
       setStores(response.data.data);
     } catch (error) {
       console.error("Error fetching categories:", error);
@@ -71,8 +79,6 @@ const Store = () => {
 
   return (
     <Layout>
-      <div className="main-content">
-        {/* <!-- main-content-wrap --> */}
         <div className="main-content-inner">
           {/* <!-- main-content-wrap --> */}
           <div className="main-content-wrap">
@@ -89,14 +95,14 @@ const Store = () => {
                 </li>
                 <li>
                   <Link to="#">
-                    <div className="text-tiny">User</div>
+                    <div className="text-tiny">Store</div>
                   </Link>
                 </li>
                 <li>
                   <i className="icon-chevron-right"></i>
                 </li>
                 <li>
-                  <div className="text-tiny">All User</div>
+                  <div className="text-tiny">All Store</div>
                 </li>
               </ul>
             </div>
@@ -182,21 +188,6 @@ const Store = () => {
           </div>
           {/* <!-- /main-content-wrap --> */}
         </div>
-        {/* <!-- /main-content-wrap --> */}
-        {/* <!-- bottom-page --> */}
-        <div className="bottom-page">
-          <div className="body-text">Copyright © 2024 Remos. Design with</div>
-          <i className="icon-heart"></i>
-          <div className="body-text">
-            by{" "}
-            <Link to="https://themeforest.net/user/themesflat/portfolio">
-              Themesflat
-            </Link>{" "}
-            All rights reserved.
-          </div>
-        </div>
-        {/* <!-- /bottom-page --> */}
-      </div>
     </Layout>
   );
 };

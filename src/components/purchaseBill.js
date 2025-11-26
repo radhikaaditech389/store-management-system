@@ -4,10 +4,12 @@ import { Link } from "react-router-dom";
 import axios from "axios";
 import Layout from "./layout";
 import { getCookie } from "../utils/cookies";
-const Product = () => {
+const PurchaseBill = () => {
   const [products, setProducts] = useState([]);
   const [search, setSearch] = useState("");
+  const [purchaseBill, setPurchaseBill] = useState([]);
   const [filteredData, setFilteredData] = useState(products);
+  
   const user_data = JSON.parse(localStorage.getItem("user_detail"));
 
   const columns = [
@@ -17,63 +19,63 @@ const Product = () => {
       sortable: true,
     },
     {
-      name: "Store Name",
-      selector: (row) => row.store.name,
+      name: "Store Id",
+      selector: (row) => row.store_id,
       sortable: true,
     },
     {
-      name: "sku",
-      selector: (row) => row.sku,
+      name: "Branch Id",
+      selector: (row) => row.branch_id,
       sortable: true,
     },
     {
-      name: "barcode",
-      selector: (row) => row.barcode,
+      name: "Supplier Id",
+      selector: (row) => row.supplier_id,
       sortable: true,
     },
     {
-      name: "name",
-      selector: (row) => row.name,
+      name: "Bill No",
+      selector: (row) => row.bill_no,
       sortable: true,
     },
     {
-      name: "brand Name",
-      selector: (row) => row.brand.name,
+      name: "Bill Date",
+      selector: (row) => row.bill_date,
       sortable: true,
     },
     {
-      name: "Category Name",
-      selector: (row) => row.category.name,
+      name: "taxableValue",
+      selector: (row) => row.taxable_value,
       sortable: true,
     },
     {
-      name: "Hsn Code",
-      selector: (row) => row.hsn_code,
+      name: "Cgst Amount",
+      selector: (row) => row.cgst_amount,
       sortable: true,
     },
     {
-      name: "Gst Rate Id",
-      selector: (row) => row.gst_rate_id,
+      name: "Sgst Amount",
+      selector: (row) => row.sgst_amount,
       sortable: true,
     },
     {
-      name: "mrp",
-      selector: (row) => row.mrp,
+      name: "Igst Amount",
+      selector: (row) => row.igst_amount,
       sortable: true,
     },
     {
-      name: "Selling Price",
-      selector: (row) => row.selling_price,
+      name: "Cess Amount",
+      selector: (row) => row.cess_amount,
       sortable: true,
     },
     {
-      name: "Cost Price",
-      selector: (row) => row.cost_price,
+      name: "Total Tax",
+      selector: (row) => row.total_tax,
       sortable: true,
     },
     {
-      name: "Stock",
-      selector: (row) => row.stock,
+      name: "Total Amount",
+      selector: (row) => row.total_amount,
       sortable: true,
     },
     {
@@ -94,12 +96,12 @@ const Product = () => {
     },
   ];
 
-  const fetchProduct = async () => {
+  const fetchPurchaseBill = async () => {
     try {
       await axios.get("http://localhost:8000/sanctum/csrf-cookie", {
         withCredentials: true,
       });
-      const response = await axios.get("http://127.0.0.1:8000/api/products", {
+      const response = await axios.get("http://127.0.0.1:8000/api/purchase-bill", {
         headers: {
           Accept: "application/json",
           Authorization: `Bearer ${user_data.token}`,
@@ -107,16 +109,16 @@ const Product = () => {
         },
         withCredentials: true,
       });
-      setProducts(response.data.products);
+      setPurchaseBill(response.data.data);
     } catch (error) {
       console.error("Error fetching categories:", error);
     }
   };
   useEffect(() => {
-    fetchProduct();
+    fetchPurchaseBill();
   }, []);
   useEffect(() => {
-    const result = products.filter((item) => {
+    const result = purchaseBill.filter((item) => {
       return Object.values(item)
         .join(" ")
         .toLowerCase()
@@ -124,7 +126,7 @@ const Product = () => {
     });
 
     setFilteredData(result);
-  }, [search, products]);
+  }, [search, purchaseBill]);
 
   return (
     <Layout>
@@ -132,7 +134,7 @@ const Product = () => {
         {/* <!-- main-content-wrap --> */}
         <div className="main-content-wrap">
           <div className="flex items-center flex-wrap justify-between gap20 mb-27">
-            <h3>All Product</h3>
+            <h3>All Purchase Bill</h3>
             <ul className="breadcrumbs flex items-center flex-wrap justify-start gap10">
               <li>
                 <Link to="/">
@@ -144,14 +146,14 @@ const Product = () => {
               </li>
               <li>
                 <Link to="#">
-                  <div className="text-tiny">Product</div>
+                  <div className="text-tiny">Purchase Bill</div>
                 </Link>
               </li>
               <li>
                 <i className="icon-chevron-right"></i>
               </li>
               <li>
-                <div className="text-tiny">All Product</div>
+                <div className="text-tiny">All Purchase Bill</div>
               </li>
             </ul>
           </div>
@@ -217,4 +219,4 @@ const Product = () => {
     </Layout>
   );
 };
-export default Product;
+export default PurchaseBill;

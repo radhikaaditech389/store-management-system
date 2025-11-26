@@ -25,13 +25,13 @@ const Navbar = () => {
             <div className="center-heading">Main Home</div>
             <ul className="menu-list">
               <li className="menu-item has-children active">
-                <Link to="#" className="menu-item-button">
+                <Link to="/" className="menu-item-button">
                   <div className="icon">
                     <i className="icon-grid"></i>
                   </div>
                   <div className="text">Dashboard</div>
                 </Link>
-                <ul className="sub-menu" style={{ display: "block" }}>
+                {/* <ul className="sub-menu" style={{ display: "block" }}>
                   <li className="sub-menu-item">
                     <Link to="/" className="active">
                       <div className="text">Home 01</div>
@@ -67,7 +67,7 @@ const Navbar = () => {
                       <div className="text">Home Menu Icon Default</div>
                     </Link>
                   </li>
-                </ul>
+                </ul> */}
               </li>
             </ul>
           </div>
@@ -75,61 +75,14 @@ const Navbar = () => {
             <div className="center-heading">All page</div>
             <ul className="menu-list">
               <li className="menu-item has-children">
-                <Link to="javascript:void(0);" className="menu-item-button">
-                  <div className="icon">
-                    <i className="icon-shopping-cart"></i>
-                  </div>
-                  <div className="text">Ecommerce</div>
-                </Link>
-                <ul className="sub-menu">
-                  <li className="sub-menu-item">
-                    <Link to="add-product.html" className="">
-                      <div className="text">Add Product</div>
-                    </Link>
-                  </li>
-                  <li className="sub-menu-item">
-                    <Link to="product-list.html" className="">
-                      <div className="text">Product List</div>
-                    </Link>
-                  </li>
-                  <li className="sub-menu-item">
-                    <Link to="product-detail-1.html" className="">
-                      <div className="text">Product Detail 1</div>
-                    </Link>
-                  </li>
-                  <li className="sub-menu-item">
-                    <Link to="product-detail-2.html" className="">
-                      <div className="text">Product Detail 2</div>
-                    </Link>
-                  </li>
-                  <li className="sub-menu-item">
-                    <Link to="product-detail-3.html" className="">
-                      <div className="text">Product Detail 3</div>
-                    </Link>
-                  </li>
-                </ul>
-              </li>
-              <li className="menu-item has-children">
-                <Link to="javascript:void(0);" className="menu-item-button">
+                <Link to="/category" className="menu-item-button">
                   <div className="icon">
                     <i className="icon-layers"></i>
                   </div>
-                  <div className="text">Category</div>
+                  <div className="text">Categories</div>
                 </Link>
-                <ul className="sub-menu">
-                  <li className="sub-menu-item">
-                    <Link to="category-list.html" className="">
-                      <div className="text">Category list</div>
-                    </Link>
-                  </li>
-                  <li className="sub-menu-item">
-                    <Link to="new-category.html" className="">
-                      <div className="text">New category</div>
-                    </Link>
-                  </li>
-                </ul>
               </li>
-              <li className="menu-item has-children">
+              {/* <li className="menu-item has-children">
                 <Link to="javascript:void(0);" className="menu-item-button">
                   <div className="icon">
                     <i className="icon-box"></i>
@@ -148,8 +101,8 @@ const Navbar = () => {
                     </Link>
                   </li>
                 </ul>
-              </li>
-              <li className="menu-item has-children">
+              </li> */}
+              {/* <li className="menu-item has-children">
                 <Link to="javascript:void(0);" className="menu-item-button">
                   <div className="icon">
                     <i className="icon-file-plus"></i>
@@ -173,13 +126,13 @@ const Navbar = () => {
                     </Link>
                   </li>
                 </ul>
-              </li>
+              </li> */}
               <li className="menu-item has-children">
                 <Link to="/store" className="menu-item-button">
                   <div className="icon">
                     <i className="icon-user"></i>
                   </div>
-                  <div className="text">Store</div>
+                  <div className="text">Stores</div>
                 </Link>
               </li>
               <li className="menu-item has-children">
@@ -191,6 +144,30 @@ const Navbar = () => {
                 </Link>
               </li>
               <li className="menu-item has-children">
+                <Link to="/product" className="menu-item-button">
+                  <div className="icon">
+                    <i className="icon-user"></i>
+                  </div>
+                  <div className="text">Products</div>
+                </Link>
+              </li>
+               <li className="menu-item has-children">
+                <Link to="/purchase-bill" className="menu-item-button">
+                  <div className="icon">
+                    <i className="icon-user"></i>
+                  </div>
+                  <div className="text">Purchase Bill</div>
+                </Link>
+              </li>
+              <li className="menu-item has-children">
+                <Link to="/supplier-bill" className="menu-item-button">
+                  <div className="icon">
+                    <i className="icon-user"></i>
+                  </div>
+                  <div className="text">Supplier Bill</div>
+                </Link>
+              </li>
+              {/* <li className="menu-item has-children">
                 <Link to="javascript:void(0);" className="menu-item-button">
                   <div className="icon">
                     <i className="icon-user-plus"></i>
@@ -209,8 +186,8 @@ const Navbar = () => {
                     </Link>
                   </li>
                 </ul>
-              </li>
-              <li className="menu-item">
+              </li> */}
+              {/* <li className="menu-item">
                 <Link to="gallery.html" className="">
                   <div className="icon">
                     <i className="icon-image"></i>
@@ -225,10 +202,10 @@ const Navbar = () => {
                   </div>
                   <div className="text">Report</div>
                 </Link>
-              </li>
+              </li> */}
             </ul>
           </div>
-          <div className="center-item">
+          {/* <div className="center-item">
             <div className="center-heading">Setting</div>
             <ul className="menu-list">
               <li className="menu-item has-children">
@@ -414,9 +391,9 @@ const Navbar = () => {
                 </Link>
               </li>
             </ul>
-          </div>
+          </div> */}
         </div>
-        <div className="bot text-center">
+        {/* <div className="bot text-center">
           <div className="wrap">
             <div className="mb-20">
               <img src="images/menu-left/img-bot.png" alt="" />
@@ -432,7 +409,7 @@ const Navbar = () => {
               Contact
             </Link>
           </div>
-        </div>
+        </div> */}
       </div>
     </div>
   );

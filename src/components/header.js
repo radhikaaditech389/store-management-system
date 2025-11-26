@@ -1,19 +1,17 @@
-import React,{useState} from "react";
-import { Link,useHistory } from "react-router-dom";
-
-
+import React, { useState } from "react";
+import { Link, useHistory } from "react-router-dom";
 
 const Header = () => {
-     const [showMenu, setShowMenu] = useState(false);
-        const history = useHistory();
-      const handleChange = () => {};
+  const [showMenu, setShowMenu] = useState(false);
+  const history = useHistory();
+  const handleChange = () => {};
 
   const toggleMenu = () => {
     setShowMenu(!showMenu);
   };
 
   const handleLogout = () => {
-history.push("/login");
+    history.push("/login");
   };
   return (
     <div className="header-dashboard">

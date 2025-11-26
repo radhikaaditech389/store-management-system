@@ -3,6 +3,7 @@ import { Link, useHistory } from "react-router-dom";
 import Swal from "sweetalert2";
 import axios from "axios";
 import { toast } from "react-toastify";
+import { getCookie } from "../utils/cookies";
 
 const Register = () => {
   const history = useHistory();
@@ -25,6 +26,7 @@ const Register = () => {
 
     if (!user.name) temp.name = "Name is required";
     if (!user.address) temp.address = "Address is required";
+     if (!user.state) temp.state = "State is required";
     if (!user.phone) temp.phone = "Phone is required";
     else if (user.phone.length < 10) temp.phone = "Phone must be 10 digits";
 
@@ -42,10 +44,20 @@ const Register = () => {
     try {
       setLoading(true);
 
+        await axios.get("http://localhost:8000/sanctum/csrf-cookie", {
+      withCredentials: true,
+    });
+
       const response = await axios.post(
         "http://localhost:8000/api/stores",
         user,
-        {}
+         {
+        headers: {
+          accept: "application/json",
+          "X-XSRF-TOKEN": getCookie("XSRF-TOKEN"),
+        },
+        withCredentials: true,
+      }
       );
       if (response) {
          toast.success("Store registered successfully!");
@@ -105,6 +117,22 @@ const Register = () => {
                 />
                 {errors.address && (
                   <p className="error-text">{errors.address}</p>
+                )}
+              </fieldset>
+              <fieldset className="address">
+                <div className="body-title mb-10">
+                  State <span className="tf-color-1">*</span>
+                </div>
+                <input
+                  className="flex-grow"
+                  type="text"
+                  placeholder="Enter your state"
+                  name="state"
+                  value={user.state}
+                  onChange={handleChange}
+                />
+                {errors.state && (
+                  <p className="error-text">{errors.state}</p>
                 )}
               </fieldset>
 

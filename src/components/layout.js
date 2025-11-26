@@ -1,5 +1,6 @@
 import Navbar from "./navbar";
 import Header from "./header";
+import Footer from "./footer";
 const Layout = ({ children }) => {
   return (
     <>
@@ -8,7 +9,10 @@ const Layout = ({ children }) => {
         <div className="section-content-right">
           {/* <!-- header-dashboard --> */}
           <Header />
+           <div className="main-content">
           { children }
+          <Footer/>
+          </div>
         </div>
       </div>
     </>

@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import axios from "axios";
 import Layout from "./layout";
 import { getCookie } from "../utils/cookies";
-const Product = () => {
+const SaleBill = () => {
   const [products, setProducts] = useState([]);
   const [search, setSearch] = useState("");
   const [filteredData, setFilteredData] = useState(products);
@@ -94,7 +94,7 @@ const Product = () => {
     },
   ];
 
-  const fetchProduct = async () => {
+  const fetchSaleBill = async () => {
     try {
       await axios.get("http://localhost:8000/sanctum/csrf-cookie", {
         withCredentials: true,
@@ -113,7 +113,7 @@ const Product = () => {
     }
   };
   useEffect(() => {
-    fetchProduct();
+    fetchSaleBill();
   }, []);
   useEffect(() => {
     const result = products.filter((item) => {
@@ -217,4 +217,4 @@ const Product = () => {
     </Layout>
   );
 };
-export default Product;
+export default SaleBill;

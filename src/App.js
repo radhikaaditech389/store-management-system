@@ -12,6 +12,10 @@ import "react-toastify/dist/ReactToastify.css";
 import Product from "./components/product";
 import Store from "./components/store";
 import Branch from "./components/branch";
+import CashierLogin from "./components/cashierLogin";
+import Category from "./components/category";
+import PurchaseBill from "./components/purchaseBill";
+import SupplierBill from "./components/suppllier";
 
 function App() {
   return (
@@ -37,10 +41,14 @@ function App() {
         <Switch>         
           <Route exact path="/register" component={Register} />
           <Route exact path="/login" component={Login} />
+           <Route exact path="/casier_login" component={CashierLogin} />
           <Route exact path="/" component={Home} />
            <Route exact path="/product" component={Product} />
            <Route exact path="/store" component={Store} />
             <Route exact path="/branch" component={Branch} />
+             <Route exact path="/category" component={Category} />
+              <Route exact path="/purchase-bill" component={PurchaseBill} />
+              <Route exact path="/supplier-bill" component={SupplierBill} />
         </Switch>
       </Router>
     </>

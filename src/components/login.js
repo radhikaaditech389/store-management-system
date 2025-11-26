@@ -2,6 +2,7 @@ import React,{useState} from "react";
 import { Link } from "react-router-dom";
 import { useHistory } from "react-router-dom";
 import { toast } from "react-toastify";
+import { getCookie } from "../utils/cookies";
 import axios from "axios";
 axios.defaults.baseURL = "http://localhost:8000";
 axios.defaults.withCredentials = true;
@@ -11,7 +12,6 @@ const Login = () => {
   const [formData, setFormData] = useState({
     username: "",
     password: "",
-    // pin: "",
   });
 
   const [errors, setErrors] = useState({});
@@ -25,47 +25,27 @@ const Login = () => {
   };
 
   // validation
-  const validate = () => {
-    let temp = {};
+const validate = () => {
+  let temp = {};
 
-    // If PIN login → no username/password required
-    // if (formData.pin) {
-    //   if (formData.pin.length < 4) temp.pin = "PIN must be at least 4 digits";
-    // }
+  if (!formData.username) temp.username = "Username is required";
+  if (!formData.password) temp.password = "Password is required";
 
-    // If username/password login → no PIN required
-    // else {
-      if (!formData.username) temp.username = "Username is required";
-      if (!formData.password) temp.password = "Password is required";
-    // }
+  setErrors(temp);
 
-    setErrors(temp);
-    // return Object.keys(temp).length === 0;
-  };
-function getCookie(name) {
-  let cookieValue = null;
+  return Object.keys(temp).length === 0; // ✅ return true if no errors
+};
 
-  if (document.cookie && document.cookie !== "") {
-    const cookies = document.cookie.split(";");
-
-    for (let i = 0; i < cookies.length; i++) {
-      const cookie = cookies[i].trim();
-
-      if (cookie.substring(0, name.length + 1) === `${name}=`) {
-        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-        break;
-      }
-    }
-  }
-
-  return cookieValue;
-}
   // Submit form
  const handleSubmit = async (e) => {
   e.preventDefault();
 
+  if (!validate()) {
+    console.log("Validation failed");
+    return; // ⛔ Stop here
+  }
+
    try {
-    // console.lo
     // 1. Get CSRF cookie
     await axios.get("http://localhost:8000/sanctum/csrf-cookie", {
       withCredentials: true,
@@ -82,9 +62,12 @@ function getCookie(name) {
         },
         withCredentials: true,
       }
-    );
-
-    console.log("LOGIN SUCCESS:", response.data);
+    );    
+    const user_detail = response.data;
+    localStorage.setItem("user_detail",JSON.stringify(user_detail))
+    if(response.data){
+      history.push("/");
+    }
   } catch (err) {
     console.error("LOGIN ERROR:", err);
   }
