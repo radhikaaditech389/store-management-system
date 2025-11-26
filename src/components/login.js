@@ -11,7 +11,7 @@ const Login = () => {
   const [formData, setFormData] = useState({
     username: "",
     password: "",
-    pin: "",
+    // pin: "",
   });
 
   const [errors, setErrors] = useState({});
@@ -42,31 +42,54 @@ const Login = () => {
     setErrors(temp);
     // return Object.keys(temp).length === 0;
   };
+function getCookie(name) {
+  let cookieValue = null;
 
-  // Submit form
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-  await axios.get("/sanctum/csrf-cookie");
-    // if (!validate()) {
-    //   toast.error("Please fix the errors");
-    //   return;
-    // }
-    try {
-      // console.log({formData});
-      const res = await axios.post("http://localhost:8000/api/login", formData);
+  if (document.cookie && document.cookie !== "") {
+    const cookies = document.cookie.split(";");
 
-      toast.success("Login Successful!");
+    for (let i = 0; i < cookies.length; i++) {
+      const cookie = cookies[i].trim();
 
-      localStorage.setItem("token", res.data.token);
-      localStorage.setItem("user", JSON.stringify(res.data.user));
-
-      setTimeout(() => {
-        history.push("/");
-      }, 1000);
-    } catch (err) {
-      toast.error(err.response?.data?.message || "Login failed");
+      if (cookie.substring(0, name.length + 1) === `${name}=`) {
+        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+        break;
+      }
     }
-  };
+  }
+
+  return cookieValue;
+}
+  // Submit form
+ const handleSubmit = async (e) => {
+  e.preventDefault();
+
+   try {
+    // console.lo
+    // 1. Get CSRF cookie
+    await axios.get("http://localhost:8000/sanctum/csrf-cookie", {
+      withCredentials: true,
+    });
+
+    // 2. Send login request
+    const response = await axios.post(
+      "http://localhost:8000/api/login",
+      formData,
+      {
+        headers: {
+          accept: "application/json",
+          "X-XSRF-TOKEN": getCookie("XSRF-TOKEN"),
+        },
+        withCredentials: true,
+      }
+    );
+
+    console.log("LOGIN SUCCESS:", response.data);
+  } catch (err) {
+    console.error("LOGIN ERROR:", err);
+  }
+};
+
   return (
     <div className="wrap-login-page">
       <div className="flex-grow flex flex-column justify-center gap30">
