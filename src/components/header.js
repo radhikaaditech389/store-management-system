@@ -11,7 +11,16 @@ const Header = () => {
   };
 
   const handleLogout = () => {
-    history.push("/login");
+    document.cookie.split(";").forEach((c) => {
+      document.cookie = c
+        .replace(/^ +/, "")
+        .replace(/=.*/, "=;expires=Thu, 01 Jan 1970 00:00:00 UTC;path=/");
+    });
+
+    localStorage.clear();
+    sessionStorage.clear();
+
+    history.push("/");
   };
   return (
     <div className="header-dashboard">
@@ -551,17 +560,11 @@ const Header = () => {
                   </Link>
                 </li> */}
                 <li>
-                  <Link className="user-item">
+                  <Link to="#" className="user-item" onClick={handleLogout}>
                     <div className="icon">
                       <i className="icon-log-out"></i>
                     </div>
-                    <Link
-                      to="#"
-                      className="body-title-2"
-                      onClick={handleLogout}
-                    >
-                      Logout
-                    </Link>
+                    <span className="body-title-2">Logout</span>
                   </Link>
                 </li>
               </ul>
