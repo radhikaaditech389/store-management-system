@@ -106,6 +106,14 @@ const Navbar = () => {
                   <div className="text">Gst Rates</div>
                 </Link>
               </li>
+                <li className="menu-item has-children">
+                <Link to="/staff" className="menu-item-button">
+                  <div className="icon">
+                    <i className="icon-folder"></i>
+                  </div>
+                  <div className="text">Staff</div>
+                </Link>
+              </li>
             </ul>
           </div>
         </div>

@@ -5,19 +5,19 @@ import DataTable from "react-data-table-component";
 import axios from "axios";
 import { getCookie } from "../utils/cookies";
 
-const Brand = () => {
+const Staff = () => {
   const history = useHistory();
   const [search, setSearch] = useState("");
-  const [brands, setBrands] = useState([]);
-  const [filteredData, setFilteredData] = useState(brands);
+  const [staffs, setStaffs] = useState([]);
+  const [filteredData, setFilteredData] = useState(staffs);
   const user_data = JSON.parse(localStorage.getItem("user_detail"));
 
-  const fetchBrand = async () => {
+  const fetchStaff = async () => {
     try {
       await axios.get("http://localhost:8000/sanctum/csrf-cookie", {
         withCredentials: true,
       });
-      const response = await axios.get("http://localhost:8000/api/brands", {
+      const response = await axios.get("http://localhost:8000/api/staff", {
         headers: {
           Accept: "application/json",
           Authorization: `Bearer ${user_data.token}`,
@@ -25,45 +25,45 @@ const Brand = () => {
         },
         withCredentials: true,
       });
-      setBrands(response.data.brands);
+      setStaffs(response.data.data);
     } catch (error) {
-      console.error("Error fetching brands:", error);
+      console.error("Error fetching staffs:", error);
     }
   };
 
-  const handleCreateBrand = () => {
-    localStorage.setItem("brand_detail", null);
-  };
-  const handleEdit = (row) => {
-    localStorage.setItem("brand_detail", JSON.stringify(row));
-  };
+//   const handleCreateStaff = () => {
+//     localStorage.setItem("brand_detail", null);
+//   };
+//   const handleEdit = (row) => {
+//     localStorage.setItem("brand_detail", JSON.stringify(row));
+//   };
 
-  const handleDelete = async (id) => {
-    await axios.get("http://localhost:8000/sanctum/csrf-cookie", {
-      withCredentials: true,
-    });
-    const response = await axios.delete(
-      `http://localhost:8000/api/brands/${id}`,
-      {
-        headers: {
-          accept: "application/json",
-          "X-XSRF-TOKEN": getCookie("XSRF-TOKEN"),
-          Authorization: `Bearer ${user_data.token}`,
-        },
-        withCredentials: true,
-      }
-    );
-    if (response) {
-      history.push("/brand");
-      fetchBrand();
-    }
-  };
+//   const handleDelete = async (id) => {
+//     await axios.get("http://localhost:8000/sanctum/csrf-cookie", {
+//       withCredentials: true,
+//     });
+//     const response = await axios.delete(
+//       `http://localhost:8000/api/brands/${id}`,
+//       {
+//         headers: {
+//           accept: "application/json",
+//           "X-XSRF-TOKEN": getCookie("XSRF-TOKEN"),
+//           Authorization: `Bearer ${user_data.token}`,
+//         },
+//         withCredentials: true,
+//       }
+//     );
+//     if (response) {
+//       history.push("/brand");
+//       fetchBrand();
+//     }
+//   };
   useEffect(() => {
-    fetchBrand();
+    fetchStaff();
   }, []);
 
   useEffect(() => {
-    const result = brands.filter((item) => {
+    const result = staffs.filter((item) => {
       return Object.values(item)
         .join(" ")
         .toLowerCase()
@@ -71,7 +71,7 @@ const Brand = () => {
     });
 
     setFilteredData(result);
-  }, [search, brands]);
+  }, [search, staffs]);
 
   const columns = [
     {
@@ -90,25 +90,30 @@ const Brand = () => {
       sortable: true,
     },
     {
-      name: "Description",
-      selector: (row) => row.description,
+      name: "username",
+      selector: (row) => row.username,
       sortable: true,
     },
-    {
-      name: "Action",
-      cell: (row) => (
-        <div className="list-icon-function">
-          <div className="item edit">
-            <Link to={`/brand/edit/${row.id}`} onClick={() => handleEdit(row)}>
-              <i className="icon-edit-3"></i>
-            </Link>
-          </div>
-          <div className="item trash" onClick={() => handleDelete(row.id)}>
-            <i className="icon-trash-2"></i>
-          </div>
-        </div>
-      ),
+     {
+      name: "role",
+      selector: (row) => row.role,
+      sortable: true,
     },
+    // {
+    //   name: "Action",
+    //   cell: (row) => (
+    //     <div className="list-icon-function">
+    //       <div className="item edit">
+    //         <Link to={`/brand/edit/${row.id}`} onClick={() => handleEdit(row)}>
+    //           <i className="icon-edit-3"></i>
+    //         </Link>
+    //       </div>
+    //       <div className="item trash" onClick={() => handleDelete(row.id)}>
+    //         <i className="icon-trash-2"></i>
+    //       </div>
+    //     </div>
+    //   ),
+    // },
   ];
 
   return (
@@ -142,7 +147,7 @@ const Brand = () => {
           </div>
           {/* <!-- all-user --> */}
           <div className="wg-box">
-            <div className="flex items-center justify-between gap10 flex-wrap">
+            {/* <div className="flex items-center justify-between gap10 flex-wrap">
               <div className="wg-filter flex-grow"></div>
               <Link
                 className="tf-button style-1 w208"
@@ -151,7 +156,7 @@ const Brand = () => {
               >
                 <i className="icon-plus"></i>Add new
               </Link>
-            </div>
+            </div> */}
             <input
               type="text"
               placeholder="Search..."
@@ -188,4 +193,4 @@ const Brand = () => {
     </Layout>
   );
 };
-export default Brand;
+export default Staff;
