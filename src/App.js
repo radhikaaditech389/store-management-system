@@ -48,9 +48,9 @@ function App() {
       <Router>
         <Switch>
           <Route exact path="/register" component={Register} />
-          <Route exact path="/login" component={Login} />
+          <Route exact path="/" component={Login} />
           <Route exact path="/casier_login" component={CashierLogin} />
-          <Route exact path="/" component={Home} />
+          <Route exact path="/dashboard" component={Home} />
           <Route exact path="/product" component={Product} />
           <Route exact path="/create-product" component={CreateEditProduct} />
           <Route path="/product/edit/:id" component={CreateEditProduct} />
