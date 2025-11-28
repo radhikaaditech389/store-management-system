@@ -1,14 +1,41 @@
 import React, { useEffect, useState } from "react";
 import DataTable from "react-data-table-component";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import axios from "axios";
 import Layout from "./layout";
 import { getCookie } from "../utils/cookies";
 const Product = () => {
+  const history = useHistory();
   const [products, setProducts] = useState([]);
   const [search, setSearch] = useState("");
   const [filteredData, setFilteredData] = useState(products);
   const user_data = JSON.parse(localStorage.getItem("user_detail"));
+  const handleEdit = (row) => {
+    localStorage.setItem("product_detail", JSON.stringify(row));
+  };
+  const handleCreateProduct = () => {
+    localStorage.setItem("product_detail", null);
+  };
+  const handleDelete = async (id) => {
+    await axios.get("http://localhost:8000/sanctum/csrf-cookie", {
+      withCredentials: true,
+    });
+    const response = await axios.delete(
+      `http://localhost:8000/api/products/${id}`,
+      {
+        headers: {
+          accept: "application/json",
+          "X-XSRF-TOKEN": getCookie("XSRF-TOKEN"),
+          Authorization: `Bearer ${user_data.token}`,
+        },
+        withCredentials: true,
+      }
+    );
+    if (response) {
+      history.push("/product");
+      fetchProduct();
+    }
+  };
 
   const columns = [
     {
@@ -72,21 +99,22 @@ const Product = () => {
       sortable: true,
     },
     {
-      name: "Stock",
-      selector: (row) => row.stock,
-      sortable: true,
-    },
-    {
       name: "Action",
       cell: (row) => (
         <div className="list-icon-function">
-          <div className="item eye">
+          {/* <div className="item eye">
             <i className="icon-eye"></i>
-          </div>
+          </div> */}
+       
           <div className="item edit">
-            <i className="icon-edit-3"></i>
+            <Link
+              to={`/product/edit/${row.id}`}
+              onClick={() => handleEdit(row)}
+            >
+              <i className="icon-edit-3"></i>
+            </Link>
           </div>
-          <div className="item trash">
+          <div className="item trash" onClick={() => handleDelete(row.id)}>
             <i className="icon-trash-2"></i>
           </div>
         </div>
@@ -132,7 +160,7 @@ const Product = () => {
         {/* <!-- main-content-wrap --> */}
         <div className="main-content-wrap">
           <div className="flex items-center flex-wrap justify-between gap20 mb-27">
-            <h3>All Product</h3>
+            <h3>All Products</h3>
             <ul className="breadcrumbs flex items-center flex-wrap justify-start gap10">
               <li>
                 <Link to="/">
@@ -157,6 +185,16 @@ const Product = () => {
           </div>
           {/* <!-- all-user --> */}
           <div className="wg-box">
+            <div className="flex items-center justify-between gap10 flex-wrap">
+              <div className="wg-filter flex-grow"></div>
+              <Link
+                className="tf-button style-1 w208"
+                to="/create-product"
+                onClick={handleCreateProduct}
+              >
+                <i className="icon-plus"></i>Add new
+              </Link>
+            </div>
             <input
               type="text"
               placeholder="Search..."
@@ -185,30 +223,6 @@ const Product = () => {
               }}
             />
             <div className="divider"></div>
-            {/* <div className="flex items-center justify-between flex-wrap gap10">
-                  <div className="text-tiny">Showing 10 entries</div>
-                  <ul className="wg-pagination">
-                    <li>
-                      <Link to="#">
-                        <i className="icon-chevron-left"></i>
-                      </Link>
-                    </li>
-                    <li>
-                      <Link to="#">1</Link>
-                    </li>
-                    <li className="active">
-                      <Link to="#">2</Link>
-                    </li>
-                    <li>
-                      <Link to="#">3</Link>
-                    </li>
-                    <li>
-                      <Link to="#">
-                        <i className="icon-chevron-right"></i>
-                      </Link>
-                    </li>
-                  </ul>
-                </div> */}
           </div>
           {/* <!-- /all-user --> */}
         </div>

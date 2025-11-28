@@ -2356,6 +2356,18 @@ a:hover, a:focus {
   display: flex;
   gap: 8px;
 }
+
+.input-wrapper {
+  display: flex;
+  flex-direction: column;
+  width:100%;
+}
+
+.error-text {
+  color: red;
+  font-size: 12px;
+  margin-top: 4px;
+}
 .wg-social li a {
   display: -webkit-box;
   display: -moz-box;

@@ -83,7 +83,7 @@ const Store = () => {
           {/* <!-- main-content-wrap --> */}
           <div className="main-content-wrap">
             <div className="flex items-center flex-wrap justify-between gap20 mb-27">
-              <h3>All Store</h3>
+              <h3>All Stores</h3>
               <ul className="breadcrumbs flex items-center flex-wrap justify-start gap10">
                 <li>
                   <Link to="/">
@@ -108,29 +108,6 @@ const Store = () => {
             </div>
             {/* <!-- all-user --> */}
             <div className="wg-box">
-              {/* <div className="flex items-center justify-between gap10 flex-wrap">
-                  <div className="wg-filter flex-grow">
-                    <form className="form-search">
-                      <fieldset className="name">
-                        <input
-                          type="text"
-                          placeholder="Search here..."
-                          className=""
-                          name="name"
-                          tabindex="2"
-                          value=""
-                          aria-required="true"
-                          required=""
-                        />
-                      </fieldset>
-                      <div className="button-submit">
-                        <button className="" type="submit">
-                          <i className="icon-search"></i>
-                        </button>
-                      </div>
-                    </form>
-                  </div>
-                </div>                 */}
               <input
                 type="text"
                 placeholder="Search..."
@@ -159,30 +136,6 @@ const Store = () => {
                 }}
               />
               <div className="divider"></div>
-              {/* <div className="flex items-center justify-between flex-wrap gap10">
-                  <div className="text-tiny">Showing 10 entries</div>
-                  <ul className="wg-pagination">
-                    <li>
-                      <Link to="#">
-                        <i className="icon-chevron-left"></i>
-                      </Link>
-                    </li>
-                    <li>
-                      <Link to="#">1</Link>
-                    </li>
-                    <li className="active">
-                      <Link to="#">2</Link>
-                    </li>
-                    <li>
-                      <Link to="#">3</Link>
-                    </li>
-                    <li>
-                      <Link to="#">
-                        <i className="icon-chevron-right"></i>
-                      </Link>
-                    </li>
-                  </ul>
-                </div> */}
             </div>
             {/* <!-- /all-user --> */}
           </div>

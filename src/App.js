@@ -16,6 +16,11 @@ import CashierLogin from "./components/cashierLogin";
 import Category from "./components/category";
 import PurchaseBill from "./components/purchaseBill";
 import SupplierBill from "./components/suppllier";
+import Brand from "./components/brand";
+import CreateEditProduct from "./components/createEditProduct";
+import CreateEditBranch from "./components/createEditBranch";
+import CreateEditCategory from "./components/createEditCategory";
+import CreateEditBrand from "./components/createEditBrand";
 
 function App() {
   return (
@@ -44,11 +49,20 @@ function App() {
            <Route exact path="/casier_login" component={CashierLogin} />
           <Route exact path="/" component={Home} />
            <Route exact path="/product" component={Product} />
+           <Route exact path="/create-product" component={CreateEditProduct} />
+           <Route path="/product/edit/:id" component={CreateEditProduct} />
            <Route exact path="/store" component={Store} />
             <Route exact path="/branch" component={Branch} />
+             <Route exact path="/create-branch" component={CreateEditBranch} />
+           <Route path="/branch/edit/:id" component={CreateEditBranch} />
              <Route exact path="/category" component={Category} />
+              <Route exact path="/create-category" component={CreateEditCategory} />
+           <Route path="/category/edit/:id" component={CreateEditCategory} />
               <Route exact path="/purchase-bill" component={PurchaseBill} />
               <Route exact path="/supplier-bill" component={SupplierBill} />
+               <Route exact path="/brand" component={Brand} />
+                <Route exact path="/create-brand" component={CreateEditBrand} />
+           <Route path="/brand/edit/:id" component={CreateEditBrand} />
         </Switch>
       </Router>
     </>

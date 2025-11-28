@@ -1,14 +1,48 @@
-import React, { useEffect, useState } from "react";
-import DataTable from "react-data-table-component";
-import { Link } from "react-router-dom";
-import axios from "axios";
+import React, { useState, useEffect } from "react";
 import Layout from "./layout";
+import { Link } from "react-router-dom";
+import DataTable from "react-data-table-component";
+import axios from "axios";
 import { getCookie } from "../utils/cookies";
-const SaleBill = () => {
-  const [products, setProducts] = useState([]);
+
+const BrachStaff = () => {
   const [search, setSearch] = useState("");
-  const [filteredData, setFilteredData] = useState(products);
+  const [brands, setBrands] = useState([]);
+  const [filteredData, setFilteredData] = useState(brands);
   const user_data = JSON.parse(localStorage.getItem("user_detail"));
+
+  const fetchBranchStaff = async () => {
+    try {
+      await axios.get("http://localhost:8000/sanctum/csrf-cookie", {
+        withCredentials: true,
+      });
+      const response = await axios.get("http://localhost:8000/api/brands", {
+        headers: {
+          Accept: "application/json",
+          Authorization: `Bearer ${user_data.token}`,
+          "X-XSRF-TOKEN": getCookie("XSRF-TOKEN"),
+        },
+        withCredentials: true,
+      });
+      setBrands(response.data.brands);
+    } catch (error) {
+      console.error("Error fetching brands:", error);
+    }
+  };
+  useEffect(() => {
+    fetchBranchStaff();
+  }, []);
+
+    useEffect(() => {
+    const result = brands.filter((item) => {
+      return Object.values(item)
+        .join(" ")
+        .toLowerCase()
+        .includes(search.toLowerCase());
+    });
+
+    setFilteredData(result);
+  }, [search, brands]);
 
   const columns = [
     {
@@ -18,62 +52,17 @@ const SaleBill = () => {
     },
     {
       name: "Store Name",
-      selector: (row) => row.store.name,
+      selector: (row) => row?.store?.name,
       sortable: true,
     },
     {
-      name: "sku",
-      selector: (row) => row.sku,
-      sortable: true,
-    },
-    {
-      name: "barcode",
-      selector: (row) => row.barcode,
-      sortable: true,
-    },
-    {
-      name: "name",
+      name: "Name",
       selector: (row) => row.name,
       sortable: true,
     },
     {
-      name: "brand Name",
-      selector: (row) => row.brand.name,
-      sortable: true,
-    },
-    {
-      name: "Category Name",
-      selector: (row) => row.category.name,
-      sortable: true,
-    },
-    {
-      name: "Hsn Code",
-      selector: (row) => row.hsn_code,
-      sortable: true,
-    },
-    {
-      name: "Gst Rate Id",
-      selector: (row) => row.gst_rate_id,
-      sortable: true,
-    },
-    {
-      name: "mrp",
-      selector: (row) => row.mrp,
-      sortable: true,
-    },
-    {
-      name: "Selling Price",
-      selector: (row) => row.selling_price,
-      sortable: true,
-    },
-    {
-      name: "Cost Price",
-      selector: (row) => row.cost_price,
-      sortable: true,
-    },
-    {
-      name: "Stock",
-      selector: (row) => row.stock,
+      name: "Description",
+      selector: (row) => row.description,
       sortable: true,
     },
     {
@@ -94,37 +83,6 @@ const SaleBill = () => {
     },
   ];
 
-  const fetchSaleBill = async () => {
-    try {
-      await axios.get("http://localhost:8000/sanctum/csrf-cookie", {
-        withCredentials: true,
-      });
-      const response = await axios.get("http://127.0.0.1:8000/api/products", {
-        headers: {
-          Accept: "application/json",
-          Authorization: `Bearer ${user_data.token}`,
-          "X-XSRF-TOKEN": getCookie("XSRF-TOKEN"),
-        },
-        withCredentials: true,
-      });
-      setProducts(response.data.products);
-    } catch (error) {
-      console.error("Error fetching categories:", error);
-    }
-  };
-  useEffect(() => {
-    fetchSaleBill();
-  }, []);
-  useEffect(() => {
-    const result = products.filter((item) => {
-      return Object.values(item)
-        .join(" ")
-        .toLowerCase()
-        .includes(search.toLowerCase());
-    });
-
-    setFilteredData(result);
-  }, [search, products]);
 
   return (
     <Layout>
@@ -132,7 +90,7 @@ const SaleBill = () => {
         {/* <!-- main-content-wrap --> */}
         <div className="main-content-wrap">
           <div className="flex items-center flex-wrap justify-between gap20 mb-27">
-            <h3>All Sale Bills</h3>
+            <h3>All Brands</h3>
             <ul className="breadcrumbs flex items-center flex-wrap justify-start gap10">
               <li>
                 <Link to="/">
@@ -144,14 +102,14 @@ const SaleBill = () => {
               </li>
               <li>
                 <Link to="#">
-                  <div className="text-tiny">Product</div>
+                  <div className="text-tiny">Brand</div>
                 </Link>
               </li>
               <li>
                 <i className="icon-chevron-right"></i>
               </li>
               <li>
-                <div className="text-tiny">All Product</div>
+                <div className="text-tiny">All Brand</div>
               </li>
             </ul>
           </div>
@@ -193,4 +151,4 @@ const SaleBill = () => {
     </Layout>
   );
 };
-export default SaleBill;
+export default BrachStaff;

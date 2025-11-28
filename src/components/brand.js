@@ -5,19 +5,19 @@ import DataTable from "react-data-table-component";
 import axios from "axios";
 import { getCookie } from "../utils/cookies";
 
-const Branch = () => {
-  const history = useHistory()
+const Brand = () => {
+    const history = useHistory()
   const [search, setSearch] = useState("");
-  const [branches, setBranches] = useState([]);
-  const [filteredData, setFilteredData] = useState(branches);
+  const [brands, setBrands] = useState([]);
+  const [filteredData, setFilteredData] = useState(brands);
   const user_data = JSON.parse(localStorage.getItem("user_detail"));
 
-  const fetchBranch = async () => {
+  const fetchBrand = async () => {
     try {
       await axios.get("http://localhost:8000/sanctum/csrf-cookie", {
         withCredentials: true,
       });
-      const response = await axios.get("http://localhost:8000/api/branches", {
+      const response = await axios.get("http://localhost:8000/api/brands", {
         headers: {
           Accept: "application/json",
           Authorization: `Bearer ${user_data.token}`,
@@ -25,29 +25,25 @@ const Branch = () => {
         },
         withCredentials: true,
       });
-
-      setBranches(response.data.data);
+      setBrands(response.data.brands);
     } catch (error) {
-      console.error("Error fetching categories:", error);
+      console.error("Error fetching brands:", error);
     }
   };
-  useEffect(() => {
-    fetchBranch();
-  }, []);
 
-  const handleCreateBranch = () => {
-    localStorage.setItem("branch_detail", null);
+  const handleCreateBrand = () => {
+    localStorage.setItem("brand_detail", null);
   };
   const handleEdit = (row) => {
-    localStorage.setItem("branch_detail", JSON.stringify(row));
+    localStorage.setItem("brand_detail", JSON.stringify(row));
   };
 
-  const handleDelete = async (id) => {
+      const handleDelete = async (id) => {
     await axios.get("http://localhost:8000/sanctum/csrf-cookie", {
       withCredentials: true,
     });
     const response = await axios.delete(
-      `http://localhost:8000/api/branches/${id}`,
+      `http://localhost:8000/api/brands/${id}`,
       {
         headers: {
           accept: "application/json",
@@ -58,14 +54,16 @@ const Branch = () => {
       }
     );
     if (response) {
-      history.push("/branch");
-      fetchBranch();
+      history.push("/brand");
+      fetchBrand();
     }
   };
-
+  useEffect(() => {
+    fetchBrand();
+  }, []);
 
   useEffect(() => {
-    const result = branches.filter((item) => {
+    const result = brands.filter((item) => {
       return Object.values(item)
         .join(" ")
         .toLowerCase()
@@ -73,7 +71,7 @@ const Branch = () => {
     });
 
     setFilteredData(result);
-  }, [search, branches]);
+  }, [search, brands]);
 
   const columns = [
     {
@@ -83,7 +81,7 @@ const Branch = () => {
     },
     {
       name: "Store Name",
-      selector: (row) => row.store.name,
+      selector: (row) => row?.store?.name,
       sortable: true,
     },
     {
@@ -92,33 +90,23 @@ const Branch = () => {
       sortable: true,
     },
     {
-      name: "Address",
-      selector: (row) => row.address,
-      sortable: true,
-    },
-     {
-      name: "State",
-      selector: (row) => row.state,
-      sortable: true,
-    },
-    {
-      name: "Phone",
-      selector: (row) => row.phone,
+      name: "Description",
+      selector: (row) => row.description,
       sortable: true,
     },
     {
       name: "Action",
       cell: (row) => (
         <div className="list-icon-function">
-          {/* <div className="item eye">
+          <div className="item eye">
             <i className="icon-eye"></i>
-          </div> */}
-          <div className="item edit">
-            <Link to={`/branch/edit/${row.id}`} onClick={() => handleEdit(row)}>
-              <i className="icon-edit-3"></i>
-            </Link>
           </div>
-          <div className="item trash" onClick={() => handleDelete(row.id)}>
+           <div className="item edit">
+                                <Link to={`/brand/edit/${row.id}`} onClick={() => handleEdit(row)}>
+                                  <i className="icon-edit-3"></i>
+                                </Link>
+                              </div>
+                    <div className="item trash" onClick={() => handleDelete(row.id)}>
             <i className="icon-trash-2"></i>
           </div>
         </div>
@@ -132,7 +120,7 @@ const Branch = () => {
         {/* <!-- main-content-wrap --> */}
         <div className="main-content-wrap">
           <div className="flex items-center flex-wrap justify-between gap20 mb-27">
-            <h3>All Branches</h3>
+            <h3>All Brands</h3>
             <ul className="breadcrumbs flex items-center flex-wrap justify-start gap10">
               <li>
                 <Link to="/">
@@ -144,14 +132,14 @@ const Branch = () => {
               </li>
               <li>
                 <Link to="#">
-                  <div className="text-tiny">Branch</div>
+                  <div className="text-tiny">Brand</div>
                 </Link>
               </li>
               <li>
                 <i className="icon-chevron-right"></i>
               </li>
               <li>
-                <div className="text-tiny">All Branch</div>
+                <div className="text-tiny">All Brand</div>
               </li>
             </ul>
           </div>
@@ -161,8 +149,8 @@ const Branch = () => {
               <div className="wg-filter flex-grow"></div>
               <Link
                 className="tf-button style-1 w208"
-                to="/create-branch"
-                onClick={handleCreateBranch}
+                to="/create-brand"
+                onClick={handleCreateBrand}
               >
                 <i className="icon-plus"></i>Add new
               </Link>
@@ -203,4 +191,4 @@ const Branch = () => {
     </Layout>
   );
 };
-export default Branch;
+export default Brand;

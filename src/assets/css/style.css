@@ -2907,7 +2907,7 @@ a:focus {
 }
 .tf-button:hover {
    color: #fff !important;
-  background-color: #fff;
+  background-color: #2275fc;
 }
 .tf-button:hover span {
   color: #fff !important;
@@ -3550,6 +3550,7 @@ select.h40 {
   flex-direction: column;
   gap: 20px;
 }
+
 .offcanvas .offcanvas-body form > fieldset {
   padding-bottom: 20px;
   border-bottom: 1px solid #edf1f5;
@@ -5943,6 +5944,16 @@ select.h40 {
 }
 .layout-wrap.loader-off #preload {
   display: none;
+}
+.body-content{
+  width:100%
+}
+
+form.form-style-1 > * {
+    display: flex;
+    align-items: center;
+    justify-content: center!important;
+    gap: 10px;
 }
 
 @media (min-width: 992px) {

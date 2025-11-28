@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { useHistory } from "react-router-dom";
 import { toast } from "react-toastify";
 import axios from "axios";
+import { getCookie } from "../utils/cookies";
 axios.defaults.baseURL = "http://localhost:8000";
 axios.defaults.withCredentials = true;
 
@@ -32,24 +33,7 @@ const CashierLogin = () => {
 
     return Object.keys(temp).length === 0; // ✅ return true if no errors
   };
-  function getCookie(name) {
-    let cookieValue = null;
 
-    if (document.cookie && document.cookie !== "") {
-      const cookies = document.cookie.split(";");
-
-      for (let i = 0; i < cookies.length; i++) {
-        const cookie = cookies[i].trim();
-
-        if (cookie.substring(0, name.length + 1) === `${name}=`) {
-          cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-          break;
-        }
-      }
-    }
-
-    return cookieValue;
-  }
   // Submit form
   const handleSubmit = async (e) => {
     e.preventDefault();
