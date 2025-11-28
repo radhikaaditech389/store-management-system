@@ -8,7 +8,7 @@ const Navbar = () => {
   return (
     <div className="section-menu-left">
       <div className="box-logo">
-        <Link to="/dashboard" id="site-logo-inner">
+        <Link to="/" id="site-logo-inner">
           <img
             className=""
             id="logo_header"
@@ -28,7 +28,7 @@ const Navbar = () => {
             <div className="center-heading">Main Home</div>
             <ul className="menu-list">
               <li className="menu-item active">
-                <Link to="/dashboard" className="menu-item-button">
+                <Link to="/" className="menu-item-button">
                   <div className="icon">
                     <i className="icon-grid"></i>
                   </div>
@@ -47,19 +47,21 @@ const Navbar = () => {
                   </div>
                   <div className="text">Categories</div>
                 </Link>
-              </li>             
+              </li>
+              {role == "superadmin" && (            
               <li className="menu-item has-children">
                 <Link to="/store" className="menu-item-button">
                   <div className="icon">
-                    <i className="icon-user"></i>
+                    <i className="icon-briefcase"></i>
                   </div>
                   <div className="text">Stores</div>
                 </Link>
               </li>
+              )}
               <li className="menu-item has-children">
                 <Link to="/branch" className="menu-item-button">
                   <div className="icon">
-                    <i className="icon-user"></i>
+                    <i className="icon-clipboard"></i>
                   </div>
                   <div className="text">Branches</div>
                 </Link>
@@ -67,7 +69,7 @@ const Navbar = () => {
               <li className="menu-item has-children">
                 <Link to="/product" className="menu-item-button">
                   <div className="icon">
-                    <i className="icon-user"></i>
+                    <i className="icon-box"></i>
                   </div>
                   <div className="text">Products</div>
                 </Link>
@@ -75,7 +77,7 @@ const Navbar = () => {
                <li className="menu-item has-children">
                 <Link to="/purchase-bill" className="menu-item-button">
                   <div className="icon">
-                    <i className="icon-user"></i>
+                    <i className="icon-bookmark"></i>
                   </div>
                   <div className="text">Purchase Bill</div>
                 </Link>
@@ -83,7 +85,7 @@ const Navbar = () => {
               <li className="menu-item has-children">
                 <Link to="/supplier-bill" className="menu-item-button">
                   <div className="icon">
-                    <i className="icon-user"></i>
+                    <i className="icon-bookmark"></i>
                   </div>
                   <div className="text">Supplier Bill</div>
                 </Link>
@@ -91,9 +93,17 @@ const Navbar = () => {
                <li className="menu-item has-children">
                 <Link to="/brand" className="menu-item-button">
                   <div className="icon">
-                    <i className="icon-user"></i>
+                    <i className="icon-book"></i>
                   </div>
                   <div className="text">Brands</div>
+                </Link>
+              </li>
+               <li className="menu-item has-children">
+                <Link to="/gst-rates" className="menu-item-button">
+                  <div className="icon">
+                    <i className="icon-folder"></i>
+                  </div>
+                  <div className="text">Gst Rates</div>
                 </Link>
               </li>
             </ul>

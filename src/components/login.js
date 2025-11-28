@@ -66,7 +66,7 @@ const Login = () => {
       const user_detail = response.data;
       localStorage.setItem("user_detail", JSON.stringify(user_detail));
       if (response.data) {
-        history.push("/dashboard");
+        history.push("/");
       }
     } catch (err) {
       console.error("LOGIN ERROR:", err);

@@ -98,9 +98,6 @@ const Brand = () => {
       name: "Action",
       cell: (row) => (
         <div className="list-icon-function">
-          <div className="item eye">
-            <i className="icon-eye"></i>
-          </div>
            <div className="item edit">
                                 <Link to={`/brand/edit/${row.id}`} onClick={() => handleEdit(row)}>
                                   <i className="icon-edit-3"></i>
