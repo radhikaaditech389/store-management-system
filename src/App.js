@@ -56,11 +56,8 @@ function App() {
           <Route exact path="/create-product" component={CreateEditProduct} />
           <Route path="/product/edit/:id" component={CreateEditProduct} />
           <Route exact path="/store" component={Store} />
-
-          <Route exact path="/store" component={Store} />
           <Route exact path="/stores/view/:id" component={ViewStore} />
           <Route exact path="/create-store" component={CreateStore} />
-
           <Route exact path="/branch" component={Branch} />
           <Route exact path="/create-branch" component={CreateEditBranch} />
           <Route path="/branch/edit/:id" component={CreateEditBranch} />

@@ -62,7 +62,7 @@ const CashierLogin = () => {
         }
       );
       if (response.data) {
-        history.push("/");
+        history.push("/dashboard");
       }
     } catch (err) {
       console.error("LOGIN ERROR:", err);

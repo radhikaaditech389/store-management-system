@@ -61,7 +61,7 @@ const Register = () => {
       );
       if (response) {
          toast.success("Store registered successfully!");
-        history.push("/");
+        history.push("/login");
 
         setUser({ name: "", address: "", phone: "" });
       }
