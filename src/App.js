@@ -12,6 +12,7 @@ import "react-toastify/dist/ReactToastify.css";
 import Product from "./components/product";
 import Store from "./components/store";
 import CreateStore from "./components/createStore";
+import ViewStore from "./components/viewStore";
 import Branch from "./components/branch";
 import CashierLogin from "./components/cashierLogin";
 import Category from "./components/category";
@@ -45,8 +46,11 @@ function App() {
           <Route exact path="/casier_login" component={CashierLogin} />
           <Route exact path="/dashboard" component={Home} />
           <Route exact path="/product" component={Product} />
+
           <Route exact path="/store" component={Store} />
+          <Route exact path="/stores/view/:id" component={ViewStore} />
           <Route exact path="/create-store" component={CreateStore} />
+
           <Route exact path="/branch" component={Branch} />
           <Route exact path="/category" component={Category} />
           <Route exact path="/purchase-bill" component={PurchaseBill} />

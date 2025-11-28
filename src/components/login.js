@@ -66,9 +66,11 @@ const Login = () => {
       const user_detail = response.data;
       localStorage.setItem("user_detail", JSON.stringify(user_detail));
       if (response.data) {
+        toast.success(user_detail.message || "Login successfull!");
         history.push("/dashboard");
       }
     } catch (err) {
+      toast.error(err?.response?.data?.message || "Invalid credentials!");
       console.error("LOGIN ERROR:", err);
     }
   };

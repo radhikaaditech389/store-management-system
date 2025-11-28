@@ -85,7 +85,10 @@ const Store = () => {
       name: "Action",
       cell: (row) => (
         <div className="list-icon-function">
-          <div className="item eye">
+          <div
+            className="item eye"
+            onClick={() => history.push(`/stores/view/${row.id}`)}
+          >
             <i className="icon-eye"></i>
           </div>
           <div className="item edit" onClick={() => handleEdit(row)}>
@@ -147,7 +150,7 @@ const Store = () => {
                 <i className="icon-chevron-right"></i>
               </li>
               <li>
-                <Link to="/stores">
+                <Link to="/store">
                   <div className="text-tiny">Store</div>
                 </Link>
               </li>
