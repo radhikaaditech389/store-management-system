@@ -31,33 +31,33 @@ const Staff = () => {
     }
   };
 
-//   const handleCreateStaff = () => {
-//     localStorage.setItem("brand_detail", null);
-//   };
-//   const handleEdit = (row) => {
-//     localStorage.setItem("brand_detail", JSON.stringify(row));
-//   };
+  const handleCreateStaff = () => {
+    localStorage.setItem("staff_detail", null);
+  };
+  const handleEdit = (row) => {
+    localStorage.setItem("staff_detail", JSON.stringify(row));
+  };
 
-//   const handleDelete = async (id) => {
-//     await axios.get("http://localhost:8000/sanctum/csrf-cookie", {
-//       withCredentials: true,
-//     });
-//     const response = await axios.delete(
-//       `http://localhost:8000/api/brands/${id}`,
-//       {
-//         headers: {
-//           accept: "application/json",
-//           "X-XSRF-TOKEN": getCookie("XSRF-TOKEN"),
-//           Authorization: `Bearer ${user_data.token}`,
-//         },
-//         withCredentials: true,
-//       }
-//     );
-//     if (response) {
-//       history.push("/brand");
-//       fetchBrand();
-//     }
-//   };
+  const handleDelete = async (id) => {
+    await axios.get("http://localhost:8000/sanctum/csrf-cookie", {
+      withCredentials: true,
+    });
+    const response = await axios.delete(
+      `http://localhost:8000/api/staff/${id}`,
+      {
+        headers: {
+          accept: "application/json",
+          "X-XSRF-TOKEN": getCookie("XSRF-TOKEN"),
+          Authorization: `Bearer ${user_data.token}`,
+        },
+        withCredentials: true,
+      }
+    );
+    if (response) {
+      history.push("/staff");
+      fetchStaff();
+    }
+  };
   useEffect(() => {
     fetchStaff();
   }, []);
@@ -99,21 +99,21 @@ const Staff = () => {
       selector: (row) => row.role,
       sortable: true,
     },
-    // {
-    //   name: "Action",
-    //   cell: (row) => (
-    //     <div className="list-icon-function">
-    //       <div className="item edit">
-    //         <Link to={`/brand/edit/${row.id}`} onClick={() => handleEdit(row)}>
-    //           <i className="icon-edit-3"></i>
-    //         </Link>
-    //       </div>
-    //       <div className="item trash" onClick={() => handleDelete(row.id)}>
-    //         <i className="icon-trash-2"></i>
-    //       </div>
-    //     </div>
-    //   ),
-    // },
+    {
+      name: "Action",
+      cell: (row) => (
+        <div className="list-icon-function">
+          <div className="item edit">
+            <Link to={`/staff/edit/${row.id}`} onClick={() => handleEdit(row)}>
+              <i className="icon-edit-3"></i>
+            </Link>
+          </div>
+          <div className="item trash" onClick={() => handleDelete(row.id)}>
+            <i className="icon-trash-2"></i>
+          </div>
+        </div>
+      ),
+    },
   ];
 
   return (
@@ -122,7 +122,7 @@ const Staff = () => {
         {/* <!-- main-content-wrap --> */}
         <div className="main-content-wrap">
           <div className="flex items-center flex-wrap justify-between gap20 mb-27">
-            <h3>All Brands</h3>
+            <h3>All Staff</h3>
             <ul className="breadcrumbs flex items-center flex-wrap justify-start gap10">
               <li>
                 <Link to="/">
@@ -134,29 +134,29 @@ const Staff = () => {
               </li>
               <li>
                 <Link to="#">
-                  <div className="text-tiny">Brand</div>
+                  <div className="text-tiny">Staff</div>
                 </Link>
               </li>
               <li>
                 <i className="icon-chevron-right"></i>
               </li>
               <li>
-                <div className="text-tiny">All Brand</div>
+                <div className="text-tiny">All Staff</div>
               </li>
             </ul>
           </div>
           {/* <!-- all-user --> */}
           <div className="wg-box">
-            {/* <div className="flex items-center justify-between gap10 flex-wrap">
+            <div className="flex items-center justify-between gap10 flex-wrap">
               <div className="wg-filter flex-grow"></div>
               <Link
                 className="tf-button style-1 w208"
-                to="/create-brand"
-                onClick={handleCreateBrand}
+                to="/create-staff"
+                onClick={handleCreateStaff}
               >
                 <i className="icon-plus"></i>Add new
               </Link>
-            </div> */}
+            </div>
             <input
               type="text"
               placeholder="Search..."

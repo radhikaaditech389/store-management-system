@@ -1406,7 +1406,7 @@ a:focus {
   display: none;
   min-width: 10rem;
   padding: 0.5rem 0;
- margin: 16px 11px;
+  margin: 16px 11px;
   font-size: 1rem;
   color: #212529;
   text-align: left;
@@ -1422,7 +1422,7 @@ a:focus {
   display: block;
   min-width: 10rem;
   padding: 0.5rem 0;
- margin: 16px 11px;
+  margin: 16px 11px;
   font-size: 1rem;
   color: #212529;
   text-align: left;
@@ -2613,6 +2613,14 @@ a:focus {
   background: #fff;
   content: "";
 }
+.selected-branch-style {
+  background-color: #f0f0f0; /* Example color */
+  color: green;
+  margin-bottom: 6px;
+}
+.branch-style {
+  margin-bottom: 6px;
+}
 
 #preload {
   width: 100%;
@@ -2894,7 +2902,7 @@ a:focus {
   width: max-content;
   height: 50px;
   padding: 15px 22px;
-  color: #000!important;
+  color: #000 !important;
   display: -webkit-box;
   display: -moz-box;
   display: -ms-flexbox;
@@ -2919,7 +2927,7 @@ a:focus {
   transition: all 0.3s ease;
 }
 .tf-button:hover {
-   color: #fff !important;
+  color: #fff !important;
   background-color: #2275fc;
 }
 .tf-button:hover span {
@@ -5958,15 +5966,15 @@ select.h40 {
 .layout-wrap.loader-off #preload {
   display: none;
 }
-.body-content{
-  width:100%
+.body-content {
+  width: 100%;
 }
 
 form.form-style-1 > * {
-    display: flex;
-    align-items: center;
-    justify-content: center!important;
-    gap: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center !important;
+  gap: 10px;
 }
 
 @media (min-width: 992px) {

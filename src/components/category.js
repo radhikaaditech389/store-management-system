@@ -77,6 +77,11 @@ const Category = () => {
       sortable: true,
     },
     {
+      name: "Parent Category",
+      selector: (row) => row?.parent?.name,
+      sortable: true,
+    },
+    {
       name: "Action",
       cell: (row) => (
         <div className="list-icon-function">

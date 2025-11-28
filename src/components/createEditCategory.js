@@ -19,26 +19,51 @@ const CreateEditCategory = () => {
   const [initialValues, setInitialValues] = useState({
     name: "",
     description: "",
+    parent_id: "",
   });
+
+  const [categories, setCategories] = useState([]);
 
   // If editing → set initial values
   const loadCategoryData = () => {
     if (incomingCategory) {
       setInitialValues({
         name: incomingCategory.name,
-        description: incomingCategory.description
+        description: incomingCategory.description,
+        parent_id: incomingCategory.parent_id,
       });
+    }
+  };
+
+  const fetchCategory = async () => {
+    try {
+      await axios.get("http://localhost:8000/sanctum/csrf-cookie", {
+        withCredentials: true,
+      });
+      const response = await axios.get("http://localhost:8000/api/categories", {
+        headers: {
+          Accept: "application/json",
+          Authorization: `Bearer ${user_data.token}`,
+          "X-XSRF-TOKEN": getCookie("XSRF-TOKEN"),
+        },
+        withCredentials: true,
+      });
+      setCategories(response.data.categories);
+    } catch (error) {
+      console.error("Error fetching categories:", error);
     }
   };
 
   useEffect(() => {
     loadCategoryData();
+    fetchCategory();
   }, []);
 
   // Validation Schema
   const validationSchema = Yup.object({
     name: Yup.string().required("Name is required"),
     description: Yup.string().required("Description is required"),
+     parent_id: Yup.string().required("Parent Id is required"),
   });
 
   // Submit (Create + Update)
@@ -84,7 +109,9 @@ const CreateEditCategory = () => {
     <Layout>
       <div className="main-content-inner">
         <div className="main-content-wrap">
-          <h3 className="mb-8">{isEdit ? "Edit Category" : "Create Category"}</h3>
+          <h3 className="mb-8">
+            {isEdit ? "Edit Category" : "Create Category"}
+          </h3>
 
           <div className="wg-box">
             <Formik
@@ -113,6 +140,24 @@ const CreateEditCategory = () => {
                       <Field type="text" name="description" className="mb-5" />
                       <ErrorMessage
                         name="description"
+                        className="error-text"
+                        component="div"
+                      />
+                    </div>
+                  </fieldset>
+                  <fieldset>
+                    <div className="body-title">parent Categories *</div>
+                    <div className="body-content">
+                      <Field as="select" name="parent_id" className="mb-5">
+                        <option value="">Select Parent Category</option>
+                        {categories.map((c) => (
+                          <option value={c.id} key={c.id}>
+                            {c.name}
+                          </option>
+                        ))}
+                      </Field>
+                      <ErrorMessage
+                        name="parent_id"
                         className="error-text"
                         component="div"
                       />

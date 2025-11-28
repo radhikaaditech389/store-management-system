@@ -1,0 +1,253 @@
+import React, { useEffect, useState } from "react";
+import axios from "axios";
+import { useParams, useLocation, useHistory } from "react-router-dom";
+import { Formik, Form, Field, ErrorMessage } from "formik";
+import * as Yup from "yup";
+import { getCookie } from "../utils/cookies";
+import Layout from "./layout";
+
+const CreateEditStaff = () => {
+  const { id } = useParams(); // if id exists -> Edit Mode
+  const history = useHistory();
+
+  const user_data = JSON.parse(localStorage.getItem("user_detail"));
+  const store_staff = localStorage.getItem("staff_detail");
+
+  const incomingStaff = store_staff && JSON.parse(store_staff);
+  const isEdit = Boolean(id);
+  const [branches, setBranches] = useState([]);
+  const [initialValues, setInitialValues] = useState({
+    name: "",
+    username: "",
+    role: "",
+    pin: "1234",
+    branch_ids: [], // VERY IMPORTANT
+  });
+
+  const cleanedBranchIds =
+    incomingStaff?.branches?.map((b) => b.pivot.branch_id) || [];
+
+  // If editing → set initial values
+  const loadStaffData = () => {
+    if (incomingStaff) {
+      setInitialValues({
+        name: incomingStaff.name,
+        username: incomingStaff.username,
+        role: incomingStaff.role,
+        pin: incomingStaff.pin ? incomingStaff.pin : "1234",
+        branch_ids: isEdit ? cleanedBranchIds : [], // EDIT → array, CREATE → empty
+      });
+    }
+  };
+  const fetchBranches = async () => {
+    try {
+      await axios.get("http://localhost:8000/sanctum/csrf-cookie", {
+        withCredentials: true,
+      });
+      const response = await axios.get("http://localhost:8000/api/branches", {
+        headers: {
+          Accept: "application/json",
+          Authorization: `Bearer ${user_data.token}`,
+          "X-XSRF-TOKEN": getCookie("XSRF-TOKEN"),
+        },
+        withCredentials: true,
+      });
+      setBranches(response.data.data);
+    } catch (error) {
+      console.error("Error fetching staffs:", error);
+    }
+  };
+
+  useEffect(() => {
+    loadStaffData();
+    fetchBranches();
+  }, []);
+
+  // Validation Schema
+  const validationSchema = Yup.object({
+    name: Yup.string().required("Name is required"),
+    username: Yup.string().required("Username is required"),
+    role: Yup.string().required("Role is required"),
+    //   pin: Yup.string().when("role", {
+    //     is: "cashier",
+    //     then: Yup.string()
+    //       .required("PIN is required for cashier")
+    //       .length(4, "PIN must be 4 digits"),
+    //     otherwise: Yup.string().nullable()
+    //   }),
+    branch_ids: Yup.array()
+      .min(1, "At least one branch is required")
+      .required("Branch is required"),
+  });
+
+  // Submit (Create + Update)
+  const handleSubmit = async (values, actions) => {
+    try {
+      await axios.get("http://localhost:8000/sanctum/csrf-cookie", {
+        withCredentials: true,
+      });
+
+      let url = "";
+      let method = "";
+
+      if (isEdit) {
+        // UPDATE PRODUCT
+        url = `http://localhost:8000/api/staff/${id}`;
+        method = "put";
+      } else {
+        // CREATE PRODUCT
+        url = `http://localhost:8000/api/staff`;
+        method = "post";
+      }
+
+      await axios({
+        method,
+        url,
+        data: values,
+        headers: {
+          Accept: "application/json",
+          Authorization: `Bearer ${user_data.token}`,
+          "X-XSRF-TOKEN": getCookie("XSRF-TOKEN"),
+        },
+        withCredentials: true,
+      });
+
+      alert(isEdit ? "Staff Updated!" : "Staff Created!");
+      actions.resetForm();
+      history.push("/staff");
+    } catch (error) {
+      console.error("Error saving product:", error);
+    }
+  };
+
+  return (
+    <Layout>
+      <div className="main-content-inner">
+        <div className="main-content-wrap">
+          <h3 className="mb-8">{isEdit ? "Edit Staff" : "Create Staff"}</h3>
+
+          <div className="wg-box">
+            <Formik
+              enableReinitialize
+              initialValues={initialValues}
+              validationSchema={validationSchema}
+              onSubmit={(values, actions) => handleSubmit(values, actions)}
+            >
+              {({ values, setFieldValue }) => (
+                <Form className="form-new-product form-style-1">
+                  {/* Name */}
+                  <fieldset>
+                    <div className="body-title">Name *</div>
+                    <div className="body-content">
+                      <Field type="text" name="name" className="mb-5" />
+                      <ErrorMessage
+                        name="name"
+                        component="div"
+                        className="error-text"
+                      />
+                    </div>
+                  </fieldset>
+
+                  {/* Username */}
+                  <fieldset>
+                    <div className="body-title">Username *</div>
+                    <div className="body-content">
+                      <Field type="text" name="username" className="mb-5" />
+                      <ErrorMessage
+                        name="username"
+                        component="div"
+                        className="error-text"
+                      />
+                    </div>
+                  </fieldset>
+
+                  <fieldset>
+                    <div className="body-title">Branch IDs *</div>
+                    <div className="body-content">
+                      <Field
+                        as="select"
+                        name="branch_ids"
+                        multiple
+                        className="mb-5"
+                        value={values.branch_ids.map(String)} // Convert to string if IDs are numbers
+                        onChange={(e) => {
+                          const selected = Array.from(
+                            e.target.selectedOptions,
+                            (option) => Number(option.value) // Store as number
+                          );
+                          setFieldValue("branch_ids", selected);
+                        }}
+                      >
+                        {branches.map((element) => (
+                          <option
+                            key={element.id}
+                            value={element.id}
+                            className={
+                              values.branch_ids.includes(Number(element.id))
+                                ? "selected-branch-style"
+                                : "branch-style"
+                            }
+                          >
+                            {element.name}
+                          </option>
+                        ))}
+                      </Field>
+
+                      <ErrorMessage
+                        name="branch_ids"
+                        component="div"
+                        className="error-text"
+                      />
+                    </div>
+                  </fieldset>
+
+                  {/* Role */}
+                  <fieldset>
+                    <div className="body-title">Role *</div>
+                    <div className="body-content">
+                      <Field as="select" name="role" className="mb-5">
+                        <option value="">Select Role</option>
+                        <option value="manager">Manager</option>
+                        <option value="cashier">Cashier</option>
+                      </Field>
+                      <ErrorMessage
+                        name="role"
+                        component="div"
+                        className="error-text"
+                      />
+                    </div>
+                  </fieldset>
+                  {values.role === "cashier" && (
+                    <fieldset>
+                      <div className="body-title">Pin *</div>
+                      <div className="body-content">
+                        <Field
+                          type="text"
+                          name="pin"
+                          maxLength={4}
+                          className="mb-5"
+                        />
+                        <ErrorMessage
+                          name="pin"
+                          component="div"
+                          className="error-text"
+                        />
+                      </div>
+                    </fieldset>
+                  )}
+
+                  {/* SUBMIT BUTTON */}
+                  <button className="tf-button w208" type="submit">
+                    {isEdit ? "Update Staff" : "Create Staff"}
+                  </button>
+                </Form>
+              )}
+            </Formik>
+          </div>
+        </div>
+      </div>
+    </Layout>
+  );
+};
+
+export default CreateEditStaff;

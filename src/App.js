@@ -25,6 +25,7 @@ import CreateEditCategory from "./components/createEditCategory";
 import CreateEditBrand from "./components/createEditBrand";
 import GstRate from "./components/gstRate";
 import Staff from "./components/staff";
+import CreateEditStaff from "./components/createEditStaff";
 
 function App() {
   return (
@@ -69,6 +70,8 @@ function App() {
           <Route exact path="/brand" component={Brand} />
           <Route exact path="/create-brand" component={CreateEditBrand} />
           <Route path="/brand/edit/:id" component={CreateEditBrand} />
+           <Route exact path="/create-staff" component={CreateEditStaff} />
+          <Route path="/staff/edit/:id" component={CreateEditStaff} />
           <Route exact path="/gst-rates" component={GstRate} />
            <Route exact path="/staff" component={Staff} />
         </Switch>
