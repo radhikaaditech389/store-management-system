@@ -61,7 +61,7 @@ const Register = () => {
       );
       if (response) {
          toast.success("Store registered successfully!");
-        history.push("/login");
+        history.push("/");
 
         setUser({ name: "", address: "", phone: "" });
       }
@@ -161,7 +161,7 @@ const Register = () => {
 
             <div className="body-text text-center">
               Already have an account?
-              <Link to="/login" className="body-text tf-color">
+              <Link to="/" className="body-text tf-color">
                 {" "}
                 Login Now{" "}
               </Link>

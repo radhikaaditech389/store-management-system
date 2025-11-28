@@ -85,7 +85,10 @@ const Store = () => {
       name: "Action",
       cell: (row) => (
         <div className="list-icon-function">
-          <div className="item eye">
+          <div
+            className="item eye"
+            onClick={() => history.push(`/stores/view/${row.id}`)}
+          >
             <i className="icon-eye"></i>
           </div>
           <div className="item edit" onClick={() => handleEdit(row)}>
@@ -131,32 +134,64 @@ const Store = () => {
 
   return (
     <Layout>
-        <div className="main-content-inner">
-          {/* <!-- main-content-wrap --> */}
-          <div className="main-content-wrap">
-            <div className="flex items-center flex-wrap justify-between gap20 mb-27">
-              <h3>All Stores</h3>
-              <ul className="breadcrumbs flex items-center flex-wrap justify-start gap10">
-                <li>
-                  <Link to="/">
-                    <div className="text-tiny">Dashboard</div>
-                  </Link>
-                </li>
-                <li>
-                  <i className="icon-chevron-right"></i>
-                </li>
-                <li>
-                  <Link to="#">
-                    <div className="text-tiny">Store</div>
-                  </Link>
-                </li>
-                <li>
-                  <i className="icon-chevron-right"></i>
-                </li>
-                <li>
-                  <div className="text-tiny">All Store</div>
-                </li>
-              </ul>
+      <div className="main-content-inner">
+        <div className="main-content-wrap">
+          {/* Page header + Breadcrumbs */}
+          <div className="flex items-center flex-wrap justify-between gap20 mb-27">
+            <h3>All Store</h3>
+
+            <ul className="breadcrumbs flex items-center flex-wrap gap10">
+              <li>
+                <Link to="/dashboard">
+                  <div className="text-tiny">Dashboard</div>
+                </Link>
+              </li>
+              <li>
+                <i className="icon-chevron-right"></i>
+              </li>
+              <li>
+                <Link to="/store">
+                  <div className="text-tiny">Store</div>
+                </Link>
+              </li>
+              <li>
+                <i className="icon-chevron-right"></i>
+              </li>
+              <li>
+                <div className="text-tiny">All Store</div>
+              </li>
+            </ul>
+          </div>
+
+          {/* Table Section */}
+          <div className="wg-box">
+            {/* Search Box (styled like your HTML) */}
+            <div className="flex items-center justify-between gap10 flex-wrap mb-3">
+              <div className="wg-filter flex-grow">
+                <form
+                  className="form-search"
+                  onSubmit={(e) => e.preventDefault()}
+                >
+                  <fieldset className="name">
+                    <input
+                      type="text"
+                      placeholder="Search here..."
+                      value={search}
+                      onChange={(e) => setSearch(e.target.value)}
+                      aria-required="true"
+                      required
+                    />
+                  </fieldset>
+                  <div className="button-submit">
+                    <button type="submit">
+                      <i className="icon-search"></i>
+                    </button>
+                  </div>
+                </form>
+              </div>
+              <Link class="tf-button style-1 w208" to="/create-store">
+                <i class="icon-plus"></i>Add new
+              </Link>
             </div>
             {/* <!-- all-user --> */}
             <div className="wg-box">
@@ -192,6 +227,7 @@ const Store = () => {
             {/* <!-- /all-user --> */}
           </div>
         </div>
+      </div>
     </Layout>
   );
 };

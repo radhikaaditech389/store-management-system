@@ -20,7 +20,7 @@ const Header = () => {
     localStorage.clear();
     sessionStorage.clear();
 
-    history.push("/login");
+    history.push("/");
   };
   return (
     <div className="header-dashboard">
