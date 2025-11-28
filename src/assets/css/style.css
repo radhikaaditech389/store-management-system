@@ -281,6 +281,19 @@ acronym {
   cursor: help;
 }
 
+.field-wrapper {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.error-text {
+  display: block;
+  color: #e11d48;
+  font-size: 14px;
+  margin-top: 4px;
+}
+
 .btn-link:focus,
 .btn-link:hover,
 mark,

@@ -11,6 +11,7 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Product from "./components/product";
 import Store from "./components/store";
+import CreateStore from "./components/createStore";
 import Branch from "./components/branch";
 import CashierLogin from "./components/cashierLogin";
 import Category from "./components/category";
@@ -43,7 +44,7 @@ function App() {
       />
 
       <Router>
-        <Switch>         
+        <Switch>
           <Route exact path="/register" component={Register} />
           <Route exact path="/login" component={Login} />
            <Route exact path="/casier_login" component={CashierLogin} />

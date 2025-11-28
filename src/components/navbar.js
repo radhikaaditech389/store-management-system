@@ -2,10 +2,13 @@ import React, { useState } from "react";
 import { Link, useHistory } from "react-router-dom";
 
 const Navbar = () => {
+  const user_detail = JSON.parse(localStorage.getItem("user_detail"));
+  const role = user_detail?.user?.role;
+
   return (
     <div className="section-menu-left">
       <div className="box-logo">
-        <Link to="/" id="site-logo-inner">
+        <Link to="/dashboard" id="site-logo-inner">
           <img
             className=""
             id="logo_header"
@@ -24,8 +27,8 @@ const Navbar = () => {
           <div className="center-item">
             <div className="center-heading">Main Home</div>
             <ul className="menu-list">
-              <li className="menu-item has-children active">
-                <Link to="/" className="menu-item-button">
+              <li className="menu-item active">
+                <Link to="/dashboard" className="menu-item-button">
                   <div className="icon">
                     <i className="icon-grid"></i>
                   </div>

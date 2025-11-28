@@ -1,18 +1,63 @@
 import React, { useEffect, useState } from "react";
 import DataTable from "react-data-table-component";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import axios from "axios";
 import Layout from "./layout";
-import { getCookie } from "../utils/cookies";
+import Swal from "sweetalert2";
+import { toast } from "react-toastify";
+
 const Store = () => {
+  const BASE_URL = process.env.REACT_APP_API_BASE_URL;
+
+  const history = useHistory();
   const [stores, setStores] = useState([]);
   const [search, setSearch] = useState("");
   const [filteredData, setFilteredData] = useState(stores);
-  const user_data = JSON.parse(localStorage.getItem("user_detail"))
+
+  const user_data = JSON.parse(localStorage.getItem("user_detail"));
+
+  const handleEdit = (row) => {
+    history.push({
+      pathname: "/create-store",
+      state: { storeData: row },
+    });
+  };
+
+  const handleDelete = (id) => {
+    Swal.fire({
+      title: "Are you sure?",
+      text: "This store will be permanently deleted!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#d33",
+      cancelButtonColor: "#3085d6",
+      confirmButtonText: "Yes, delete it!",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        try {
+          const response = await axios.delete(`${BASE_URL}/stores/${id}`, {
+            headers: {
+              Authorization: `Bearer ${user_data.token}`,
+            },
+          });
+
+          toast.success(
+            response.data?.message || "Store deleted successfully!"
+          );
+
+          fetchStore();
+        } catch (error) {
+          toast.error(
+            error.response?.data?.message || "Failed to delete the store."
+          );
+        }
+      }
+    });
+  };
 
   const columns = [
     {
-      name: "Name",
+      name: "Store Name",
       selector: (row) => row.name,
       sortable: true,
     },
@@ -27,6 +72,11 @@ const Store = () => {
       sortable: true,
     },
     {
+      name: "State",
+      selector: (row) => row.state,
+      sortable: true,
+    },
+    {
       name: "Phone",
       selector: (row) => row.phone,
       sortable: true,
@@ -38,10 +88,10 @@ const Store = () => {
           <div className="item eye">
             <i className="icon-eye"></i>
           </div>
-          <div className="item edit">
+          <div className="item edit" onClick={() => handleEdit(row)}>
             <i className="icon-edit-3"></i>
           </div>
-          <div className="item trash">
+          <div className="item trash" onClick={() => handleDelete(row.id)}>
             <i className="icon-trash-2"></i>
           </div>
         </div>
@@ -51,10 +101,10 @@ const Store = () => {
 
   const fetchStore = async () => {
     try {
-      const response = await axios.get("http://localhost:8000/api/stores", {
+      const response = await axios.get(`${BASE_URL}/stores`, {
         headers: {
           accept: "application/json",
-           Authorization: `Bearer ${user_data.token}`,
+          Authorization: `Bearer ${user_data.token}`,
         },
         withCredentials: true,
       });
@@ -63,9 +113,11 @@ const Store = () => {
       console.error("Error fetching categories:", error);
     }
   };
+
   useEffect(() => {
     fetchStore();
   }, []);
+
   useEffect(() => {
     const result = stores.filter((item) => {
       return Object.values(item)
@@ -139,7 +191,6 @@ const Store = () => {
             </div>
             {/* <!-- /all-user --> */}
           </div>
-          {/* <!-- /main-content-wrap --> */}
         </div>
     </Layout>
   );
