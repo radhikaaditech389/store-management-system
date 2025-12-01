@@ -26,6 +26,7 @@ import CreateEditBrand from "./components/createEditBrand";
 import GstRate from "./components/gstRate";
 import Staff from "./components/staff";
 import CreateEditStaff from "./components/createEditStaff";
+import ProtectedRoute from "./routes/ProtectedRoute";
 
 function App() {
   return (
@@ -49,31 +50,71 @@ function App() {
 
       <Router>
         <Switch>
-          <Route exact path="/register" component={Register} />
           <Route exact path="/" component={Login} />
+          <Route exact path="/register" component={Register} />
           <Route exact path="/casier_login" component={CashierLogin} />
-          <Route exact path="/dashboard" component={Home} />
-          <Route exact path="/product" component={Product} />
-          <Route exact path="/create-product" component={CreateEditProduct} />
-          <Route path="/product/edit/:id" component={CreateEditProduct} />
-          <Route exact path="/store" component={Store} />
-          <Route exact path="/stores/view/:id" component={ViewStore} />
-          <Route exact path="/create-store" component={CreateStore} />
-          <Route exact path="/branch" component={Branch} />
-          <Route exact path="/create-branch" component={CreateEditBranch} />
-          <Route path="/branch/edit/:id" component={CreateEditBranch} />
-          <Route exact path="/category" component={Category} />
-          <Route exact path="/create-category" component={CreateEditCategory} />
-          <Route path="/category/edit/:id" component={CreateEditCategory} />
-          <Route exact path="/purchase-bill" component={PurchaseBill} />
-          <Route exact path="/supplier-bill" component={SupplierBill} />
-          <Route exact path="/brand" component={Brand} />
-          <Route exact path="/create-brand" component={CreateEditBrand} />
-          <Route path="/brand/edit/:id" component={CreateEditBrand} />
-           <Route exact path="/create-staff" component={CreateEditStaff} />
-          <Route path="/staff/edit/:id" component={CreateEditStaff} />
-          <Route exact path="/gst-rates" component={GstRate} />
-           <Route exact path="/staff" component={Staff} />
+
+          <ProtectedRoute exact path="/dashboard" component={Home} />
+          <ProtectedRoute exact path="/product" component={Product} />
+          <ProtectedRoute
+            exact
+            path="/create-product"
+            component={CreateEditProduct}
+          />
+          <ProtectedRoute
+            path="/product/edit/:id"
+            component={CreateEditProduct}
+          />
+          <ProtectedRoute exact path="/store" component={Store} />
+          <ProtectedRoute exact path="/stores/view/:id" component={ViewStore} />
+          <ProtectedRoute exact path="/create-store" component={CreateStore} />
+          <ProtectedRoute exact path="/branch" component={Branch} />
+          <ProtectedRoute
+            exact
+            path="/create-branch"
+            component={CreateEditBranch}
+          />
+          <ProtectedRoute
+            path="/branch/edit/:id"
+            component={CreateEditBranch}
+          />
+          <ProtectedRoute exact path="/category" component={Category} />
+          <ProtectedRoute
+            exact
+            path="/create-category"
+            component={CreateEditCategory}
+          />
+          <ProtectedRoute
+            path="/category/edit/:id"
+            component={CreateEditCategory}
+          />
+          <ProtectedRoute
+            exact
+            path="/purchase-bill"
+            component={PurchaseBill}
+          />
+          <ProtectedRoute
+            exact
+            path="/supplier-bill"
+            component={SupplierBill}
+          />
+          <ProtectedRoute exact path="/brand" component={Brand} />
+          <ProtectedRoute
+            exact
+            path="/create-brand"
+            component={CreateEditBrand}
+          />
+          <ProtectedRoute path="/brand/edit/:id" component={CreateEditBrand} />
+          <ProtectedRoute
+            exact
+            path="/create-staff"
+            component={CreateEditStaff}
+          />
+          <ProtectedRoute path="/staff/edit/:id" component={CreateEditStaff} />
+          <ProtectedRoute exact path="/gst-rates" component={GstRate} />
+          <ProtectedRoute exact path="/staff" component={Staff} />
+
+          <Route path="*" component={Login} />
         </Switch>
       </Router>
     </>

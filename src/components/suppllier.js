@@ -8,7 +8,7 @@ const SupplierBill = () => {
   const [search, setSearch] = useState("");
   const [supplierBill, setSupplierBill] = useState([]);
   const [filteredData, setFilteredData] = useState(supplierBill);
-  
+
   const user_data = JSON.parse(localStorage.getItem("user_detail"));
 
   const columns = [
@@ -103,7 +103,7 @@ const SupplierBill = () => {
         {/* <!-- main-content-wrap --> */}
         <div className="main-content-wrap">
           <div className="flex items-center flex-wrap justify-between gap20 mb-27">
-            <h3>All Supplier Bills</h3>
+            <h3>All suppliers</h3>
             <ul className="breadcrumbs flex items-center flex-wrap justify-start gap10">
               <li>
                 <Link to="/">

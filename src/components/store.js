@@ -165,7 +165,7 @@ const Store = () => {
 
           {/* Table Section */}
           <div className="wg-box">
-            {/* Search Box (styled like your HTML) */}
+            {/* TOP Search Box + Add Button */}
             <div className="flex items-center justify-between gap10 flex-wrap mb-3">
               <div className="wg-filter flex-grow">
                 <form
@@ -179,7 +179,6 @@ const Store = () => {
                       value={search}
                       onChange={(e) => setSearch(e.target.value)}
                       aria-required="true"
-                      required
                     />
                   </fieldset>
                   <div className="button-submit">
@@ -189,42 +188,29 @@ const Store = () => {
                   </div>
                 </form>
               </div>
-              <Link class="tf-button style-1 w208" to="/create-store">
-                <i class="icon-plus"></i>Add new
+
+              <Link className="tf-button style-1 w208" to="/create-store">
+                <i className="icon-plus"></i>Add new
               </Link>
             </div>
-            {/* <!-- all-user --> */}
-            <div className="wg-box">
-              <input
-                type="text"
-                placeholder="Search..."
-                value={search}
-                onChange={(e) => setSearch(e.target.value)}
-                style={{
-                  marginBottom: "10px",
-                  padding: "8px",
-                  width: "250px",
-                }}
-              />
-              <DataTable
-                columns={columns}
-                data={filteredData}
-                pagination
-                highlightOnHover
-                pointerOnHover
-                responsive
-                customStyles={{
-                  headCells: {
-                    style: {
-                      fontWeight: "bold",
-                      fontSize: "14px",
-                    },
+
+            {/* DataTable */}
+            <DataTable
+              columns={columns}
+              data={filteredData}
+              pagination
+              highlightOnHover
+              pointerOnHover
+              responsive
+              customStyles={{
+                headCells: {
+                  style: {
+                    fontWeight: "bold",
+                    fontSize: "14px",
                   },
-                }}
-              />
-              <div className="divider"></div>
-            </div>
-            {/* <!-- /all-user --> */}
+                },
+              }}
+            />
           </div>
         </div>
       </div>
