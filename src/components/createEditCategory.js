@@ -65,7 +65,7 @@ const CreateEditCategory = () => {
   const validationSchema = Yup.object({
     name: Yup.string().required("Name is required"),
     description: Yup.string().required("Description is required"),
-    parent_id: Yup.string().required("Parent Id is required"),
+    // parent_id: Yup.string().required("Parent Id is required"),
   });
 
   // Submit (Create + Update)
@@ -148,7 +148,7 @@ const CreateEditCategory = () => {
                     </div>
                   </fieldset>
                   <fieldset>
-                    <div className="body-title">parent Categories *</div>
+                    <div className="body-title">Parent Categories *</div>
                     <div className="body-content">
                       <Field as="select" name="parent_id" className="mb-5">
                         <option value="">Select Parent Category</option>
@@ -158,11 +158,11 @@ const CreateEditCategory = () => {
                           </option>
                         ))}
                       </Field>
-                      <ErrorMessage
+                      {/* <ErrorMessage
                         name="parent_id"
                         className="error-text"
                         component="div"
-                      />
+                      /> */}
                     </div>
                   </fieldset>
 

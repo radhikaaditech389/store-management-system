@@ -62,8 +62,35 @@ const Store = () => {
       sortable: true,
     },
     {
+      name: "Logo",
+      sortable: false,
+      cell: (row) =>
+        row.logo ? (
+          <img
+            src={`http://localhost:8000/storage/${row.logo}`}
+            alt="Store Logo"
+            className="w-2 h-2 rounded-full object-cover mt-2"
+          />
+        ) : null,
+    },
+    {
       name: "Code",
       selector: (row) => row.code,
+      sortable: true,
+    },
+    {
+      name: "Contact Person",
+      selector: (row) => row.contact_person_name,
+      sortable: true,
+    },
+    {
+      name: "GSTIN",
+      selector: (row) => row.gstin,
+      sortable: true,
+    },
+    {
+      name: "Tag Line",
+      selector: (row) => row.tagline,
       sortable: true,
     },
     {
