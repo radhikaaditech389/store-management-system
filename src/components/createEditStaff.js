@@ -6,6 +6,8 @@ import * as Yup from "yup";
 import { getCookie } from "../utils/cookies";
 import Layout from "./layout";
 
+const BASE_URL = process.env.REACT_APP_API_BASE_URL;
+
 const CreateEditStaff = () => {
   const { id } = useParams(); // if id exists -> Edit Mode
   const history = useHistory();
@@ -44,7 +46,7 @@ const CreateEditStaff = () => {
       await axios.get("http://localhost:8000/sanctum/csrf-cookie", {
         withCredentials: true,
       });
-      const response = await axios.get("http://localhost:8000/api/branches", {
+      const response = await axios.get(`${BASE_URL}/branches`, {
         headers: {
           Accept: "application/json",
           Authorization: `Bearer ${user_data.token}`,
@@ -92,11 +94,11 @@ const CreateEditStaff = () => {
 
       if (isEdit) {
         // UPDATE PRODUCT
-        url = `http://localhost:8000/api/staff/${id}`;
+        url = `${BASE_URL}/staff/${id}`;
         method = "put";
       } else {
         // CREATE PRODUCT
-        url = `http://localhost:8000/api/staff`;
+        url = `${BASE_URL}/staff`;
         method = "post";
       }
 

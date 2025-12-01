@@ -6,6 +6,8 @@ import axios from "axios";
 import { getCookie } from "../utils/cookies";
 
 const BrachStaff = () => {
+  const BASE_URL = process.env.REACT_APP_API_BASE_URL;
+
   const [search, setSearch] = useState("");
   const [brands, setBrands] = useState([]);
   const [filteredData, setFilteredData] = useState(brands);
@@ -16,7 +18,7 @@ const BrachStaff = () => {
       await axios.get("http://localhost:8000/sanctum/csrf-cookie", {
         withCredentials: true,
       });
-      const response = await axios.get("http://localhost:8000/api/brands", {
+      const response = await axios.get(`${BASE_URL}/brands`, {
         headers: {
           Accept: "application/json",
           Authorization: `Bearer ${user_data.token}`,
@@ -33,7 +35,7 @@ const BrachStaff = () => {
     fetchBranchStaff();
   }, []);
 
-    useEffect(() => {
+  useEffect(() => {
     const result = brands.filter((item) => {
       return Object.values(item)
         .join(" ")
@@ -82,7 +84,6 @@ const BrachStaff = () => {
       ),
     },
   ];
-
 
   return (
     <Layout>

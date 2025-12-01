@@ -5,6 +5,8 @@ import DataTable from "react-data-table-component";
 import axios from "axios";
 import { getCookie } from "../utils/cookies";
 
+const BASE_URL = process.env.REACT_APP_API_BASE_URL;
+
 const GstRate = () => {
   const history = useHistory();
   const [search, setSearch] = useState("");
@@ -17,7 +19,7 @@ const GstRate = () => {
       await axios.get("http://localhost:8000/sanctum/csrf-cookie", {
         withCredentials: true,
       });
-      const response = await axios.get("http://localhost:8000/api/gst-rates", {
+      const response = await axios.get(`${BASE_URL}/gst-rates`, {
         headers: {
           Accept: "application/json",
           Authorization: `Bearer ${user_data.token}`,
@@ -31,25 +33,22 @@ const GstRate = () => {
     }
   };
 
-//   const handleCreateGstRates = () => {
-//     localStorage.setItem("gst_rate_detail", null);
-//   };
+  //   const handleCreateGstRates = () => {
+  //     localStorage.setItem("gst_rate_detail", null);
+  //   };
 
   const handleDelete = async (id) => {
     await axios.get("http://localhost:8000/sanctum/csrf-cookie", {
       withCredentials: true,
     });
-    const response = await axios.delete(
-      `http://localhost:8000/api/gst-rates/${id}`,
-      {
-        headers: {
-          accept: "application/json",
-          "X-XSRF-TOKEN": getCookie("XSRF-TOKEN"),
-          Authorization: `Bearer ${user_data.token}`,
-        },
-        withCredentials: true,
-      }
-    );
+    const response = await axios.delete(`${BASE_URL}/gst-rates/${id}`, {
+      headers: {
+        accept: "application/json",
+        "X-XSRF-TOKEN": getCookie("XSRF-TOKEN"),
+        Authorization: `Bearer ${user_data.token}`,
+      },
+      withCredentials: true,
+    });
     if (response) {
       history.push("/gst-rates");
       fetchGstRate();

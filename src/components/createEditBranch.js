@@ -6,6 +6,8 @@ import * as Yup from "yup";
 import { getCookie } from "../utils/cookies";
 import Layout from "./layout";
 
+const BASE_URL = process.env.REACT_APP_API_BASE_URL;
+
 const CreateEditBranch = () => {
   const { id } = useParams(); // if id exists -> Edit Mode
   const history = useHistory();
@@ -20,7 +22,7 @@ const CreateEditBranch = () => {
     name: "",
     address: "",
     phone: "",
-     state: "",
+    state: "",
   });
 
   // If editing → set initial values
@@ -59,11 +61,11 @@ const CreateEditBranch = () => {
 
       if (isEdit) {
         // UPDATE PRODUCT
-        url = `http://localhost:8000/api/branches/${id}`;
+        url = `${BASE_URL}/branches/${id}`;
         method = "put";
       } else {
         // CREATE PRODUCT
-        url = `http://localhost:8000/api/branches`;
+        url = `${BASE_URL}/branches`;
         method = "post";
       }
 

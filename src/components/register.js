@@ -5,6 +5,8 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import { getCookie } from "../utils/cookies";
 
+const BASE_URL = process.env.REACT_APP_API_BASE_URL;
+
 const Register = () => {
   const history = useHistory();
   const [userType, setUserType] = useState("");
@@ -26,7 +28,7 @@ const Register = () => {
 
     if (!user.name) temp.name = "Name is required";
     if (!user.address) temp.address = "Address is required";
-     if (!user.state) temp.state = "State is required";
+    if (!user.state) temp.state = "State is required";
     if (!user.phone) temp.phone = "Phone is required";
     else if (user.phone.length < 10) temp.phone = "Phone must be 10 digits";
 
@@ -44,23 +46,19 @@ const Register = () => {
     try {
       setLoading(true);
 
-        await axios.get("http://localhost:8000/sanctum/csrf-cookie", {
-      withCredentials: true,
-    });
+      await axios.get("http://localhost:8000/sanctum/csrf-cookie", {
+        withCredentials: true,
+      });
 
-      const response = await axios.post(
-        "http://localhost:8000/api/stores",
-        user,
-         {
+      const response = await axios.post(`${BASE_URL}/stores`, user, {
         headers: {
           accept: "application/json",
           "X-XSRF-TOKEN": getCookie("XSRF-TOKEN"),
         },
         withCredentials: true,
-      }
-      );
+      });
       if (response) {
-         toast.success("Store registered successfully!");
+        toast.success("Store registered successfully!");
         history.push("/login");
 
         setUser({ name: "", address: "", phone: "" });
@@ -131,9 +129,7 @@ const Register = () => {
                   value={user.state}
                   onChange={handleChange}
                 />
-                {errors.state && (
-                  <p className="error-text">{errors.state}</p>
-                )}
+                {errors.state && <p className="error-text">{errors.state}</p>}
               </fieldset>
 
               {/* Phone */}

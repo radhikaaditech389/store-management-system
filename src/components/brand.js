@@ -6,6 +6,8 @@ import axios from "axios";
 import { getCookie } from "../utils/cookies";
 
 const Brand = () => {
+  const BASE_URL = process.env.REACT_APP_API_BASE_URL;
+
   const history = useHistory();
   const [search, setSearch] = useState("");
   const [brands, setBrands] = useState([]);
@@ -17,7 +19,7 @@ const Brand = () => {
       await axios.get("http://localhost:8000/sanctum/csrf-cookie", {
         withCredentials: true,
       });
-      const response = await axios.get("http://localhost:8000/api/brands", {
+      const response = await axios.get(`${BASE_URL}/brands`, {
         headers: {
           Accept: "application/json",
           Authorization: `Bearer ${user_data.token}`,
@@ -42,17 +44,14 @@ const Brand = () => {
     await axios.get("http://localhost:8000/sanctum/csrf-cookie", {
       withCredentials: true,
     });
-    const response = await axios.delete(
-      `http://localhost:8000/api/brands/${id}`,
-      {
-        headers: {
-          accept: "application/json",
-          "X-XSRF-TOKEN": getCookie("XSRF-TOKEN"),
-          Authorization: `Bearer ${user_data.token}`,
-        },
-        withCredentials: true,
-      }
-    );
+    const response = await axios.delete(`${BASE_URL}/brands/${id}`, {
+      headers: {
+        accept: "application/json",
+        "X-XSRF-TOKEN": getCookie("XSRF-TOKEN"),
+        Authorization: `Bearer ${user_data.token}`,
+      },
+      withCredentials: true,
+    });
     if (response) {
       history.push("/brand");
       fetchBrand();

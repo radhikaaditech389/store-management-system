@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from "react";
 import Layout from "./layout";
-import { Link,useHistory } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import DataTable from "react-data-table-component";
 import axios from "axios";
 import { getCookie } from "../utils/cookies";
 
 const Branch = () => {
-  const history = useHistory()
+  const BASE_URL = process.env.REACT_APP_API_BASE_URL;
+
+  const history = useHistory();
   const [search, setSearch] = useState("");
   const [branches, setBranches] = useState([]);
   const [filteredData, setFilteredData] = useState(branches);
@@ -17,7 +19,7 @@ const Branch = () => {
       await axios.get("http://localhost:8000/sanctum/csrf-cookie", {
         withCredentials: true,
       });
-      const response = await axios.get("http://localhost:8000/api/branches", {
+      const response = await axios.get(`${BASE_URL}/branches`, {
         headers: {
           Accept: "application/json",
           Authorization: `Bearer ${user_data.token}`,
@@ -46,23 +48,19 @@ const Branch = () => {
     await axios.get("http://localhost:8000/sanctum/csrf-cookie", {
       withCredentials: true,
     });
-    const response = await axios.delete(
-      `http://localhost:8000/api/branches/${id}`,
-      {
-        headers: {
-          accept: "application/json",
-          "X-XSRF-TOKEN": getCookie("XSRF-TOKEN"),
-          Authorization: `Bearer ${user_data.token}`,
-        },
-        withCredentials: true,
-      }
-    );
+    const response = await axios.delete(`${BASE_URL}/branches/${id}`, {
+      headers: {
+        accept: "application/json",
+        "X-XSRF-TOKEN": getCookie("XSRF-TOKEN"),
+        Authorization: `Bearer ${user_data.token}`,
+      },
+      withCredentials: true,
+    });
     if (response) {
       history.push("/branch");
       fetchBranch();
     }
   };
-
 
   useEffect(() => {
     const result = branches.filter((item) => {
@@ -96,7 +94,7 @@ const Branch = () => {
       selector: (row) => row.address,
       sortable: true,
     },
-     {
+    {
       name: "State",
       selector: (row) => row.state,
       sortable: true,

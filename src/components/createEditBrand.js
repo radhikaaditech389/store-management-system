@@ -6,6 +6,8 @@ import * as Yup from "yup";
 import { getCookie } from "../utils/cookies";
 import Layout from "./layout";
 
+const BASE_URL = process.env.REACT_APP_API_BASE_URL;
+
 const CreateEditBrand = () => {
   const { id } = useParams(); // if id exists -> Edit Mode
   const history = useHistory();
@@ -26,7 +28,7 @@ const CreateEditBrand = () => {
     if (incomingBrand) {
       setInitialValues({
         name: incomingBrand.name,
-        description: incomingBrand.description
+        description: incomingBrand.description,
       });
     }
   };
@@ -53,11 +55,11 @@ const CreateEditBrand = () => {
 
       if (isEdit) {
         // UPDATE PRODUCT
-        url = `http://localhost:8000/api/brands/${id}`;
+        url = `${BASE_URL}/brands/${id}`;
         method = "put";
       } else {
         // CREATE PRODUCT
-        url = `http://localhost:8000/api/brands`;
+        url = `${BASE_URL}/brands`;
         method = "post";
       }
 

@@ -1,23 +1,25 @@
 import React, { useState, useEffect } from "react";
 import Layout from "./layout";
-import { Link,useHistory } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import DataTable from "react-data-table-component";
 import axios from "axios";
 import { getCookie } from "../utils/cookies";
 
 const Category = () => {
+  const BASE_URL = process.env.REACT_APP_API_BASE_URL;
+
   const [search, setSearch] = useState("");
   const [categories, setCategories] = useState([]);
   const [filteredData, setFilteredData] = useState(categories);
   const user_data = JSON.parse(localStorage.getItem("user_detail"));
-  const history = useHistory()
+  const history = useHistory();
 
   const fetchCategory = async () => {
     try {
       await axios.get("http://localhost:8000/sanctum/csrf-cookie", {
         withCredentials: true,
       });
-      const response = await axios.get("http://localhost:8000/api/categories", {
+      const response = await axios.get(`${BASE_URL}/categories`, {
         headers: {
           Accept: "application/json",
           Authorization: `Bearer ${user_data.token}`,
@@ -34,21 +36,18 @@ const Category = () => {
     fetchCategory();
   }, []);
 
-    const handleDelete = async (id) => {
+  const handleDelete = async (id) => {
     await axios.get("http://localhost:8000/sanctum/csrf-cookie", {
       withCredentials: true,
     });
-    const response = await axios.delete(
-      `http://localhost:8000/api/categories/${id}`,
-      {
-        headers: {
-          accept: "application/json",
-          "X-XSRF-TOKEN": getCookie("XSRF-TOKEN"),
-          Authorization: `Bearer ${user_data.token}`,
-        },
-        withCredentials: true,
-      }
-    );
+    const response = await axios.delete(`${BASE_URL}/categories/${id}`, {
+      headers: {
+        accept: "application/json",
+        "X-XSRF-TOKEN": getCookie("XSRF-TOKEN"),
+        Authorization: `Bearer ${user_data.token}`,
+      },
+      withCredentials: true,
+    });
     if (response) {
       history.push("/category");
       fetchCategory();
@@ -89,10 +88,13 @@ const Category = () => {
             <i className="icon-eye"></i>
           </div> */}
           <div className="item edit">
-                      <Link to={`/category/edit/${row.id}`} onClick={() => handleEdit(row)}>
-                        <i className="icon-edit-3"></i>
-                      </Link>
-                    </div>
+            <Link
+              to={`/category/edit/${row.id}`}
+              onClick={() => handleEdit(row)}
+            >
+              <i className="icon-edit-3"></i>
+            </Link>
+          </div>
           <div className="item trash" onClick={() => handleDelete(row.id)}>
             <i className="icon-trash-2"></i>
           </div>

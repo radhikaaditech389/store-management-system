@@ -6,6 +6,8 @@ import * as Yup from "yup";
 import { getCookie } from "../utils/cookies";
 import Layout from "./layout";
 
+const BASE_URL = process.env.REACT_APP_API_BASE_URL;
+
 const CreateEditCategory = () => {
   const { id } = useParams(); // if id exists -> Edit Mode
   const history = useHistory();
@@ -40,7 +42,7 @@ const CreateEditCategory = () => {
       await axios.get("http://localhost:8000/sanctum/csrf-cookie", {
         withCredentials: true,
       });
-      const response = await axios.get("http://localhost:8000/api/categories", {
+      const response = await axios.get(`${BASE_URL}/categories`, {
         headers: {
           Accept: "application/json",
           Authorization: `Bearer ${user_data.token}`,
@@ -63,7 +65,7 @@ const CreateEditCategory = () => {
   const validationSchema = Yup.object({
     name: Yup.string().required("Name is required"),
     description: Yup.string().required("Description is required"),
-     parent_id: Yup.string().required("Parent Id is required"),
+    parent_id: Yup.string().required("Parent Id is required"),
   });
 
   // Submit (Create + Update)
@@ -78,11 +80,11 @@ const CreateEditCategory = () => {
 
       if (isEdit) {
         // UPDATE PRODUCT
-        url = `http://localhost:8000/api/categories/${id}`;
+        url = `${BASE_URL}/categories/${id}`;
         method = "put";
       } else {
         // CREATE PRODUCT
-        url = `http://localhost:8000/api/categories`;
+        url = `${BASE_URL}/categories`;
         method = "post";
       }
 

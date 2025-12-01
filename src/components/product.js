@@ -4,6 +4,9 @@ import { Link, useHistory } from "react-router-dom";
 import axios from "axios";
 import Layout from "./layout";
 import { getCookie } from "../utils/cookies";
+
+const BASE_URL = process.env.REACT_APP_API_BASE_URL;
+
 const Product = () => {
   const history = useHistory();
   const [products, setProducts] = useState([]);
@@ -20,17 +23,14 @@ const Product = () => {
     await axios.get("http://localhost:8000/sanctum/csrf-cookie", {
       withCredentials: true,
     });
-    const response = await axios.delete(
-      `http://localhost:8000/api/products/${id}`,
-      {
-        headers: {
-          accept: "application/json",
-          "X-XSRF-TOKEN": getCookie("XSRF-TOKEN"),
-          Authorization: `Bearer ${user_data.token}`,
-        },
-        withCredentials: true,
-      }
-    );
+    const response = await axios.delete(`${BASE_URL}/products/${id}`, {
+      headers: {
+        accept: "application/json",
+        "X-XSRF-TOKEN": getCookie("XSRF-TOKEN"),
+        Authorization: `Bearer ${user_data.token}`,
+      },
+      withCredentials: true,
+    });
     if (response) {
       history.push("/product");
       fetchProduct();
@@ -105,7 +105,7 @@ const Product = () => {
           {/* <div className="item eye">
             <i className="icon-eye"></i>
           </div> */}
-       
+
           <div className="item edit">
             <Link
               to={`/product/edit/${row.id}`}

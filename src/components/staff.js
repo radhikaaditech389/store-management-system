@@ -5,6 +5,8 @@ import DataTable from "react-data-table-component";
 import axios from "axios";
 import { getCookie } from "../utils/cookies";
 
+const BASE_URL = process.env.REACT_APP_API_BASE_URL;
+
 const Staff = () => {
   const history = useHistory();
   const [search, setSearch] = useState("");
@@ -17,7 +19,7 @@ const Staff = () => {
       await axios.get("http://localhost:8000/sanctum/csrf-cookie", {
         withCredentials: true,
       });
-      const response = await axios.get("http://localhost:8000/api/staff", {
+      const response = await axios.get(`${BASE_URL}/staff`, {
         headers: {
           Accept: "application/json",
           Authorization: `Bearer ${user_data.token}`,
@@ -42,17 +44,14 @@ const Staff = () => {
     await axios.get("http://localhost:8000/sanctum/csrf-cookie", {
       withCredentials: true,
     });
-    const response = await axios.delete(
-      `http://localhost:8000/api/staff/${id}`,
-      {
-        headers: {
-          accept: "application/json",
-          "X-XSRF-TOKEN": getCookie("XSRF-TOKEN"),
-          Authorization: `Bearer ${user_data.token}`,
-        },
-        withCredentials: true,
-      }
-    );
+    const response = await axios.delete(`${BASE_URL}/staff/${id}`, {
+      headers: {
+        accept: "application/json",
+        "X-XSRF-TOKEN": getCookie("XSRF-TOKEN"),
+        Authorization: `Bearer ${user_data.token}`,
+      },
+      withCredentials: true,
+    });
     if (response) {
       history.push("/staff");
       fetchStaff();
@@ -94,7 +93,7 @@ const Staff = () => {
       selector: (row) => row.username,
       sortable: true,
     },
-     {
+    {
       name: "role",
       selector: (row) => row.role,
       sortable: true,

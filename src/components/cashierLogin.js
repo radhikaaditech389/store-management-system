@@ -7,6 +7,8 @@ import { getCookie } from "../utils/cookies";
 axios.defaults.baseURL = "http://localhost:8000";
 axios.defaults.withCredentials = true;
 
+const BASE_URL = process.env.REACT_APP_API_BASE_URL;
+
 const CashierLogin = () => {
   const history = useHistory();
   const [formData, setFormData] = useState({
@@ -31,7 +33,7 @@ const CashierLogin = () => {
 
     setErrors(temp);
 
-    return Object.keys(temp).length === 0; // ✅ return true if no errors
+    return Object.keys(temp).length === 0; // return true if no errors
   };
 
   // Submit form
@@ -40,7 +42,7 @@ const CashierLogin = () => {
 
     if (!validate()) {
       console.log("Validation failed");
-      return; // ⛔ Stop here
+      return; // Stop here
     }
 
     try {
@@ -50,17 +52,13 @@ const CashierLogin = () => {
       });
 
       // 2. Send login request
-      const response = await axios.post(
-        "http://localhost:8000/api/login",
-        formData,
-        {
-          headers: {
-            accept: "application/json",
-            "X-XSRF-TOKEN": getCookie("XSRF-TOKEN"),
-          },
-          withCredentials: true,
-        }
-      );
+      const response = await axios.post(`${BASE_URL}/login`, formData, {
+        headers: {
+          accept: "application/json",
+          "X-XSRF-TOKEN": getCookie("XSRF-TOKEN"),
+        },
+        withCredentials: true,
+      });
       if (response.data) {
         history.push("/dashboard");
       }

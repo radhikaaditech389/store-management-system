@@ -7,6 +7,8 @@ import axios from "axios";
 axios.defaults.baseURL = "http://localhost:8000";
 axios.defaults.withCredentials = true;
 
+const BASE_URL = process.env.REACT_APP_API_BASE_URL;
+
 const Login = () => {
   const history = useHistory();
   const [formData, setFormData] = useState({
@@ -52,17 +54,13 @@ const Login = () => {
       });
 
       // 2. Send login request
-      const response = await axios.post(
-        "http://localhost:8000/api/login",
-        formData,
-        {
-          headers: {
-            accept: "application/json",
-            "X-XSRF-TOKEN": getCookie("XSRF-TOKEN"),
-          },
-          withCredentials: true,
-        }
-      );
+      const response = await axios.post(`${BASE_URL}/login`, formData, {
+        headers: {
+          accept: "application/json",
+          "X-XSRF-TOKEN": getCookie("XSRF-TOKEN"),
+        },
+        withCredentials: true,
+      });
       const user_detail = response.data;
       localStorage.setItem("user_detail", JSON.stringify(user_detail));
       if (response.data) {
