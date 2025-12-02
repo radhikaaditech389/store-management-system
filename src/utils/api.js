@@ -1,0 +1,45 @@
+import axios from "axios";
+
+const BASE_URL = process.env.REACT_APP_API_BASE_URL;
+
+const getAuthHeader = () => {
+  const user_detail = localStorage.getItem("user_detail");
+  const user = user_detail ? JSON.parse(user_detail) : null;
+  const token = user?.token;
+
+  return token
+    ? { "Content-Type": "application/json", Authorization: `Bearer ${token}` }
+    : {};
+};
+
+export const getProducts = (params = {}) =>
+  axios.get(`${BASE_URL}/products`, {
+    headers: getAuthHeader(),
+    params: params,
+  });
+
+export const getCategories = () =>
+  axios.get(`${BASE_URL}/categories`, { headers: getAuthHeader() });
+export const getBrands = () =>
+  axios.get(`${BASE_URL}/brands`, { headers: getAuthHeader() });
+
+export const scanBarcode = (barcode) =>
+  axios.post(
+    `${BASE_URL}/sales/scan`,
+    { barcode },
+    { headers: getAuthHeader() }
+  );
+
+export const createSalesBill = (lines) =>
+  axios.post(
+    `${BASE_URL}/sales-bills`,
+    { lines },
+    { headers: getAuthHeader() }
+  );
+
+export const paySalesBill = (sales_bill_id, payments) =>
+  axios.post(
+    `${BASE_URL}/sales-bills/pay`,
+    { sales_bill_id, payments },
+    { headers: getAuthHeader() }
+  );

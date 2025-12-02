@@ -27,6 +27,7 @@ import GstRate from "./components/gstRate";
 import Staff from "./components/staff";
 import CreateEditStaff from "./components/createEditStaff";
 import ProtectedRoute from "./routes/ProtectedRoute";
+import POS from "./components/POS";
 
 function App() {
   return (
@@ -53,7 +54,8 @@ function App() {
           <Route exact path="/" component={Login} />
           <Route exact path="/register" component={Register} />
           <Route exact path="/casier_login" component={CashierLogin} />
-
+          
+          <ProtectedRoute exact path="/pos" component={POS} />
           <ProtectedRoute exact path="/dashboard" component={Home} />
           <ProtectedRoute exact path="/product" component={Product} />
           <ProtectedRoute
