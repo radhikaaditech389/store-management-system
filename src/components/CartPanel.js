@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { createSalesBill, paySalesBill } from "../utils/api";
 import PaymentModal from "./PaymentModal";
 import { toast } from "react-toastify";
+import { Link, useHistory } from "react-router-dom";
 
 export default function CartPanel({ cart, setCart }) {
   const [showPayment, setShowPayment] = useState(false);
@@ -58,7 +59,16 @@ export default function CartPanel({ cart, setCart }) {
   return (
     <>
       <div className="w-1/3 bg-gray-50 border-l shadow-2xl p-10 flex flex-col">
-        <h2 className="font-extrabold text-4xl mb-10 text-center">Cart</h2>
+        <div className="flex items-center justify-between mb-10">
+          <h2 className="font-extrabold text-4xl">Cart</h2>
+
+          <Link
+            to="/dashboard"
+            className="px-8 py-4 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-semibold shadow-md transition"
+          >
+            Dashboard
+          </Link>
+        </div>
 
         <div className="flex-1 overflow-y-auto space-y-6">
           {cart.map((item) => (
