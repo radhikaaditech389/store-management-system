@@ -27,6 +27,9 @@ import GstRate from "./components/gstRate";
 import Staff from "./components/staff";
 import CreateEditStaff from "./components/createEditStaff";
 import ProtectedRoute from "./routes/ProtectedRoute";
+import CreateEditPurchaseBill from "./components/createEditPurchaseBill";
+import SaleBill from "./components/saleBill";
+import CreateEditSaleBill from "./components/createEditSaleBill";
 
 function App() {
   return (
@@ -95,6 +98,16 @@ function App() {
           />
           <ProtectedRoute
             exact
+            path="/sale-bill"
+            component={SaleBill}
+          />
+          <ProtectedRoute
+            exact
+            path="/create-sale-bill"
+            component={CreateEditSaleBill}
+          />
+          <ProtectedRoute
+            exact
             path="/supplier-bill"
             component={SupplierBill}
           />
@@ -111,6 +124,11 @@ function App() {
             component={CreateEditStaff}
           />
           <ProtectedRoute path="/staff/edit/:id" component={CreateEditStaff} />
+           <ProtectedRoute
+            exact
+            path="/create-purchase-bill"
+            component={CreateEditPurchaseBill}
+          />
           <ProtectedRoute exact path="/gst-rates" component={GstRate} />
           <ProtectedRoute exact path="/staff" component={Staff} />
 
