@@ -544,7 +544,7 @@ const Header = () => {
                   </Link>
                 </li> */}
                 <li>
-                  <Link to="setting.html" className="user-item">
+                  <Link to="#" className="user-item">
                     <div className="icon">
                       <i className="icon-settings"></i>
                     </div>
