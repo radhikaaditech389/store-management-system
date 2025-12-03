@@ -55,7 +55,7 @@ export default function ProductList({
             if (value.length >= 8) {
               try {
                 const res = await scanBarcode(value);
-                addToCart(res.data.product);
+                addToCart(res.data.data);
                 setBarcode("");
               } catch (err) {
                 console.log("Product not found for barcode:", value);
@@ -112,7 +112,7 @@ export default function ProductList({
           products.map((p) => (
             <div
               key={p.id}
-              onClick={() => p.stock > 0 && addToCart(p)}
+              onClick={() => p.stock > 0 && addToCart({ ...p, qty: 1 })}
               className={`bg-white p-6 rounded-3xl shadow-2xl flex flex-col justify-between transition-transform transform 
         ${
           p.stock > 0

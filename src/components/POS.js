@@ -11,7 +11,7 @@ export default function POSApp() {
   return (
     <div className="flex h-screen bg-gray-100">
       <LeftSidebar
-        selectedCategory={selectedCategory} 
+        selectedCategory={selectedCategory}
         selectedBrand={selectedBrand}
         setCategory={setSelectedCategory}
         setBrand={setSelectedBrand}
