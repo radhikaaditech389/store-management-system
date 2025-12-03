@@ -5,7 +5,6 @@ import axios from "axios";
 import Layout from "./layout";
 import { getCookie } from "../utils/cookies";
 const SaleBill = () => {
-  const [products, setProducts] = useState([]);
   const [search, setSearch] = useState("");
    const [saleBills, setSaleBills] = useState([]);
   
@@ -88,27 +87,11 @@ const SaleBill = () => {
       selector: (row) => row.bill_status,
       sortable: true,
     },
-    {
-      name: "Action",
-      cell: (row) => (
-        <div className="list-icon-function">
-          <div className="item eye">
-            <i className="icon-eye"></i>
-          </div>
-          <div className="item edit">
-            <i className="icon-edit-3"></i>
-          </div>
-          <div className="item trash">
-            <i className="icon-trash-2"></i>
-          </div>
-        </div>
-      ),
-    },
   ];
 
-   const handleCreateSaleBill = () => {
-    localStorage.setItem("sale_bill_detail", null);
-  };
+  //  const handleCreateSaleBill = () => {
+  //   localStorage.setItem("sale_bill_detail", null);
+  // };
 
   const fetchSaleBill = async () => {
     try {
@@ -132,16 +115,35 @@ const SaleBill = () => {
   useEffect(() => {
     fetchSaleBill();
   }, []);
-  useEffect(() => {
-    const result = saleBills.filter((item) => {
-      return Object.values(item)
-        .join(" ")
-        .toLowerCase()
-        .includes(search.toLowerCase());
-    });
 
-    setFilteredData(result);
-  }, [search, saleBills]);
+useEffect(() => {
+  const searchText = search.toLowerCase();
+
+  const result = saleBills.filter((item) => {
+    const searchable = `
+      ${item.id}
+      ${item.store?.name}
+      ${item.branch?.name}
+      ${item.user?.name}
+      ${item.bill_no}
+      ${item.subtotal}
+      ${item.total_gst}
+      ${item.total_amount}
+      ${item.total_saved}
+      ${item.total_cogs}
+      ${item.total_profit}
+      ${item.cash_received}
+      ${item.balance_return}
+      ${item.payment_status}
+      ${item.bill_status}
+    `.toLowerCase();
+
+    return searchable.includes(searchText);
+  });
+
+  setFilteredData(result);
+}, [search, saleBills]);
+
 
   return (
     <Layout>
@@ -174,7 +176,7 @@ const SaleBill = () => {
           </div>
           {/* <!-- all-user --> */}
           <div className="wg-box">
-            <div className="flex items-center justify-between gap10 flex-wrap">
+            {/* <div className="flex items-center justify-between gap10 flex-wrap">
                           <div className="wg-filter flex-grow"></div>
                           <Link
                             className="tf-button style-1 w208"
@@ -183,17 +185,13 @@ const SaleBill = () => {
                           >
                             <i className="icon-plus"></i>Add new
                           </Link>
-                        </div>
+                        </div> */}
             <input
               type="text"
               placeholder="Search..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              style={{
-                marginBottom: "10px",
-                padding: "8px",
-                width: "250px",
-              }}
+              className="search-input"
             />
             <DataTable
               columns={columns}

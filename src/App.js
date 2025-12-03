@@ -98,6 +98,15 @@ function App() {
             path="/purchase-bill"
             component={PurchaseBill}
           />
+            <ProtectedRoute
+            exact
+            path="/create-purchase-bill"
+            component={CreateEditPurchaseBill}
+          />
+           <ProtectedRoute
+            path="/purchase-bill/edit/:id"
+            component={CreateEditPurchaseBill}
+          />
           <ProtectedRoute
             exact
             path="/sale-bill"
@@ -126,11 +135,7 @@ function App() {
             component={CreateEditStaff}
           />
           <ProtectedRoute path="/staff/edit/:id" component={CreateEditStaff} />
-           <ProtectedRoute
-            exact
-            path="/create-purchase-bill"
-            component={CreateEditPurchaseBill}
-          />
+         
           <ProtectedRoute exact path="/gst-rates" component={GstRate} />
           <ProtectedRoute exact path="/staff" component={Staff} />
 

@@ -1,17 +1,45 @@
 import React, { useEffect, useState } from "react";
 import DataTable from "react-data-table-component";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import axios from "axios";
 import Layout from "./layout";
 import { getCookie } from "../utils/cookies";
+import { toast } from "react-toastify";
 const PurchaseBill = () => {
+  const BASE_URL = process.env.REACT_APP_API_BASE_URL;
+
+  const history = useHistory();
   const [products, setProducts] = useState([]);
   const [search, setSearch] = useState("");
   const [purchaseBill, setPurchaseBill] = useState([]);
   const [filteredData, setFilteredData] = useState(products);
 
   const user_data = JSON.parse(localStorage.getItem("user_detail"));
+  const handleCreatePurchaseBills = () => {
+    localStorage.setItem("purchase_bills_create", null);
+  };
+  const handleEdit = (row) => {
+    localStorage.setItem("purchase_bills_create", JSON.stringify(row));
+  };
 
+  const handleDelete = async (id) => {
+    await axios.get("http://localhost:8000/sanctum/csrf-cookie", {
+      withCredentials: true,
+    });
+    const response = await axios.delete(`${BASE_URL}/purchase-bill/${id}`, {
+      headers: {
+        accept: "application/json",
+        "X-XSRF-TOKEN": getCookie("XSRF-TOKEN"),
+        Authorization: `Bearer ${user_data.token}`,
+      },
+      withCredentials: true,
+    });
+    if (response) {
+      history.push("/purchase-bill");
+      toast.success("Purchase Bill Deleted!");
+      fetchPurchaseBill();
+    }
+  };
   const columns = [
     {
       name: "Id",
@@ -78,6 +106,24 @@ const PurchaseBill = () => {
       selector: (row) => row.total_amount,
       sortable: true,
     },
+    {
+      name: "Action",
+      cell: (row) => (
+        <div className="list-icon-function">
+          <div className="item edit">
+            <Link
+              to={`/purchase-bill/edit/${row.id}`}
+              onClick={() => handleEdit(row)}
+            >
+              <i className="icon-edit-3"></i>
+            </Link>
+          </div>
+          <div className="item trash" onClick={() => handleDelete(row.id)}>
+            <i className="icon-trash-2"></i>
+          </div>
+        </div>
+      ),
+    },
   ];
 
   const fetchPurchaseBill = async () => {
@@ -105,19 +151,30 @@ const PurchaseBill = () => {
     fetchPurchaseBill();
   }, []);
   useEffect(() => {
+    const searchText = search.toLowerCase();
+
     const result = purchaseBill.filter((item) => {
-      return Object.values(item)
-        .join(" ")
-        .toLowerCase()
-        .includes(search.toLowerCase());
+      const searchable = `
+      ${item.id}
+      ${item.store?.name}
+      ${item.branch?.name}
+      ${item.supplier?.name}
+      ${item.bill_no}
+      ${item.bill_date}
+      ${item.taxable_value}
+      ${item.cgst_amount}
+      ${item.sgst_amount}
+      ${item.igst_amount}
+      ${item.cess_amount}
+      ${item.total_tax}
+      ${item.total_amount}
+    `.toLowerCase();
+
+      return searchable.includes(searchText);
     });
 
     setFilteredData(result);
   }, [search, purchaseBill]);
-
-  const handleCreatePurchaseBills = () =>{
-     localStorage.setItem("purchase_bills_create", null); 
-  }
 
   return (
     <Layout>
@@ -165,6 +222,7 @@ const PurchaseBill = () => {
               placeholder="Search..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
+              className="search-input"
               style={{
                 marginBottom: "10px",
                 padding: "8px",

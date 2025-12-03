@@ -61,16 +61,23 @@ const Staff = () => {
     fetchStaff();
   }, []);
 
-  useEffect(() => {
-    const result = staffs.filter((item) => {
-      return Object.values(item)
-        .join(" ")
-        .toLowerCase()
-        .includes(search.toLowerCase());
-    });
+ useEffect(() => {
+  const searchText = search.toLowerCase();
 
-    setFilteredData(result);
-  }, [search, staffs]);
+  const result = staffs.filter((item) => {
+    const searchable = `
+      ${item.id}
+      ${item.store?.name}
+      ${item.name}
+      ${item.username}
+      ${item.role}
+    `.toLowerCase();
+
+    return searchable.includes(searchText);
+  });
+
+  setFilteredData(result);
+}, [search, staffs]);
 
   const columns = [
     {
@@ -161,11 +168,7 @@ const Staff = () => {
               placeholder="Search..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              style={{
-                marginBottom: "10px",
-                padding: "8px",
-                width: "250px",
-              }}
+              className="search-input"
             />
             <DataTable
               columns={columns}

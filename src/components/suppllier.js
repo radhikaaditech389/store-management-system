@@ -87,15 +87,24 @@ const SupplierBill = () => {
     fetchSupplierBill();
   }, []);
 
-  useEffect(() => {
-    const result = supplierBill.filter((item) => {
-      return Object.values(item)
-        .join(" ")
-        .toLowerCase()
-        .includes(search.toLowerCase());
-    });
-    setFilteredData(result);
-  }, [search, supplierBill]);
+useEffect(() => {
+  const searchText = search.toLowerCase();
+
+  const result = supplierBill.filter((item) => {
+    return (
+      item.store?.name?.toLowerCase().includes(searchText) ||
+      item.name?.toLowerCase().includes(searchText) ||
+      String(item.gstin || "").toLowerCase().includes(searchText) ||
+      String(item.contact || "").toLowerCase().includes(searchText) ||   // <-- CONTACT SEARCH
+      item.address?.toLowerCase().includes(searchText) ||
+      item.state?.toLowerCase().includes(searchText) ||
+      item.description?.toLowerCase().includes(searchText)
+    );
+  });
+
+  setFilteredData(result);
+}, [search, supplierBill]);
+
 
   return (
     <Layout>
@@ -133,11 +142,7 @@ const SupplierBill = () => {
               placeholder="Search..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              style={{
-                marginBottom: "10px",
-                padding: "8px",
-                width: "250px",
-              }}
+              className="search-input"
             />
             <DataTable
               columns={columns}

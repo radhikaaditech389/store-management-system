@@ -63,15 +63,21 @@ const Branch = () => {
   };
 
   useEffect(() => {
-    const result = branches.filter((item) => {
-      return Object.values(item)
-        .join(" ")
-        .toLowerCase()
-        .includes(search.toLowerCase());
-    });
+  const s = search.toLowerCase();
 
-    setFilteredData(result);
-  }, [search, branches]);
+  const result = branches.filter((item) => {
+    return (
+      item.id.toString().includes(s) ||
+      item.store?.name?.toLowerCase().includes(s) ||
+      item.name?.toLowerCase().includes(s) ||
+      item.address?.toLowerCase().includes(s) ||
+      item.state?.toLowerCase().includes(s) ||
+      item.phone?.toString().includes(s)
+    );
+  });
+
+  setFilteredData(result);
+}, [search, branches]);
 
   const columns = [
     {
@@ -170,11 +176,7 @@ const Branch = () => {
               placeholder="Search..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              style={{
-                marginBottom: "10px",
-                padding: "8px",
-                width: "250px",
-              }}
+              className="search-input"
             />
             <DataTable
               columns={columns}

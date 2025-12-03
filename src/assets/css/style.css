@@ -5772,6 +5772,12 @@ select.h40 {
   font-size: 12px;
   margin-top: 4px;
 }
+.search-input{
+  margin-bottom: 10px;
+  padding: 8px;
+  width: 250px;
+  border:2px solid black
+}
 
 @media (max-width: 991px) {
   .dark-theme .layout-wrap.full-width .box-logo {

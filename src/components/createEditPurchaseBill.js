@@ -7,7 +7,6 @@ import { getCookie } from "../utils/cookies";
 import Layout from "./layout";
 import { toast } from "react-toastify";
 
-const BASE_URL = process.env.REACT_APP_API_BASE_URL;
 
 const CreateEditPurchaseBill = () => {
   const { id } = useParams(); // if id exists -> Edit Mode
@@ -17,10 +16,14 @@ const CreateEditPurchaseBill = () => {
   const [products, setProducts] = useState([]);
 
   const user_data = JSON.parse(localStorage.getItem("user_detail"));
+  const store_purchase_bill = localStorage.getItem("purchase_bills_create");
+  const incomingBill = store_purchase_bill
+    ? JSON.parse(store_purchase_bill)
+    : null;
 
   const isEdit = Boolean(id);
 
-  const initialValues = {
+  const [initialValues, setInitialValues] = useState({
     branch_id: "",
     supplier_id: "",
     bill_no: "",
@@ -39,20 +42,48 @@ const CreateEditPurchaseBill = () => {
         expiry_date: "",
       },
     ],
-  };
+  });
+  useEffect(() => {
+    if (incomingBill) {
+      setInitialValues({
+        branch_id: incomingBill.branch_id?.toString() || "",
+        supplier_id: incomingBill.supplier_id?.toString() || "",
+        bill_no: incomingBill.bill_no || "",
+        bill_date: incomingBill.bill_date || "",
+
+        lines: incomingBill.lines?.length
+          ? incomingBill.lines.map((line) => ({
+              product_id: line.product_id?.toString() || "",
+              qty: line.qty || "",
+              free_qty: line.free_qty || "",
+              purchase_rate: line.purchase_rate || "",
+              discount_type: line.discount_type || "",
+              discount: line.discount || "",
+              hsn_code: line.hsn_code || "",
+              gst_rate_id: line.gst_rate_id?.toString() || "",
+              batch_no: line.batch_no || "",
+              expiry_date: line.expiry_date || "",
+            }))
+          : initialValues.lines, // fallback
+      });
+    }
+  }, []);
   const fetchBranch = async () => {
     try {
       await axios.get("http://localhost:8000/sanctum/csrf-cookie", {
         withCredentials: true,
       });
-      const response = await axios.get(`http://127.0.0.1:8000/api/manager/branches`, {
-        headers: {
-          Accept: "application/json",
-          Authorization: `Bearer ${user_data.token}`,
-          "X-XSRF-TOKEN": getCookie("XSRF-TOKEN"),
-        },
-        withCredentials: true,
-      });
+      const response = await axios.get(
+        `http://127.0.0.1:8000/api/manager/branches`,
+        {
+          headers: {
+            Accept: "application/json",
+            Authorization: `Bearer ${user_data.token}`,
+            "X-XSRF-TOKEN": getCookie("XSRF-TOKEN"),
+          },
+          withCredentials: true,
+        }
+      );
 
       setBranches(response.data.branches);
     } catch (error) {
@@ -136,8 +167,7 @@ const CreateEditPurchaseBill = () => {
             .required("Purchase rate required")
             .min(0, "Rate cannot be negative"),
 
-          discount_type: Yup.string()
-            .required(),
+          discount_type: Yup.string().required(),
 
           discount: Yup.number()
             .nullable()
@@ -150,30 +180,43 @@ const CreateEditPurchaseBill = () => {
 
           batch_no: Yup.string().required(),
 
-          expiry_date: Yup.date().required()
+          expiry_date: Yup.date().required(),
         })
       ),
   });
-
-  // Submit (Create + Update)
+  
   const handleSubmit = async (values, actions) => {
     try {
-      // if you haven't called before login session
       await axios.get("/sanctum/csrf-cookie", { withCredentials: true });
 
-      const response = await axios.post("/api/purchase-bill", values, {
-        headers: {
-          Accept: "application/json",
-          Authorization: `Bearer ${user_data.token}`,
-          "X-XSRF-TOKEN": getCookie("XSRF-TOKEN"),
-        },
-        withCredentials: true,
-      });
-      if (response.data) {
-        history.push("purchase-bill");
-        toast.success("Purchase Bill Saved!");
+      let response;
+
+      if (isEdit) {
+        // UPDATE
+        response = await axios.put(`/api/purchase-bill/${id}`, values, {
+          headers: {
+            Accept: "application/json",
+            Authorization: `Bearer ${user_data.token}`,
+            "X-XSRF-TOKEN": getCookie("XSRF-TOKEN"),
+          },
+          withCredentials: true,
+        });
+        toast.success("Purchase Bill Updated!");
+      } else {
+        // CREATE
+        response = await axios.post("/api/purchase-bill", values, {
+          headers: {
+            Accept: "application/json",
+            Authorization: `Bearer ${user_data.token}`,
+            "X-XSRF-TOKEN": getCookie("XSRF-TOKEN"),
+          },
+          withCredentials: true,
+        });
         actions.resetForm();
+        toast.success("Purchase Bill Saved!");
       }
+
+      history.push("/purchase-bill");
     } catch (error) {
       console.log(error.response?.data);
       alert(error.response?.data?.message || "Something went wrong");
@@ -191,6 +234,7 @@ const CreateEditPurchaseBill = () => {
           <div className="wg-box">
             <Formik
               initialValues={initialValues}
+              enableReinitialize={true}
               validationSchema={validationSchema}
               onSubmit={(values, actions) => handleSubmit(values, actions)}
             >
