@@ -37,9 +37,20 @@ export const createSalesBill = (lines) =>
     { headers: getAuthHeader() }
   );
 
+const generateIdempotencyKey = () =>
+  "idemp_" +
+  Array.from(crypto.getRandomValues(new Uint8Array(16)))
+    .map((b) => b.toString(16).padStart(2, "0"))
+    .join("");
+
 export const paySalesBill = (sales_bill_id, payments) =>
   axios.post(
     `${BASE_URL}/sales-bills/pay`,
     { sales_bill_id, payments },
-    { headers: getAuthHeader() }
+    {
+      headers: {
+        ...getAuthHeader(),
+        "Idempotency-Key": generateIdempotencyKey(),
+      },
+    }
   );
