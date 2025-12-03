@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import { Link, useHistory } from "react-router-dom";
 
 const Header = () => {
+  const user_data = JSON.parse(localStorage.getItem("user_detail"));
+  console.log("user_data",user_data);
   const [showMenu, setShowMenu] = useState(false);
   const history = useHistory();
   const handleChange = () => {};
@@ -189,7 +191,7 @@ const Header = () => {
           </form>
         </div>
         <div className="header-grid">
-          <div className="header-item country">
+          {/* <div className="header-item country">
             <select className="image-select no-text">
               <option data-thumbnail="images/country/1.png">ENG</option>
               <option data-thumbnail="images/country/9.png">VIE</option>
@@ -489,7 +491,7 @@ const Header = () => {
                 </li>
               </ul>
             </div>
-          </div>
+          </div> */}
           <div className="popup-wrap user type-header">
             <div className="dropdown">
               <button
@@ -505,8 +507,8 @@ const Header = () => {
                     <img src="images/avatar/user-1.png" alt="" />
                   </span>
                   <span className="flex flex-column">
-                    <span className="body-title mb-2">Kristin Watson</span>
-                    <span className="text-tiny">Admin</span>
+                    <span className="body-title mb-2">{user_data?.user?.name}</span>
+                    <span className="text-tiny">{user_data?.user?.role}</span>
                   </span>
                 </span>
               </button>

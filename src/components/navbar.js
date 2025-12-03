@@ -121,7 +121,7 @@ const Navbar = () => {
                   <li className="menu-item">
                     <Link to="/product" className="menu-item-button">
                       <div className="icon">
-                        <i className="icon-box"></i>
+                        <i className="icon-cast"></i>
                       </div>
                       <div className="text">Products</div>
                     </Link>
@@ -138,7 +138,7 @@ const Navbar = () => {
                     <li className="menu-item">
                     <Link to="/sale-bill" className="menu-item-button">
                       <div className="icon">
-                        <i className="icon-bookmark"></i>
+                        <i className="icon-box"></i>
                       </div>
                       <div className="text">Sale Bill</div>
                     </Link>

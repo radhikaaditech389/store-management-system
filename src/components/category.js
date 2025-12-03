@@ -103,16 +103,20 @@ const Category = () => {
     },
   ];
 
-  useEffect(() => {
-    const result = categories.filter((item) => {
-      return Object.values(item)
-        .join(" ")
-        .toLowerCase()
-        .includes(search.toLowerCase());
-    });
+ useEffect(() => {
+  const searchText = search.toLowerCase();
 
-    setFilteredData(result);
-  }, [search, categories]);
+  const result = categories.filter((item) => {
+    return (
+       item.store.name.toLowerCase().includes(searchText) ||
+      item.name.toLowerCase().includes(searchText) ||
+       item.description.toLowerCase().includes(searchText) ||
+      item.parent?.name?.toLowerCase().includes(searchText)
+    );
+  });
+
+  setFilteredData(result);
+}, [search, categories]);
 
   const handleCreateCategory = () => {
     localStorage.setItem("category_detail", null);
@@ -166,11 +170,7 @@ const Category = () => {
               placeholder="Search..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              style={{
-                marginBottom: "10px",
-                padding: "8px",
-                width: "250px",
-              }}
+              className="search-input"
             />
             <DataTable
               columns={columns}

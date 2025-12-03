@@ -43,11 +43,6 @@ const Product = () => {
       selector: (row) => row.id,
       sortable: true,
     },
-    // {
-    //   name: "Store Name",
-    //   selector: (row) => row.store.name,
-    //   sortable: true,
-    // },
     {
       name: "SKU",
       selector: (row) => row.sku,
@@ -102,10 +97,6 @@ const Product = () => {
       name: "Action",
       cell: (row) => (
         <div className="list-icon-function">
-          {/* <div className="item eye">
-            <i className="icon-eye"></i>
-          </div> */}
-
           <div className="item edit">
             <Link
               to={`/product/edit/${row.id}`}
@@ -143,16 +134,29 @@ const Product = () => {
   useEffect(() => {
     fetchProduct();
   }, []);
-  useEffect(() => {
-    const result = products.filter((item) => {
-      return Object.values(item)
-        .join(" ")
-        .toLowerCase()
-        .includes(search.toLowerCase());
-    });
+useEffect(() => {
+  const text = search.toLowerCase();
 
-    setFilteredData(result);
-  }, [search, products]);
+  const result = products.filter((item) => {
+    const searchString = `
+      ${item.id}
+      ${item.sku}
+      ${item.barcode}
+      ${item.name}
+      ${item.brand?.name}
+      ${item.category?.name}
+      ${item.hsn_code}
+      ${item.gst_rate?.rate}
+      ${item.mrp}
+      ${item.selling_price}
+      ${item.cost_price}
+    `.toLowerCase();
+
+    return searchString.includes(text);
+  });
+
+  setFilteredData(result);
+}, [search, products]);
 
   return (
     <Layout>
@@ -200,11 +204,7 @@ const Product = () => {
               placeholder="Search..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              style={{
-                marginBottom: "10px",
-                padding: "8px",
-                width: "250px",
-              }}
+              className="search-input"
             />
             <DataTable
               columns={columns}

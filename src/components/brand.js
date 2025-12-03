@@ -62,15 +62,18 @@ const Brand = () => {
   }, []);
 
   useEffect(() => {
-    const result = brands.filter((item) => {
-      return Object.values(item)
-        .join(" ")
-        .toLowerCase()
-        .includes(search.toLowerCase());
-    });
-
-    setFilteredData(result);
-  }, [search, brands]);
+   const searchText = search.toLowerCase();
+ 
+   const result = brands.filter((item) => {
+     return (
+        item.store.name.toLowerCase().includes(searchText) ||
+       item.name.toLowerCase().includes(searchText) ||
+        item.description.toLowerCase().includes(searchText) 
+     );
+   });
+ 
+   setFilteredData(result);
+ }, [search, brands]);
 
   const columns = [
     {
@@ -156,11 +159,7 @@ const Brand = () => {
               placeholder="Search..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              style={{
-                marginBottom: "10px",
-                padding: "8px",
-                width: "250px",
-              }}
+             className="search-input"
             />
             <DataTable
               columns={columns}

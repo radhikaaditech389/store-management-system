@@ -59,11 +59,14 @@ const GstRate = () => {
   }, []);
 
   useEffect(() => {
+    const searchText = search.toLowerCase();
+
     const result = gstRates.filter((item) => {
-      return Object.values(item)
-        .join(" ")
-        .toLowerCase()
-        .includes(search.toLowerCase());
+      return (
+        item.store.name.toLowerCase().includes(searchText) ||
+        item.rate.toLowerCase().includes(searchText) ||
+        item.description.toLowerCase().includes(searchText)
+      );
     });
 
     setFilteredData(result);
@@ -133,11 +136,7 @@ const GstRate = () => {
               placeholder="Search..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              style={{
-                marginBottom: "10px",
-                padding: "8px",
-                width: "250px",
-              }}
+              className="search-input"
             />
             <DataTable
               columns={columns}
