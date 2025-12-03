@@ -5744,6 +5744,35 @@ select.h40 {
   background-color: #2275fc;
 }
 
+.line-row {
+  display: flex;
+  flex-wrap: nowrap;     /* Prevent breaking into next line */
+  gap: 15px;             /* Space between fields */
+  align-items: flex-end; /* Align inputs nicely */
+  overflow-x: auto;      /* Allow horizontal scroll if too many fields */
+  padding-bottom: 5px;
+}
+
+.line-col {
+  display: flex;
+  flex-direction: column;
+  min-width: 150px;      /* FIXED width so all stay in one row */
+}
+
+.line-col label {
+  font-weight: 500;
+  margin-bottom: 3px;
+}
+.purchase-label{
+  font-size:15px;
+  font-weight:500
+}
+.error-danger {
+  color: #e63946!important;      /* red */
+  font-size: 12px;
+  margin-top: 4px;
+}
+
 @media (max-width: 991px) {
   .dark-theme .layout-wrap.full-width .box-logo {
     background-color: #1e293b;

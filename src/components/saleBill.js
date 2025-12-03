@@ -7,7 +7,9 @@ import { getCookie } from "../utils/cookies";
 const SaleBill = () => {
   const [products, setProducts] = useState([]);
   const [search, setSearch] = useState("");
-  const [filteredData, setFilteredData] = useState(products);
+   const [saleBills, setSaleBills] = useState([]);
+  
+  const [filteredData, setFilteredData] = useState(saleBills);
   const user_data = JSON.parse(localStorage.getItem("user_detail"));
 
   const columns = [
@@ -22,58 +24,68 @@ const SaleBill = () => {
       sortable: true,
     },
     {
-      name: "sku",
-      selector: (row) => row.sku,
+      name: "Branch Name",
+      selector: (row) => row.branch.name,
+      sortable: true,
+    },
+     {
+      name: "User Name",
+      selector: (row) => row.user.name,
       sortable: true,
     },
     {
-      name: "barcode",
-      selector: (row) => row.barcode,
+      name: "bill No",
+      selector: (row) => row.bill_no,
       sortable: true,
     },
     {
-      name: "name",
-      selector: (row) => row.name,
+      name: "subtotal",
+      selector: (row) => row.subtotal,
       sortable: true,
     },
     {
-      name: "brand Name",
-      selector: (row) => row.brand.name,
+      name: "total_gst",
+      selector: (row) => row.total_gst,
       sortable: true,
     },
     {
-      name: "Category Name",
-      selector: (row) => row.category.name,
+      name: "total_amount",
+      selector: (row) => row?.total_amount,
       sortable: true,
     },
     {
-      name: "Hsn Code",
-      selector: (row) => row.hsn_code,
+      name: "total_saved",
+      selector: (row) => row.total_saved,
       sortable: true,
     },
     {
-      name: "Gst Rate Id",
-      selector: (row) => row.gst_rate_id,
+      name: "total_cogs",
+      selector: (row) => row.total_cogs,
       sortable: true,
     },
     {
-      name: "mrp",
-      selector: (row) => row.mrp,
+      name: "total_profit",
+      selector: (row) => row.total_profit,
       sortable: true,
     },
     {
-      name: "Selling Price",
-      selector: (row) => row.selling_price,
+      name: "cash_received",
+      selector: (row) => row.cash_received,
       sortable: true,
     },
     {
-      name: "Cost Price",
-      selector: (row) => row.cost_price,
+      name: "balance_return",
+      selector: (row) => row.balance_return,
       sortable: true,
     },
     {
-      name: "Stock",
-      selector: (row) => row.stock,
+      name: "payment_status",
+      selector: (row) => row.payment_status,
+      sortable: true,
+    },
+     {
+      name: "bill_status",
+      selector: (row) => row.bill_status,
       sortable: true,
     },
     {
@@ -94,12 +106,16 @@ const SaleBill = () => {
     },
   ];
 
+   const handleCreateSaleBill = () => {
+    localStorage.setItem("sale_bill_detail", null);
+  };
+
   const fetchSaleBill = async () => {
     try {
       await axios.get("http://localhost:8000/sanctum/csrf-cookie", {
         withCredentials: true,
       });
-      const response = await axios.get("http://127.0.0.1:8000/api/products", {
+      const response = await axios.get("http://127.0.0.1:8000/api/sales-bills", {
         headers: {
           Accept: "application/json",
           Authorization: `Bearer ${user_data.token}`,
@@ -107,16 +123,17 @@ const SaleBill = () => {
         },
         withCredentials: true,
       });
-      setProducts(response.data.products);
+      setSaleBills(response.data.data);
     } catch (error) {
       console.error("Error fetching categories:", error);
     }
   };
+  
   useEffect(() => {
     fetchSaleBill();
   }, []);
   useEffect(() => {
-    const result = products.filter((item) => {
+    const result = saleBills.filter((item) => {
       return Object.values(item)
         .join(" ")
         .toLowerCase()
@@ -124,7 +141,7 @@ const SaleBill = () => {
     });
 
     setFilteredData(result);
-  }, [search, products]);
+  }, [search, saleBills]);
 
   return (
     <Layout>
@@ -144,19 +161,29 @@ const SaleBill = () => {
               </li>
               <li>
                 <Link to="#">
-                  <div className="text-tiny">Product</div>
+                  <div className="text-tiny">Sale Bills</div>
                 </Link>
               </li>
               <li>
                 <i className="icon-chevron-right"></i>
               </li>
               <li>
-                <div className="text-tiny">All Product</div>
+                <div className="text-tiny">All Sale Bills</div>
               </li>
             </ul>
           </div>
           {/* <!-- all-user --> */}
           <div className="wg-box">
+            <div className="flex items-center justify-between gap10 flex-wrap">
+                          <div className="wg-filter flex-grow"></div>
+                          <Link
+                            className="tf-button style-1 w208"
+                            to="/create-sale-bill"
+                            onClick={handleCreateSaleBill}
+                          >
+                            <i className="icon-plus"></i>Add new
+                          </Link>
+                        </div>
             <input
               type="text"
               placeholder="Search..."

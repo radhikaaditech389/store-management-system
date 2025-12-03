@@ -4,12 +4,12 @@ import { Link } from "react-router-dom";
 import axios from "axios";
 import Layout from "./layout";
 import { getCookie } from "../utils/cookies";
-const PurchaseBill = () => {
+const PurchaseBillLine = () => {
   const [products, setProducts] = useState([]);
   const [search, setSearch] = useState("");
   const [purchaseBill, setPurchaseBill] = useState([]);
   const [filteredData, setFilteredData] = useState(products);
-
+  
   const user_data = JSON.parse(localStorage.getItem("user_detail"));
 
   const columns = [
@@ -77,7 +77,7 @@ const PurchaseBill = () => {
       name: "Total Amount",
       selector: (row) => row.total_amount,
       sortable: true,
-    },
+    },   
   ];
 
   const fetchPurchaseBill = async () => {
@@ -85,17 +85,14 @@ const PurchaseBill = () => {
       await axios.get("http://localhost:8000/sanctum/csrf-cookie", {
         withCredentials: true,
       });
-      const response = await axios.get(
-        "http://127.0.0.1:8000/api/purchase-bill",
-        {
-          headers: {
-            Accept: "application/json",
-            Authorization: `Bearer ${user_data.token}`,
-            "X-XSRF-TOKEN": getCookie("XSRF-TOKEN"),
-          },
-          withCredentials: true,
-        }
-      );
+      const response = await axios.get("http://127.0.0.1:8000/api/purchase-bill", {
+        headers: {
+          Accept: "application/json",
+          Authorization: `Bearer ${user_data.token}`,
+          "X-XSRF-TOKEN": getCookie("XSRF-TOKEN"),
+        },
+        withCredentials: true,
+      });
       setPurchaseBill(response.data.data);
     } catch (error) {
       console.error("Error fetching categories:", error);
@@ -111,13 +108,8 @@ const PurchaseBill = () => {
         .toLowerCase()
         .includes(search.toLowerCase());
     });
-
     setFilteredData(result);
   }, [search, purchaseBill]);
-
-  const handleCreatePurchaseBills = () =>{
-     localStorage.setItem("purchase_bills_create", null); 
-  }
 
   return (
     <Layout>
@@ -150,16 +142,6 @@ const PurchaseBill = () => {
           </div>
           {/* <!-- all-user --> */}
           <div className="wg-box">
-            <div className="flex items-center justify-between gap10 flex-wrap">
-              <div className="wg-filter flex-grow"></div>
-              <Link
-                className="tf-button style-1 w208"
-                to="/create-purchase-bill"
-                onClick={handleCreatePurchaseBills}
-              >
-                <i className="icon-plus"></i>Add new
-              </Link>
-            </div>
             <input
               type="text"
               placeholder="Search..."
@@ -196,4 +178,4 @@ const PurchaseBill = () => {
     </Layout>
   );
 };
-export default PurchaseBill;
+export default PurchaseBillLine;
