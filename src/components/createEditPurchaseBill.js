@@ -9,6 +9,7 @@ import { toast } from "react-toastify";
 
 
 const CreateEditPurchaseBill = () => {
+  const BASE_URL = process.env.REACT_APP_API_BASE_URL;
   const { id } = useParams(); // if id exists -> Edit Mode
   const history = useHistory();
   const [branches, setBranches] = useState([]);
@@ -70,11 +71,11 @@ const CreateEditPurchaseBill = () => {
   }, []);
   const fetchBranch = async () => {
     try {
-      await axios.get("http://localhost:8000/sanctum/csrf-cookie", {
+      await axios.get(`${BASE_URL}/sanctum/csrf-cookie`, {
         withCredentials: true,
       });
       const response = await axios.get(
-        `http://127.0.0.1:8000/api/manager/branches`,
+        `${BASE_URL}/api/manager/branches`,
         {
           headers: {
             Accept: "application/json",
@@ -96,10 +97,10 @@ const CreateEditPurchaseBill = () => {
 
   const fetchSupplierBill = async () => {
     try {
-      await axios.get("http://localhost:8000/sanctum/csrf-cookie", {
+      await axios.get(`${BASE_URL}/sanctum/csrf-cookie`, {
         withCredentials: true,
       });
-      const response = await axios.get("http://127.0.0.1:8000/api/suppliers", {
+      const response = await axios.get(`${BASE_URL}/api/suppliers`, {
         headers: {
           Accept: "application/json",
           Authorization: `Bearer ${user_data.token}`,
@@ -118,10 +119,10 @@ const CreateEditPurchaseBill = () => {
 
   const fetchProduct = async () => {
     try {
-      await axios.get("http://localhost:8000/sanctum/csrf-cookie", {
+      await axios.get(`${BASE_URL}/sanctum/csrf-cookie`, {
         withCredentials: true,
       });
-      const response = await axios.get("http://127.0.0.1:8000/api/products", {
+      const response = await axios.get(`${BASE_URL}/api/products`, {
         headers: {
           Accept: "application/json",
           Authorization: `Bearer ${user_data.token}`,

@@ -4,23 +4,27 @@ import { Link, useHistory } from "react-router-dom";
 import axios from "axios";
 import Layout from "./layout";
 import { getCookie } from "../utils/cookies";
+import { toast } from "react-toastify";
 
-const BASE_URL = process.env.REACT_APP_API_BASE_URL;
 
 const Product = () => {
+  const BASE_URL = process.env.REACT_APP_API_BASE_URL;
   const history = useHistory();
   const [products, setProducts] = useState([]);
   const [search, setSearch] = useState("");
   const [filteredData, setFilteredData] = useState(products);
   const user_data = JSON.parse(localStorage.getItem("user_detail"));
+
   const handleEdit = (row) => {
     localStorage.setItem("product_detail", JSON.stringify(row));
   };
+
   const handleCreateProduct = () => {
     localStorage.setItem("product_detail", null);
   };
+
   const handleDelete = async (id) => {
-    await axios.get("http://localhost:8000/sanctum/csrf-cookie", {
+    await axios.get(`${BASE_URL}/sanctum/csrf-cookie`, {
       withCredentials: true,
     });
     const response = await axios.delete(`${BASE_URL}/products/${id}`, {
@@ -33,6 +37,7 @@ const Product = () => {
     });
     if (response) {
       history.push("/product");
+      toast.success("Product Deleted");
       fetchProduct();
     }
   };
@@ -115,10 +120,10 @@ const Product = () => {
 
   const fetchProduct = async () => {
     try {
-      await axios.get("http://localhost:8000/sanctum/csrf-cookie", {
+      await axios.get(`${BASE_URL}/sanctum/csrf-cookie`, {
         withCredentials: true,
       });
-      const response = await axios.get("http://127.0.0.1:8000/api/products", {
+      const response = await axios.get(`${BASE_URL}/api/products`, {
         headers: {
           Accept: "application/json",
           Authorization: `Bearer ${user_data.token}`,

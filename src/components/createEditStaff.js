@@ -5,10 +5,11 @@ import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import { getCookie } from "../utils/cookies";
 import Layout from "./layout";
+import { toast } from "react-toastify";
 
-const BASE_URL = process.env.REACT_APP_API_BASE_URL;
 
 const CreateEditStaff = () => {
+  const BASE_URL = process.env.REACT_APP_API_BASE_URL;
   const { id } = useParams(); // if id exists -> Edit Mode
   const history = useHistory();
 
@@ -43,10 +44,10 @@ const CreateEditStaff = () => {
   };
   const fetchBranches = async () => {
     try {
-      await axios.get("http://localhost:8000/sanctum/csrf-cookie", {
+      await axios.get(`${BASE_URL}/sanctum/csrf-cookie`, {
         withCredentials: true,
       });
-      const response = await axios.get(`${BASE_URL}/branches`, {
+      const response = await axios.get(`${BASE_URL}/api/branches`, {
         headers: {
           Accept: "application/json",
           Authorization: `Bearer ${user_data.token}`,
@@ -70,13 +71,6 @@ const CreateEditStaff = () => {
     name: Yup.string().required("Name is required"),
     username: Yup.string().required("Username is required"),
     role: Yup.string().required("Role is required"),
-    //   pin: Yup.string().when("role", {
-    //     is: "cashier",
-    //     then: Yup.string()
-    //       .required("PIN is required for cashier")
-    //       .length(4, "PIN must be 4 digits"),
-    //     otherwise: Yup.string().nullable()
-    //   }),
     branch_ids: Yup.array()
       .min(1, "At least one branch is required")
       .required("Branch is required"),
@@ -85,7 +79,7 @@ const CreateEditStaff = () => {
   // Submit (Create + Update)
   const handleSubmit = async (values, actions) => {
     try {
-      await axios.get("http://localhost:8000/sanctum/csrf-cookie", {
+      await axios.get(`${BASE_URL}/sanctum/csrf-cookie`, {
         withCredentials: true,
       });
 
@@ -94,11 +88,11 @@ const CreateEditStaff = () => {
 
       if (isEdit) {
         // UPDATE PRODUCT
-        url = `${BASE_URL}/staff/${id}`;
+        url = `${BASE_URL}/api/staff/${id}`;
         method = "put";
       } else {
         // CREATE PRODUCT
-        url = `${BASE_URL}/staff`;
+        url = `${BASE_URL}/api/staff`;
         method = "post";
       }
 
@@ -114,7 +108,7 @@ const CreateEditStaff = () => {
         withCredentials: true,
       });
 
-      alert(isEdit ? "Staff Updated!" : "Staff Created!");
+      toast.success(isEdit ? "Suppliers Updated!" : "Suppliers Created!");
       actions.resetForm();
       history.push("/staff");
     } catch (error) {

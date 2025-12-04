@@ -5,10 +5,11 @@ import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import { getCookie } from "../utils/cookies";
 import Layout from "./layout";
+import { toast } from "react-toastify";
 
-const BASE_URL = process.env.REACT_APP_API_BASE_URL;
 
 const CreateEditBrand = () => {
+  const BASE_URL = process.env.REACT_APP_API_BASE_URL;
   const { id } = useParams(); // if id exists -> Edit Mode
   const history = useHistory();
 
@@ -46,7 +47,7 @@ const CreateEditBrand = () => {
   // Submit (Create + Update)
   const handleSubmit = async (values) => {
     try {
-      await axios.get("http://localhost:8000/sanctum/csrf-cookie", {
+      await axios.get(`${BASE_URL}/sanctum/csrf-cookie`, {
         withCredentials: true,
       });
 
@@ -55,11 +56,11 @@ const CreateEditBrand = () => {
 
       if (isEdit) {
         // UPDATE PRODUCT
-        url = `${BASE_URL}/brands/${id}`;
+        url = `${BASE_URL}/api/brands/${id}`;
         method = "put";
       } else {
         // CREATE PRODUCT
-        url = `${BASE_URL}/brands`;
+        url = `${BASE_URL}/api/brands`;
         method = "post";
       }
 
@@ -74,8 +75,7 @@ const CreateEditBrand = () => {
         },
         withCredentials: true,
       });
-
-      alert(isEdit ? "Brand Updated!" : "Brand Created!");
+      toast.success(isEdit ? "Brand Updated!" : "Brand Created!");
       history.push("/brand");
     } catch (error) {
       console.error("Error saving product:", error);

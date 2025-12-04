@@ -4,6 +4,7 @@ import { Link, useHistory } from "react-router-dom";
 import DataTable from "react-data-table-component";
 import axios from "axios";
 import { getCookie } from "../utils/cookies";
+import { toast } from "react-toastify";
 
 const Branch = () => {
   const BASE_URL = process.env.REACT_APP_API_BASE_URL;
@@ -16,10 +17,10 @@ const Branch = () => {
 
   const fetchBranch = async () => {
     try {
-      await axios.get("http://localhost:8000/sanctum/csrf-cookie", {
+      await axios.get(`${BASE_URL}/sanctum/csrf-cookie`, {
         withCredentials: true,
       });
-      const response = await axios.get(`${BASE_URL}/branches`, {
+      const response = await axios.get(`${BASE_URL}/api/branches`, {
         headers: {
           Accept: "application/json",
           Authorization: `Bearer ${user_data.token}`,
@@ -45,10 +46,10 @@ const Branch = () => {
   };
 
   const handleDelete = async (id) => {
-    await axios.get("http://localhost:8000/sanctum/csrf-cookie", {
+    await axios.get(`${BASE_URL}/sanctum/csrf-cookie`, {
       withCredentials: true,
     });
-    const response = await axios.delete(`${BASE_URL}/branches/${id}`, {
+    const response = await axios.delete(`${BASE_URL}/api/branches/${id}`, {
       headers: {
         accept: "application/json",
         "X-XSRF-TOKEN": getCookie("XSRF-TOKEN"),
@@ -58,6 +59,7 @@ const Branch = () => {
     });
     if (response) {
       history.push("/branch");
+       toast.success("Branch Deleted");
       fetchBranch();
     }
   };
@@ -68,7 +70,6 @@ const Branch = () => {
   const result = branches.filter((item) => {
     return (
       item.id.toString().includes(s) ||
-      item.store?.name?.toLowerCase().includes(s) ||
       item.name?.toLowerCase().includes(s) ||
       item.address?.toLowerCase().includes(s) ||
       item.state?.toLowerCase().includes(s) ||
@@ -83,11 +84,6 @@ const Branch = () => {
     {
       name: "Id",
       selector: (row) => row.id,
-      sortable: true,
-    },
-    {
-      name: "Store Name",
-      selector: (row) => row.store.name,
       sortable: true,
     },
     {
@@ -114,9 +110,6 @@ const Branch = () => {
       name: "Action",
       cell: (row) => (
         <div className="list-icon-function">
-          {/* <div className="item eye">
-            <i className="icon-eye"></i>
-          </div> */}
           <div className="item edit">
             <Link to={`/branch/edit/${row.id}`} onClick={() => handleEdit(row)}>
               <i className="icon-edit-3"></i>

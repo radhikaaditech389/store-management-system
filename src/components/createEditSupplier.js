@@ -7,46 +7,74 @@ import { getCookie } from "../utils/cookies";
 import Layout from "./layout";
 import { toast } from "react-toastify";
 
-const CreateEditBranch = () => {
-  const BASE_URL = process.env.REACT_APP_API_BASE_URL;
+const BASE_URL = process.env.REACT_APP_API_BASE_URL;
+
+const CreateEditSupplier = () => {
   const { id } = useParams(); // if id exists -> Edit Mode
   const history = useHistory();
 
   const user_data = JSON.parse(localStorage.getItem("user_detail"));
-  const store_branch = localStorage.getItem("branch_detail");
+  const store_supplier = localStorage.getItem("supplier_detail");
 
-  const incomingBranch = store_branch && JSON.parse(store_branch);
+  const incomingSupplier = store_supplier && JSON.parse(store_supplier);
   const isEdit = Boolean(id);
 
   const [initialValues, setInitialValues] = useState({
+    store_id: "",
     name: "",
+    gstin: "",
+    contact: "",
     address: "",
-    phone: "",
     state: "",
   });
 
+  const [categories, setCategories] = useState([]);
+
   // If editing → set initial values
-  const loadBranchData = () => {
-    if (incomingBranch) {
+  const loadSupplierData = () => {
+    if (incomingSupplier) {
       setInitialValues({
-        name: incomingBranch.name,
-        address: incomingBranch.address,
-        phone: incomingBranch.phone,
-        state: incomingBranch.state,
+        store_id: incomingSupplier.store_id,
+        name: incomingSupplier.name,
+        gstin: incomingSupplier.gstin,
+        contact: incomingSupplier.contact,
+        address: incomingSupplier.address,
+        state: incomingSupplier.state,
       });
     }
   };
 
+  //   const fetchCategory = async () => {
+  //     try {
+  //       await axios.get(`${BASE_URL}/sanctum/csrf-cookie`, {
+  //         withCredentials: true,
+  //       });
+  //       const response = await axios.get(`${BASE_URL}/categories`, {
+  //         headers: {
+  //           Accept: "application/json",
+  //           Authorization: `Bearer ${user_data.token}`,
+  //           "X-XSRF-TOKEN": getCookie("XSRF-TOKEN"),
+  //         },
+  //         withCredentials: true,
+  //       });
+  //       setCategories(response.data.categories);
+  //     } catch (error) {
+  //       console.error("Error fetching categories:", error);
+  //     }
+  //   };
+
   useEffect(() => {
-    loadBranchData();
+    loadSupplierData();
+    // fetchCategory();
   }, []);
 
   // Validation Schema
   const validationSchema = Yup.object({
     name: Yup.string().required("Name is required"),
-    address: Yup.string().required("Address is required"),
-    state: Yup.string().required("State is required"),
-    phone: Yup.string().required("Phone is required"),
+    gstin: Yup.string().required("GstIn is required"),
+    contact: Yup.string().required("contact is required"),
+    address: Yup.string().required("address is required"),
+    state: Yup.string().required("state is required"),
   });
 
   // Submit (Create + Update)
@@ -61,14 +89,13 @@ const CreateEditBranch = () => {
 
       if (isEdit) {
         // UPDATE PRODUCT
-        url = `${BASE_URL}/api/branches/${id}`;
+        url = `${BASE_URL}/api/suppliers/${id}`;
         method = "put";
       } else {
         // CREATE PRODUCT
-        url = `${BASE_URL}/api/branches`;
+        url = `${BASE_URL}/api/suppliers`;
         method = "post";
       }
-
       const response = await axios({
         method,
         url,
@@ -80,8 +107,8 @@ const CreateEditBranch = () => {
         },
         withCredentials: true,
       });
-      toast.success(isEdit ? "Branch Updated!" : "Branch Created!");
-      history.push("/branch");
+      toast.success(isEdit ? "Suppliers Updated!" : "Suppliers Created!");
+      history.push("/suppliers");
     } catch (error) {
       console.error("Error saving product:", error);
     }
@@ -91,7 +118,9 @@ const CreateEditBranch = () => {
     <Layout>
       <div className="main-content-inner">
         <div className="main-content-wrap">
-          <h3 className="mb-8">{isEdit ? "Edit Branch" : "Create Branch"}</h3>
+          <h3 className="mb-8">
+            {isEdit ? "Edit Supplier" : "Create Supplier"}
+          </h3>
 
           <div className="wg-box">
             <Formik
@@ -115,6 +144,33 @@ const CreateEditBranch = () => {
                     </div>
                   </fieldset>
                   <fieldset>
+                    <div className="body-title">GstIn *</div>
+                    <div className="body-content">
+                      <Field type="text" name="gstin" className="mb-5" />
+                      <ErrorMessage
+                        name="gstin"
+                        className="error-text"
+                        component="div"
+                      />
+                    </div>
+                  </fieldset>
+                  <fieldset>
+                    <div className="body-title">Contact *</div>
+                    <div className="body-content">
+                      <Field
+                        type="text"
+                        name="contact"
+                        maxLength={10}
+                        className="mb-5"
+                      />
+                      <ErrorMessage
+                        name="contact"
+                        className="error-text"
+                        component="div"
+                      />
+                    </div>
+                  </fieldset>
+                  <fieldset>
                     <div className="body-title">Address *</div>
                     <div className="body-content">
                       <Field type="text" name="address" className="mb-5" />
@@ -125,7 +181,6 @@ const CreateEditBranch = () => {
                       />
                     </div>
                   </fieldset>
-
                   <fieldset>
                     <div className="body-title">State *</div>
                     <div className="body-content">
@@ -137,27 +192,9 @@ const CreateEditBranch = () => {
                       />
                     </div>
                   </fieldset>
-
-                  <fieldset>
-                    <div className="body-title">Phone *</div>
-                    <div className="body-content">
-                      <Field
-                        type="text"
-                        name="phone"
-                        className="mb-5"
-                        maxLength={10}
-                      />
-                      <ErrorMessage
-                        name="phone"
-                        className="error-text"
-                        component="div"
-                      />
-                    </div>
-                  </fieldset>
-
                   {/* SUBMIT BUTTON */}
                   <button className="tf-button w208" type="submit">
-                    {isEdit ? "Update Branch" : "Create Branch"}
+                    {isEdit ? "Update Supplier" : "Create Supplier"}
                   </button>
                 </Form>
               )}
@@ -169,4 +206,4 @@ const CreateEditBranch = () => {
   );
 };
 
-export default CreateEditBranch;
+export default CreateEditSupplier;

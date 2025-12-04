@@ -4,6 +4,7 @@ import { Link, useHistory } from "react-router-dom";
 import DataTable from "react-data-table-component";
 import axios from "axios";
 import { getCookie } from "../utils/cookies";
+import { toast } from "react-toastify";
 
 const Brand = () => {
   const BASE_URL = process.env.REACT_APP_API_BASE_URL;
@@ -16,10 +17,10 @@ const Brand = () => {
 
   const fetchBrand = async () => {
     try {
-      await axios.get("http://localhost:8000/sanctum/csrf-cookie", {
+      await axios.get(`${BASE_URL}/sanctum/csrf-cookie`, {
         withCredentials: true,
       });
-      const response = await axios.get(`${BASE_URL}/brands`, {
+      const response = await axios.get(`${BASE_URL}/api/brands`, {
         headers: {
           Accept: "application/json",
           Authorization: `Bearer ${user_data.token}`,
@@ -41,10 +42,10 @@ const Brand = () => {
   };
 
   const handleDelete = async (id) => {
-    await axios.get("http://localhost:8000/sanctum/csrf-cookie", {
+    await axios.get(`${BASE_URL}/sanctum/csrf-cookie`, {
       withCredentials: true,
     });
-    const response = await axios.delete(`${BASE_URL}/brands/${id}`, {
+    const response = await axios.delete(`${BASE_URL}/api/brands/${id}`, {
       headers: {
         accept: "application/json",
         "X-XSRF-TOKEN": getCookie("XSRF-TOKEN"),
@@ -54,6 +55,7 @@ const Brand = () => {
     });
     if (response) {
       history.push("/brand");
+      toast.success("Brand Deleted");
       fetchBrand();
     }
   };
@@ -66,7 +68,6 @@ const Brand = () => {
  
    const result = brands.filter((item) => {
      return (
-        item.store.name.toLowerCase().includes(searchText) ||
        item.name.toLowerCase().includes(searchText) ||
         item.description.toLowerCase().includes(searchText) 
      );
@@ -79,11 +80,6 @@ const Brand = () => {
     {
       name: "Id",
       selector: (row) => row.id,
-      sortable: true,
-    },
-    {
-      name: "Store Name",
-      selector: (row) => row?.store?.name,
       sortable: true,
     },
     {

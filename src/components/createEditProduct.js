@@ -5,10 +5,10 @@ import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import { getCookie } from "../utils/cookies";
 import Layout from "./layout";
-
-const BASE_URL = process.env.REACT_APP_API_BASE_URL;
+import { toast } from "react-toastify";
 
 const CreateEditProduct = () => {
+  const BASE_URL = process.env.REACT_APP_API_BASE_URL;
   const { id } = useParams(); // if id exists -> Edit Mode
   const history = useHistory();
 
@@ -34,7 +34,7 @@ const CreateEditProduct = () => {
 
   // Fetch brands
   const fetchBrands = async () => {
-    const response = await axios.get(`${BASE_URL}/brands`, {
+    const response = await axios.get(`${BASE_URL}/api/brands`, {
       headers: { Authorization: `Bearer ${user_data.token}` },
     });
     setBrands(response.data.brands);
@@ -42,7 +42,7 @@ const CreateEditProduct = () => {
 
   // Fetch categories
   const fetchCategories = async () => {
-    const response = await axios.get(`${BASE_URL}/categories`, {
+    const response = await axios.get(`${BASE_URL}/api/categories`, {
       headers: { Authorization: `Bearer ${user_data.token}` },
     });
     setCategories(response.data.categories);
@@ -88,7 +88,7 @@ const CreateEditProduct = () => {
   const handleSubmit = async (values) => {
     console.log("create data");
     try {
-      await axios.get("http://localhost:8000/sanctum/csrf-cookie", {
+      await axios.get(`${BASE_URL}/sanctum/csrf-cookie`, {
         withCredentials: true,
       });
 
@@ -97,11 +97,11 @@ const CreateEditProduct = () => {
 
       if (isEdit) {
         // UPDATE PRODUCT
-        url = `${BASE_URL}/products/${id}`;
+        url = `${BASE_URL}/api/products/${id}`;
         method = "put";
       } else {
         // CREATE PRODUCT
-        url = `${BASE_URL}/products`;
+        url = `${BASE_URL}/api/products`;
         method = "post";
       }
 
@@ -116,8 +116,7 @@ const CreateEditProduct = () => {
         },
         withCredentials: true,
       });
-
-      alert(isEdit ? "Product Updated!" : "Product Created!");
+      toast.success(isEdit ? "Product Updated!" : "Product Created!");
       history.push("/product");
       // navigate("/product");
     } catch (error) {

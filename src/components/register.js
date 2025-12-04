@@ -46,7 +46,7 @@ const Register = () => {
     try {
       setLoading(true);
 
-      await axios.get("http://localhost:8000/sanctum/csrf-cookie", {
+      await axios.get(`${BASE_URL}/sanctum/csrf-cookie`, {
         withCredentials: true,
       });
 

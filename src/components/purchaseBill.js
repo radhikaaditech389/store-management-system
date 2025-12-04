@@ -7,6 +7,7 @@ import { getCookie } from "../utils/cookies";
 import { toast } from "react-toastify";
 const PurchaseBill = () => {
   const BASE_URL = process.env.REACT_APP_API_BASE_URL;
+   const APP_URL = process.env.REACT_APP_URL;
 
   const history = useHistory();
   const [products, setProducts] = useState([]);
@@ -23,7 +24,7 @@ const PurchaseBill = () => {
   };
 
   const handleDelete = async (id) => {
-    await axios.get("http://localhost:8000/sanctum/csrf-cookie", {
+    await axios.get(`${APP_URL}/sanctum/csrf-cookie`, {
       withCredentials: true,
     });
     const response = await axios.delete(`${BASE_URL}/purchase-bill/${id}`, {
@@ -44,11 +45,6 @@ const PurchaseBill = () => {
     {
       name: "Id",
       selector: (row) => row.id,
-      sortable: true,
-    },
-    {
-      name: "Store Name",
-      selector: (row) => row.store.name,
       sortable: true,
     },
     {
@@ -128,11 +124,11 @@ const PurchaseBill = () => {
 
   const fetchPurchaseBill = async () => {
     try {
-      await axios.get("http://localhost:8000/sanctum/csrf-cookie", {
+      await axios.get(`${BASE_URL}/sanctum/csrf-cookie`, {
         withCredentials: true,
       });
       const response = await axios.get(
-        "http://127.0.0.1:8000/api/purchase-bill",
+        `${BASE_URL}/api/purchase-bill`,
         {
           headers: {
             Accept: "application/json",
@@ -156,7 +152,6 @@ const PurchaseBill = () => {
     const result = purchaseBill.filter((item) => {
       const searchable = `
       ${item.id}
-      ${item.store?.name}
       ${item.branch?.name}
       ${item.supplier?.name}
       ${item.bill_no}

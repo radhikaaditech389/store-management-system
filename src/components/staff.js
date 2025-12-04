@@ -4,10 +4,10 @@ import { Link, useHistory } from "react-router-dom";
 import DataTable from "react-data-table-component";
 import axios from "axios";
 import { getCookie } from "../utils/cookies";
-
-const BASE_URL = process.env.REACT_APP_API_BASE_URL;
+import { toast } from "react-toastify";
 
 const Staff = () => {
+  const BASE_URL = process.env.REACT_APP_API_BASE_URL;
   const history = useHistory();
   const [search, setSearch] = useState("");
   const [staffs, setStaffs] = useState([]);
@@ -16,10 +16,10 @@ const Staff = () => {
 
   const fetchStaff = async () => {
     try {
-      await axios.get("http://localhost:8000/sanctum/csrf-cookie", {
+      await axios.get(`${BASE_URL}/sanctum/csrf-cookie`, {
         withCredentials: true,
       });
-      const response = await axios.get(`${BASE_URL}/staff`, {
+      const response = await axios.get(`${BASE_URL}/api/staff`, {
         headers: {
           Accept: "application/json",
           Authorization: `Bearer ${user_data.token}`,
@@ -41,10 +41,10 @@ const Staff = () => {
   };
 
   const handleDelete = async (id) => {
-    await axios.get("http://localhost:8000/sanctum/csrf-cookie", {
+    await axios.get(`${BASE_URL}/sanctum/csrf-cookie`, {
       withCredentials: true,
     });
-    const response = await axios.delete(`${BASE_URL}/staff/${id}`, {
+    const response = await axios.delete(`${BASE_URL}/api/staff/${id}`, {
       headers: {
         accept: "application/json",
         "X-XSRF-TOKEN": getCookie("XSRF-TOKEN"),
@@ -54,6 +54,7 @@ const Staff = () => {
     });
     if (response) {
       history.push("/staff");
+       toast.success("staff Deleted");
       fetchStaff();
     }
   };
@@ -83,11 +84,6 @@ const Staff = () => {
     {
       name: "Id",
       selector: (row) => row.id,
-      sortable: true,
-    },
-    {
-      name: "Store Name",
-      selector: (row) => row?.store?.name,
       sortable: true,
     },
     {
