@@ -16,16 +16,16 @@ const Staff = () => {
 
   const fetchStaff = async () => {
     try {
-      await axios.get(`${BASE_URL}/sanctum/csrf-cookie`, {
-        withCredentials: true,
-      });
-      const response = await axios.get(`${BASE_URL}/api/staff`, {
+      // await axios.get(`${BASE_URL}/sanctum/csrf-cookie`, {
+      //   withCredentials: true,
+      // });
+      const response = await axios.get(`${BASE_URL}/staff`, {
         headers: {
           Accept: "application/json",
           Authorization: `Bearer ${user_data.token}`,
-          "X-XSRF-TOKEN": getCookie("XSRF-TOKEN"),
+          // "X-XSRF-TOKEN": getCookie("XSRF-TOKEN"),
         },
-        withCredentials: true,
+        // withCredentials: true,
       });
       setStaffs(response.data.data);
     } catch (error) {
@@ -41,16 +41,16 @@ const Staff = () => {
   };
 
   const handleDelete = async (id) => {
-    await axios.get(`${BASE_URL}/sanctum/csrf-cookie`, {
-      withCredentials: true,
-    });
-    const response = await axios.delete(`${BASE_URL}/api/staff/${id}`, {
+    // await axios.get(`${BASE_URL}/sanctum/csrf-cookie`, {
+    //   withCredentials: true,
+    // });
+    const response = await axios.delete(`${BASE_URL}/staff/${id}`, {
       headers: {
         accept: "application/json",
-        "X-XSRF-TOKEN": getCookie("XSRF-TOKEN"),
+        // "X-XSRF-TOKEN": getCookie("XSRF-TOKEN"),
         Authorization: `Bearer ${user_data.token}`,
       },
-      withCredentials: true,
+      // withCredentials: true,
     });
     if (response) {
       history.push("/staff");

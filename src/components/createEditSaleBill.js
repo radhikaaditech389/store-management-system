@@ -22,16 +22,16 @@ const CreateEditSaleBill = () => {
  
   const fetchBranch = async () => {
     try {
-      await axios.get(`${BASE_URL}/sanctum/csrf-cookie`, {
-        withCredentials: true,
-      });
-      const response = await axios.get(`${BASE_URL}/api/manager/branches`, {
+      // await axios.get(`${BASE_URL}/sanctum/csrf-cookie`, {
+      //   withCredentials: true,
+      // });
+      const response = await axios.get(`${BASE_URL}/manager/branches`, {
         headers: {
           Accept: "application/json",
           Authorization: `Bearer ${user_data.token}`,
-          "X-XSRF-TOKEN": getCookie("XSRF-TOKEN"),
+          // "X-XSRF-TOKEN": getCookie("XSRF-TOKEN"),
         },
-        withCredentials: true,
+        // withCredentials: true,
       });
 
       setBranches(response.data.branches);
@@ -45,16 +45,16 @@ const CreateEditSaleBill = () => {
 
   const fetchSupplierBill = async () => {
     try {
-      await axios.get(`${BASE_URL}/sanctum/csrf-cookie`, {
-        withCredentials: true,
-      });
-      const response = await axios.get(`${BASE_URL}/api/suppliers`, {
+      // await axios.get(`${BASE_URL}/sanctum/csrf-cookie`, {
+      //   withCredentials: true,
+      // });
+      const response = await axios.get(`${BASE_URL}/suppliers`, {
         headers: {
           Accept: "application/json",
           Authorization: `Bearer ${user_data.token}`,
-          "X-XSRF-TOKEN": getCookie("XSRF-TOKEN"),
+          // "X-XSRF-TOKEN": getCookie("XSRF-TOKEN"),
         },
-        withCredentials: true,
+        // withCredentials: true,
       });
       setSupplierBill(response.data.suppliers);
     } catch (error) {
@@ -67,16 +67,16 @@ const CreateEditSaleBill = () => {
 
   const fetchProduct = async () => {
     try {
-      await axios.get(`${BASE_URL}/sanctum/csrf-cookie`, {
-        withCredentials: true,
-      });
-      const response = await axios.get(`${BASE_URL}/api/products`, {
+      // await axios.get(`${BASE_URL}/sanctum/csrf-cookie`, {
+      //   withCredentials: true,
+      // });
+      const response = await axios.get(`${BASE_URL}/products`, {
         headers: {
           Accept: "application/json",
           Authorization: `Bearer ${user_data.token}`,
-          "X-XSRF-TOKEN": getCookie("XSRF-TOKEN"),
+          // "X-XSRF-TOKEN": getCookie("XSRF-TOKEN"),
         },
-        withCredentials: true,
+        // withCredentials: true,
       });
       setProducts(response.data.products);
     } catch (error) {
@@ -113,16 +113,16 @@ const CreateEditSaleBill = () => {
     try {
       const user = JSON.parse(localStorage.getItem("user_data"));
 
-      const response = await axios.post("/api/sales-bill", values, {
+      const response = await axios.post("/sales-bill", values, {
         headers: {
           Accept: "application/json",
           Authorization: `Bearer ${user?.token}`,
-          "X-XSRF-TOKEN": document.cookie
-            .split("; ")
-            .find((r) => r.startsWith("XSRF-TOKEN="))
-            ?.split("=")[1],
+          // "X-XSRF-TOKEN": document.cookie
+          //   .split("; ")
+          //   .find((r) => r.startsWith("XSRF-TOKEN="))
+          //   ?.split("=")[1],
         },
-        withCredentials: true,
+        // withCredentials: true,
       });
 
       // alert("Sales Bill Created Successfully!");

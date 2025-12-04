@@ -44,16 +44,16 @@ const CreateEditStaff = () => {
   };
   const fetchBranches = async () => {
     try {
-      await axios.get(`${BASE_URL}/sanctum/csrf-cookie`, {
-        withCredentials: true,
-      });
-      const response = await axios.get(`${BASE_URL}/api/branches`, {
+      // await axios.get(`${BASE_URL}/sanctum/csrf-cookie`, {
+      //   withCredentials: true,
+      // });
+      const response = await axios.get(`${BASE_URL}/branches`, {
         headers: {
           Accept: "application/json",
           Authorization: `Bearer ${user_data.token}`,
-          "X-XSRF-TOKEN": getCookie("XSRF-TOKEN"),
+          // "X-XSRF-TOKEN": getCookie("XSRF-TOKEN"),
         },
-        withCredentials: true,
+        // withCredentials: true,
       });
       setBranches(response.data.data);
     } catch (error) {
@@ -79,20 +79,20 @@ const CreateEditStaff = () => {
   // Submit (Create + Update)
   const handleSubmit = async (values, actions) => {
     try {
-      await axios.get(`${BASE_URL}/sanctum/csrf-cookie`, {
-        withCredentials: true,
-      });
+      // await axios.get(`${BASE_URL}/sanctum/csrf-cookie`, {
+      //   withCredentials: true,
+      // });
 
       let url = "";
       let method = "";
 
       if (isEdit) {
         // UPDATE PRODUCT
-        url = `${BASE_URL}/api/staff/${id}`;
+        url = `${BASE_URL}/staff/${id}`;
         method = "put";
       } else {
         // CREATE PRODUCT
-        url = `${BASE_URL}/api/staff`;
+        url = `${BASE_URL}/staff`;
         method = "post";
       }
 
@@ -103,16 +103,16 @@ const CreateEditStaff = () => {
         headers: {
           Accept: "application/json",
           Authorization: `Bearer ${user_data.token}`,
-          "X-XSRF-TOKEN": getCookie("XSRF-TOKEN"),
+          // "X-XSRF-TOKEN": getCookie("XSRF-TOKEN"),
         },
-        withCredentials: true,
+        // withCredentials: true,
       });
 
-      toast.success(isEdit ? "Suppliers Updated!" : "Suppliers Created!");
+      toast.success(isEdit ? "Staff updated successfully!" : "Staff created successfully!");
       actions.resetForm();
       history.push("/staff");
     } catch (error) {
-      console.error("Error saving product:", error);
+      console.error("Error saving staff:", error);
     }
   };
 

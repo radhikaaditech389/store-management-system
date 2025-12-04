@@ -23,16 +23,16 @@ const SupplierBill = () => {
   };
 
   const handleDelete = async (id) => {
-    await axios.get(`${BASE_URL}/sanctum/csrf-cookie`, {
-      withCredentials: true,
-    });
+    // await axios.get(`${BASE_URL}/sanctum/csrf-cookie`, {
+    //   withCredentials: true,
+    // });
     const response = await axios.delete(`${BASE_URL}/suppliers/${id}`, {
       headers: {
         accept: "application/json",
-        "X-XSRF-TOKEN": getCookie("XSRF-TOKEN"),
+        // "X-XSRF-TOKEN": getCookie("XSRF-TOKEN"),
         Authorization: `Bearer ${user_data.token}`,
       },
-      withCredentials: true,
+      // withCredentials: true,
     });
     if (response) {
       toast.success("Supplier deleted successfully!");
@@ -96,16 +96,16 @@ const SupplierBill = () => {
 
   const fetchSupplierBill = async () => {
     try {
-      await axios.get(`${BASE_URL}/sanctum/csrf-cookie`, {
-        withCredentials: true,
-      });
-      const response = await axios.get(`${BASE_URL}/api/suppliers`, {
+      // await axios.get(`${BASE_URL}/sanctum/csrf-cookie`, {
+      //   withCredentials: true,
+      // });
+      const response = await axios.get(`${BASE_URL}/suppliers`, {
         headers: {
           Accept: "application/json",
           Authorization: `Bearer ${user_data.token}`,
-          "X-XSRF-TOKEN": getCookie("XSRF-TOKEN"),
+          // "X-XSRF-TOKEN": getCookie("XSRF-TOKEN"),
         },
-        withCredentials: true,
+        // withCredentials: true,
       });
       setSupplierBill(response.data.suppliers);
     } catch (error) {

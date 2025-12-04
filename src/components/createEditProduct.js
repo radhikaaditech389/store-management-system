@@ -34,7 +34,7 @@ const CreateEditProduct = () => {
 
   // Fetch brands
   const fetchBrands = async () => {
-    const response = await axios.get(`${BASE_URL}/api/brands`, {
+    const response = await axios.get(`${BASE_URL}/brands`, {
       headers: { Authorization: `Bearer ${user_data.token}` },
     });
     setBrands(response.data.brands);
@@ -42,7 +42,7 @@ const CreateEditProduct = () => {
 
   // Fetch categories
   const fetchCategories = async () => {
-    const response = await axios.get(`${BASE_URL}/api/categories`, {
+    const response = await axios.get(`${BASE_URL}/categories`, {
       headers: { Authorization: `Bearer ${user_data.token}` },
     });
     setCategories(response.data.categories);
@@ -88,20 +88,20 @@ const CreateEditProduct = () => {
   const handleSubmit = async (values) => {
     console.log("create data");
     try {
-      await axios.get(`${BASE_URL}/sanctum/csrf-cookie`, {
-        withCredentials: true,
-      });
+      // await axios.get(`${BASE_URL}/sanctum/csrf-cookie`, {
+      //   withCredentials: true,
+      // });
 
       let url = "";
       let method = "";
 
       if (isEdit) {
         // UPDATE PRODUCT
-        url = `${BASE_URL}/api/products/${id}`;
+        url = `${BASE_URL}/products/${id}`;
         method = "put";
       } else {
         // CREATE PRODUCT
-        url = `${BASE_URL}/api/products`;
+        url = `${BASE_URL}/products`;
         method = "post";
       }
 
@@ -112,9 +112,9 @@ const CreateEditProduct = () => {
         headers: {
           Accept: "application/json",
           Authorization: `Bearer ${user_data.token}`,
-          "X-XSRF-TOKEN": getCookie("XSRF-TOKEN"),
+          // "X-XSRF-TOKEN": getCookie("XSRF-TOKEN"),
         },
-        withCredentials: true,
+        // withCredentials: true,
       });
       toast.success(isEdit ? "Product Updated!" : "Product Created!");
       history.push("/product");

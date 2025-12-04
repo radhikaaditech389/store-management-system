@@ -75,7 +75,7 @@ const CreateStore = () => {
       if (editingData) {
         // UPDATE STORE
         response = await axios.post(
-          `${BASE_URL}/api/stores/${editingData.id}?_method=PUT`,
+          `${BASE_URL}/stores/${editingData.id}?_method=PUT`,
           formData,
           {
             headers: {
@@ -86,7 +86,7 @@ const CreateStore = () => {
         );
       } else {
         // CREATE STORE
-        response = await axios.post(`${BASE_URL}/api/stores`, formData, {
+        response = await axios.post(`${BASE_URL}/stores`, formData, {
           headers: {
             Authorization: `Bearer ${user_data?.token}`,
             "Content-Type": "multipart/form-data",
