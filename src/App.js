@@ -31,6 +31,7 @@ import CreateEditPurchaseBill from "./components/createEditPurchaseBill";
 import SaleBill from "./components/saleBill";
 import CreateEditSaleBill from "./components/createEditSaleBill";
 import POS from "./components/POS";
+import CreateEditSupplier from "./components/createEditSupplier";
 
 function App() {
   return (
@@ -119,8 +120,18 @@ function App() {
           />
           <ProtectedRoute
             exact
-            path="/supplier-bill"
+            path="/suppliers"
             component={SupplierBill}
+          />
+          <ProtectedRoute
+            exact
+            path="/create-suppliers"
+            component={CreateEditSupplier}
+          />
+          <ProtectedRoute
+            exact
+            path="/suppliers/edit/:id"
+            component={CreateEditSupplier}
           />
           <ProtectedRoute exact path="/brand" component={Brand} />
           <ProtectedRoute

@@ -5,6 +5,7 @@ import axios from "axios";
 import Layout from "./layout";
 import { getCookie } from "../utils/cookies";
 const SaleBill = () => {
+  const BASE_URL = process.env.REACT_APP_API_BASE_URL;
   const [search, setSearch] = useState("");
    const [saleBills, setSaleBills] = useState([]);
   
@@ -95,10 +96,10 @@ const SaleBill = () => {
 
   const fetchSaleBill = async () => {
     try {
-      await axios.get("http://localhost:8000/sanctum/csrf-cookie", {
+      await axios.get(`${BASE_URL}/sanctum/csrf-cookie`, {
         withCredentials: true,
       });
-      const response = await axios.get("http://127.0.0.1:8000/api/sales-bills", {
+      const response = await axios.get(`${BASE_URL}/api/sales-bills`, {
         headers: {
           Accept: "application/json",
           Authorization: `Bearer ${user_data.token}`,

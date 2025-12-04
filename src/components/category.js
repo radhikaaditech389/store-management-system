@@ -4,6 +4,7 @@ import { Link, useHistory } from "react-router-dom";
 import DataTable from "react-data-table-component";
 import axios from "axios";
 import { getCookie } from "../utils/cookies";
+import { toast } from "react-toastify";
 
 const Category = () => {
   const BASE_URL = process.env.REACT_APP_API_BASE_URL;
@@ -16,10 +17,10 @@ const Category = () => {
 
   const fetchCategory = async () => {
     try {
-      await axios.get("http://localhost:8000/sanctum/csrf-cookie", {
+      await axios.get(`${BASE_URL}/sanctum/csrf-cookie`, {
         withCredentials: true,
       });
-      const response = await axios.get(`${BASE_URL}/categories`, {
+      const response = await axios.get(`${BASE_URL}/api/categories`, {
         headers: {
           Accept: "application/json",
           Authorization: `Bearer ${user_data.token}`,
@@ -37,10 +38,10 @@ const Category = () => {
   }, []);
 
   const handleDelete = async (id) => {
-    await axios.get("http://localhost:8000/sanctum/csrf-cookie", {
+    await axios.get(`${BASE_URL}/sanctum/csrf-cookie`, {
       withCredentials: true,
     });
-    const response = await axios.delete(`${BASE_URL}/categories/${id}`, {
+    const response = await axios.delete(`${BASE_URL}/api/categories/${id}`, {
       headers: {
         accept: "application/json",
         "X-XSRF-TOKEN": getCookie("XSRF-TOKEN"),
@@ -50,6 +51,7 @@ const Category = () => {
     });
     if (response) {
       history.push("/category");
+      toast.success("Category Deleted");
       fetchCategory();
     }
   };
@@ -58,11 +60,6 @@ const Category = () => {
     {
       name: "Id",
       selector: (row) => row.id,
-      sortable: true,
-    },
-    {
-      name: "Store Name",
-      selector: (row) => row?.store?.name,
       sortable: true,
     },
     {

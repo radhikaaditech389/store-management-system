@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import DataTable from "react-data-table-component";
 import axios from "axios";
 import { getCookie } from "../utils/cookies";
+import { toast } from "react-toastify";
 
 const BrachStaff = () => {
   const BASE_URL = process.env.REACT_APP_API_BASE_URL;
@@ -15,10 +16,10 @@ const BrachStaff = () => {
 
   const fetchBranchStaff = async () => {
     try {
-      await axios.get("http://localhost:8000/sanctum/csrf-cookie", {
+      await axios.get(`${BASE_URL}/sanctum/csrf-cookie`, {
         withCredentials: true,
       });
-      const response = await axios.get(`${BASE_URL}/brands`, {
+      const response = await axios.get(`${BASE_URL}/api/brands`, {
         headers: {
           Accept: "application/json",
           Authorization: `Bearer ${user_data.token}`,

@@ -7,9 +7,8 @@ import { getCookie } from "../utils/cookies";
 axios.defaults.baseURL = "http://localhost:8000";
 axios.defaults.withCredentials = true;
 
-const BASE_URL = process.env.REACT_APP_API_BASE_URL;
-
 const CashierLogin = () => {
+  const BASE_URL = process.env.REACT_APP_API_BASE_URL;
   const history = useHistory();
   const [formData, setFormData] = useState({
     pin: "",
@@ -47,12 +46,12 @@ const CashierLogin = () => {
 
     try {
       // 1. Get CSRF cookie
-      await axios.get("http://localhost:8000/sanctum/csrf-cookie", {
+      await axios.get(`${BASE_URL}/sanctum/csrf-cookie`, {
         withCredentials: true,
       });
 
       // 2. Send login request
-      const response = await axios.post(`${BASE_URL}/login`, formData, {
+      const response = await axios.post(`${BASE_URL}/api/login`, formData, {
         headers: {
           accept: "application/json",
           "X-XSRF-TOKEN": getCookie("XSRF-TOKEN"),
@@ -61,6 +60,7 @@ const CashierLogin = () => {
       });
       if (response.data) {
         history.push("/dashboard");
+        toast.success("Cashier Login Successfully");
       }
     } catch (err) {
       console.error("LOGIN ERROR:", err);

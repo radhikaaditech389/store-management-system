@@ -49,12 +49,12 @@ const Login = () => {
 
     try {
       // 1. Get CSRF cookie
-      await axios.get("http://localhost:8000/sanctum/csrf-cookie", {
+      await axios.get(`${BASE_URL}/sanctum/csrf-cookie`, {
         withCredentials: true,
       });
 
       // 2. Send login request
-      const response = await axios.post(`${BASE_URL}/login`, formData, {
+      const response = await axios.post(`${BASE_URL}/api/login`, formData, {
         headers: {
           accept: "application/json",
           "X-XSRF-TOKEN": getCookie("XSRF-TOKEN"),

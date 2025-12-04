@@ -101,7 +101,7 @@ const Navbar = () => {
                   </li>
 
                   <li className="menu-item">
-                    <Link to="/supplier-bill" className="menu-item-button">
+                    <Link to="/suppliers" className="menu-item-button">
                       <div className="icon">
                         <i className="icon-bookmark"></i>
                       </div>

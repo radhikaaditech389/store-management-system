@@ -3,7 +3,6 @@ import { Link, useHistory } from "react-router-dom";
 
 const Header = () => {
   const user_data = JSON.parse(localStorage.getItem("user_detail"));
-  console.log("user_data",user_data);
   const [showMenu, setShowMenu] = useState(false);
   const history = useHistory();
   const handleChange = () => {};
@@ -520,47 +519,6 @@ const Header = () => {
                 }
                 aria-labelledby="dropdownMenuButton3"
               >
-                {/* <li>
-                  <Link to="#" className="user-item">
-                    <div className="icon" style={{ fontSize: "22px" }}>
-                      <i className="icon-user"></i>
-                    </div>
-                    <div className="body-title-2">Account</div>
-                  </Link>
-                </li>
-                <li>
-                  <Link to="#" className="user-item">
-                    <div className="icon">
-                      <i className="icon-mail"></i>
-                    </div>
-                    <div className="body-title-2">Inbox</div>
-                    <div className="number">27</div>
-                  </Link>
-                </li> */}
-                {/* <li>
-                  <Link to="#" className="user-item">
-                    <div className="icon">
-                      <i className="icon-file-text"></i>
-                    </div>
-                    <div className="body-title-2">Taskboard</div>
-                  </Link>
-                </li> */}
-                <li>
-                  <Link to="#" className="user-item">
-                    <div className="icon">
-                      <i className="icon-settings"></i>
-                    </div>
-                    <div className="body-title-2">Setting</div>
-                  </Link>
-                </li>
-                {/* <li>
-                  <Link to="#" className="user-item">
-                    <div className="icon">
-                      <i className="icon-headphones"></i>
-                    </div>
-                    <div className="body-title-2">Support</div>
-                  </Link>
-                </li> */}
                 <li>
                   <Link to="#" className="user-item" onClick={handleLogout}>
                     <div className="icon">

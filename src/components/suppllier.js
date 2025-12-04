@@ -1,15 +1,45 @@
 import React, { useEffect, useState } from "react";
 import DataTable from "react-data-table-component";
-import { Link } from "react-router-dom";
+import { Link,useHistory } from "react-router-dom";
 import axios from "axios";
 import Layout from "./layout";
 import { getCookie } from "../utils/cookies";
+import { toast } from "react-toastify";
 const SupplierBill = () => {
+  const BASE_URL = process.env.REACT_APP_API_BASE_URL;
+  const history = useHistory();
   const [search, setSearch] = useState("");
   const [supplierBill, setSupplierBill] = useState([]);
   const [filteredData, setFilteredData] = useState(supplierBill);
 
   const user_data = JSON.parse(localStorage.getItem("user_detail"));
+
+  const handleCreateSupplier = () => {
+    localStorage.setItem("supplier_detail", null);
+  };
+
+  const handleEdit = (row) => {
+    localStorage.setItem("supplier_detail", JSON.stringify(row));
+  };
+
+  const handleDelete = async (id) => {
+    await axios.get(`${BASE_URL}/sanctum/csrf-cookie`, {
+      withCredentials: true,
+    });
+    const response = await axios.delete(`${BASE_URL}/suppliers/${id}`, {
+      headers: {
+        accept: "application/json",
+        "X-XSRF-TOKEN": getCookie("XSRF-TOKEN"),
+        Authorization: `Bearer ${user_data.token}`,
+      },
+      withCredentials: true,
+    });
+    if (response) {
+      toast.success("Supplier deleted successfully!");
+      history.push("/suppliers");
+     fetchSupplierBill();
+    }
+  };
 
   const columns = [
     {
@@ -51,15 +81,14 @@ const SupplierBill = () => {
       name: "Action",
       cell: (row) => (
         <div className="list-icon-function">
-          <div className="item eye">
-            <i className="icon-eye"></i>
-          </div>
-          <div className="item edit">
-            <i className="icon-edit-3"></i>
-          </div>
-          <div className="item trash">
-            <i className="icon-trash-2"></i>
-          </div>
+            <div className="item edit">
+                    <Link to={`/suppliers/edit/${row.id}`} onClick={() => handleEdit(row)}>
+                      <i className="icon-edit-3"></i>
+                    </Link>
+                  </div>
+                  <div className="item trash" onClick={() => handleDelete(row.id)}>
+                    <i className="icon-trash-2"></i>
+                  </div>
         </div>
       ),
     },
@@ -67,10 +96,10 @@ const SupplierBill = () => {
 
   const fetchSupplierBill = async () => {
     try {
-      await axios.get("http://localhost:8000/sanctum/csrf-cookie", {
+      await axios.get(`${BASE_URL}/sanctum/csrf-cookie`, {
         withCredentials: true,
       });
-      const response = await axios.get("http://127.0.0.1:8000/api/suppliers", {
+      const response = await axios.get(`${BASE_URL}/api/suppliers`, {
         headers: {
           Accept: "application/json",
           Authorization: `Bearer ${user_data.token}`,
@@ -137,6 +166,16 @@ useEffect(() => {
           </div>
           {/* <!-- all-user --> */}
           <div className="wg-box">
+            <div className="flex items-center justify-between gap10 flex-wrap">
+                          <div className="wg-filter flex-grow"></div>
+                          <Link
+                            className="tf-button style-1 w208"
+                            to="/create-suppliers"
+                            onClick={handleCreateSupplier}
+                          >
+                            <i className="icon-plus"></i>Add new
+                          </Link>
+                        </div>
             <input
               type="text"
               placeholder="Search..."

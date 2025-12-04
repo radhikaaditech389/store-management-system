@@ -21,10 +21,10 @@ const Home = () => {
   const role = user_data?.user?.role;
   const fetchCategory = async () => {
     try {
-      await axios.get("http://localhost:8000/sanctum/csrf-cookie", {
+      await axios.get(`${BASE_URL}/sanctum/csrf-cookie`, {
         withCredentials: true,
       });
-      const response = await axios.get(`${BASE_URL}/categories`, {
+      const response = await axios.get(`${BASE_URL}/api/categories`, {
         headers: {
           Accept: "application/json",
           Authorization: `Bearer ${user_data.token}`,
@@ -39,10 +39,10 @@ const Home = () => {
   };
   const fetchBrand = async () => {
     try {
-      await axios.get("http://localhost:8000/sanctum/csrf-cookie", {
+      await axios.get(`${BASE_URL}/sanctum/csrf-cookie`, {
         withCredentials: true,
       });
-      const response = await axios.get(`${BASE_URL}/brands`, {
+      const response = await axios.get(`${BASE_URL}/api/brands`, {
         headers: {
           Accept: "application/json",
           Authorization: `Bearer ${user_data.token}`,
@@ -57,10 +57,10 @@ const Home = () => {
   };
   const fetchBrach = async () => {
     try {
-      await axios.get("http://localhost:8000/sanctum/csrf-cookie", {
+      await axios.get(`${BASE_URL}/sanctum/csrf-cookie`, {
         withCredentials: true,
       });
-      const response = await axios.get(`${BASE_URL}/branches`, {
+      const response = await axios.get(`${BASE_URL}/api/branches`, {
         headers: {
           Accept: "application/json",
           Authorization: `Bearer ${user_data.token}`,
@@ -75,10 +75,10 @@ const Home = () => {
   };
   const fetchSupplierBill = async () => {
     try {
-      await axios.get("http://localhost:8000/sanctum/csrf-cookie", {
+      await axios.get(`${BASE_URL}/sanctum/csrf-cookie`, {
         withCredentials: true,
       });
-      const response = await axios.get("http://127.0.0.1:8000/api/suppliers", {
+      const response = await axios.get(`${BASE_URL}/api/suppliers`, {
         headers: {
           Accept: "application/json",
           Authorization: `Bearer ${user_data.token}`,
@@ -93,10 +93,10 @@ const Home = () => {
   };
   const fetchProduct = async () => {
     try {
-      await axios.get("http://localhost:8000/sanctum/csrf-cookie", {
+      await axios.get(`${BASE_URL}/sanctum/csrf-cookie`, {
         withCredentials: true,
       });
-      const response = await axios.get("http://127.0.0.1:8000/api/products", {
+      const response = await axios.get(`${BASE_URL}/api/products`, {
         headers: {
           Accept: "application/json",
           Authorization: `Bearer ${user_data.token}`,
@@ -111,10 +111,10 @@ const Home = () => {
   };
   const fetchStaff = async () => {
     try {
-      await axios.get("http://localhost:8000/sanctum/csrf-cookie", {
+      await axios.get(`${BASE_URL}/sanctum/csrf-cookie`, {
         withCredentials: true,
       });
-      const response = await axios.get("http://127.0.0.1:8000/api/staff", {
+      const response = await axios.get(`${BASE_URL}/api/staff`, {
         headers: {
           Accept: "application/json",
           Authorization: `Bearer ${user_data.token}`,
@@ -129,10 +129,10 @@ const Home = () => {
   };
   const fetchGstRate = async () => {
     try {
-      await axios.get("http://localhost:8000/sanctum/csrf-cookie", {
+      await axios.get(`${BASE_URL}/sanctum/csrf-cookie`, {
         withCredentials: true,
       });
-      const response = await axios.get("http://127.0.0.1:8000/api/gst-rates", {
+      const response = await axios.get(`${BASE_URL}/api/gst-rates`, {
         headers: {
           Accept: "application/json",
           Authorization: `Bearer ${user_data.token}`,
@@ -147,10 +147,10 @@ const Home = () => {
   };
   const fetchPurchaseBills = async () => {
     try {
-      await axios.get("http://localhost:8000/sanctum/csrf-cookie", {
+      await axios.get(`${BASE_URL}/sanctum/csrf-cookie`, {
         withCredentials: true,
       });
-      const response = await axios.get("http://127.0.0.1:8000/api/purchase-bill", {
+      const response = await axios.get(`${BASE_URL}/api/purchase-bill`, {
         headers: {
           Accept: "application/json",
           Authorization: `Bearer ${user_data.token}`,
@@ -165,10 +165,10 @@ const Home = () => {
   };
    const fetchSaleBills = async () => {
     try {
-      await axios.get("http://localhost:8000/sanctum/csrf-cookie", {
+      await axios.get(`${BASE_URL}/sanctum/csrf-cookie`, {
         withCredentials: true,
       });
-      const response = await axios.get("http://127.0.0.1:8000/api/sales-bills", {
+      const response = await axios.get(`${BASE_URL}/api/sales-bills`, {
         headers: {
           Accept: "application/json",
           Authorization: `Bearer ${user_data.token}`,
