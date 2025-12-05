@@ -88,9 +88,9 @@ const CreateEditProduct = () => {
   const handleSubmit = async (values) => {
     console.log("create data");
     try {
-      await axios.get(`${BASE_URL}/sanctum/csrf-cookie`, {
-        withCredentials: true,
-      });
+      // await axios.get(`${BASE_URL}/sanctum/csrf-cookie`, {
+      //   withCredentials: true,
+      // });
 
       let url = "";
       let method = "";
@@ -112,9 +112,9 @@ const CreateEditProduct = () => {
         headers: {
           Accept: "application/json",
           Authorization: `Bearer ${user_data.token}`,
-          "X-XSRF-TOKEN": getCookie("XSRF-TOKEN"),
+          // "X-XSRF-TOKEN": getCookie("XSRF-TOKEN"),
         },
-        withCredentials: true,
+        // withCredentials: true,
       });
       toast.success(isEdit ? "Product Updated!" : "Product Created!");
       history.push("/product");

@@ -80,9 +80,9 @@ const CreateEditSupplier = () => {
   // Submit (Create + Update)
   const handleSubmit = async (values) => {
     try {
-      await axios.get(`${BASE_URL}/sanctum/csrf-cookie`, {
-        withCredentials: true,
-      });
+      // await axios.get(`${BASE_URL}/sanctum/csrf-cookie`, {
+      //   withCredentials: true,
+      // });
 
       let url = "";
       let method = "";
@@ -103,9 +103,9 @@ const CreateEditSupplier = () => {
         headers: {
           Accept: "application/json",
           Authorization: `Bearer ${user_data.token}`,
-          "X-XSRF-TOKEN": getCookie("XSRF-TOKEN"),
+          // "X-XSRF-TOKEN": getCookie("XSRF-TOKEN"),
         },
-        withCredentials: true,
+        // withCredentials: true,
       });
       toast.success(isEdit ? "Suppliers Updated!" : "Suppliers Created!");
       history.push("/suppliers");

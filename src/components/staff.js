@@ -16,16 +16,16 @@ const Staff = () => {
 
   const fetchStaff = async () => {
     try {
-      await axios.get(`${BASE_URL}/sanctum/csrf-cookie`, {
-        withCredentials: true,
-      });
+      // await axios.get(`${BASE_URL}/sanctum/csrf-cookie`, {
+      //   withCredentials: true,
+      // });
       const response = await axios.get(`${BASE_URL}/api/staff`, {
         headers: {
           Accept: "application/json",
           Authorization: `Bearer ${user_data.token}`,
-          "X-XSRF-TOKEN": getCookie("XSRF-TOKEN"),
+          // "X-XSRF-TOKEN": getCookie("XSRF-TOKEN"),
         },
-        withCredentials: true,
+        // withCredentials: true,
       });
       setStaffs(response.data.data);
     } catch (error) {
@@ -41,20 +41,20 @@ const Staff = () => {
   };
 
   const handleDelete = async (id) => {
-    await axios.get(`${BASE_URL}/sanctum/csrf-cookie`, {
-      withCredentials: true,
-    });
+    // await axios.get(`${BASE_URL}/sanctum/csrf-cookie`, {
+    //   withCredentials: true,
+    // });
     const response = await axios.delete(`${BASE_URL}/api/staff/${id}`, {
       headers: {
         accept: "application/json",
-        "X-XSRF-TOKEN": getCookie("XSRF-TOKEN"),
+        // "X-XSRF-TOKEN": getCookie("XSRF-TOKEN"),
         Authorization: `Bearer ${user_data.token}`,
       },
-      withCredentials: true,
+      // withCredentials: true,
     });
     if (response) {
       history.push("/staff");
-       toast.success("staff Deleted");
+      toast.success("staff Deleted");
       fetchStaff();
     }
   };
@@ -62,11 +62,11 @@ const Staff = () => {
     fetchStaff();
   }, []);
 
- useEffect(() => {
-  const searchText = search.toLowerCase();
+  useEffect(() => {
+    const searchText = search.toLowerCase();
 
-  const result = staffs.filter((item) => {
-    const searchable = `
+    const result = staffs.filter((item) => {
+      const searchable = `
       ${item.id}
       ${item.store?.name}
       ${item.name}
@@ -74,11 +74,11 @@ const Staff = () => {
       ${item.role}
     `.toLowerCase();
 
-    return searchable.includes(searchText);
-  });
+      return searchable.includes(searchText);
+    });
 
-  setFilteredData(result);
-}, [search, staffs]);
+    setFilteredData(result);
+  }, [search, staffs]);
 
   const columns = [
     {

@@ -9,7 +9,7 @@ const PurchaseBillLine = () => {
   const [search, setSearch] = useState("");
   const [purchaseBill, setPurchaseBill] = useState([]);
   const [filteredData, setFilteredData] = useState(products);
-  
+
   const user_data = JSON.parse(localStorage.getItem("user_detail"));
 
   const columns = [
@@ -72,21 +72,21 @@ const PurchaseBillLine = () => {
       name: "Total Amount",
       selector: (row) => row.total_amount,
       sortable: true,
-    },   
+    },
   ];
 
   const fetchPurchaseBill = async () => {
     try {
-      await axios.get(`${BASE_URL}/sanctum/csrf-cookie`, {
-        withCredentials: true,
-      });
+      // await axios.get(`${BASE_URL}/sanctum/csrf-cookie`, {
+      //   withCredentials: true,
+      // });
       const response = await axios.get(`${BASE_URL}/api/purchase-bill`, {
         headers: {
           Accept: "application/json",
           Authorization: `Bearer ${user_data.token}`,
-          "X-XSRF-TOKEN": getCookie("XSRF-TOKEN"),
+          // "X-XSRF-TOKEN": getCookie("XSRF-TOKEN"),
         },
-        withCredentials: true,
+        // withCredentials: true,
       });
       setPurchaseBill(response.data.data);
     } catch (error) {
@@ -96,12 +96,12 @@ const PurchaseBillLine = () => {
   useEffect(() => {
     fetchPurchaseBill();
   }, []);
-  
-useEffect(() => {
-  const lower = search.toLowerCase();
 
-  const result = purchaseBill.filter((item) => {
-    const searchableText = `
+  useEffect(() => {
+    const lower = search.toLowerCase();
+
+    const result = purchaseBill.filter((item) => {
+      const searchableText = `
       ${item.id}
       ${item.branch?.name}
       ${item.supplier?.name}
@@ -116,12 +116,11 @@ useEffect(() => {
       ${item.total_amount}
     `.toLowerCase();
 
-    return searchableText.includes(lower);
-  });
+      return searchableText.includes(lower);
+    });
 
-  setFilteredData(result);
-}, [search, purchaseBill]);
-
+    setFilteredData(result);
+  }, [search, purchaseBill]);
 
   return (
     <Layout>

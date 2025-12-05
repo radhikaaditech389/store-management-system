@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import DataTable from "react-data-table-component";
-import { Link,useHistory } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import axios from "axios";
 import Layout from "./layout";
 import { getCookie } from "../utils/cookies";
@@ -23,21 +23,21 @@ const SupplierBill = () => {
   };
 
   const handleDelete = async (id) => {
-    await axios.get(`${BASE_URL}/sanctum/csrf-cookie`, {
-      withCredentials: true,
-    });
-    const response = await axios.delete(`${BASE_URL}/suppliers/${id}`, {
+    // await axios.get(`${BASE_URL}/sanctum/csrf-cookie`, {
+    //   withCredentials: true,
+    // });
+    const response = await axios.delete(`${BASE_URL}/api/suppliers/${id}`, {
       headers: {
         accept: "application/json",
-        "X-XSRF-TOKEN": getCookie("XSRF-TOKEN"),
+        // "X-XSRF-TOKEN": getCookie("XSRF-TOKEN"),
         Authorization: `Bearer ${user_data.token}`,
       },
-      withCredentials: true,
+      // withCredentials: true,
     });
     if (response) {
       toast.success("Supplier deleted successfully!");
       history.push("/suppliers");
-     fetchSupplierBill();
+      fetchSupplierBill();
     }
   };
 
@@ -76,14 +76,17 @@ const SupplierBill = () => {
       name: "Action",
       cell: (row) => (
         <div className="list-icon-function">
-            <div className="item edit">
-                    <Link to={`/suppliers/edit/${row.id}`} onClick={() => handleEdit(row)}>
-                      <i className="icon-edit-3"></i>
-                    </Link>
-                  </div>
-                  <div className="item trash" onClick={() => handleDelete(row.id)}>
-                    <i className="icon-trash-2"></i>
-                  </div>
+          <div className="item edit">
+            <Link
+              to={`/suppliers/edit/${row.id}`}
+              onClick={() => handleEdit(row)}
+            >
+              <i className="icon-edit-3"></i>
+            </Link>
+          </div>
+          <div className="item trash" onClick={() => handleDelete(row.id)}>
+            <i className="icon-trash-2"></i>
+          </div>
         </div>
       ),
     },
@@ -91,16 +94,16 @@ const SupplierBill = () => {
 
   const fetchSupplierBill = async () => {
     try {
-      await axios.get(`${BASE_URL}/sanctum/csrf-cookie`, {
-        withCredentials: true,
-      });
+      // await axios.get(`${BASE_URL}/sanctum/csrf-cookie`, {
+      //   withCredentials: true,
+      // });
       const response = await axios.get(`${BASE_URL}/api/suppliers`, {
         headers: {
           Accept: "application/json",
           Authorization: `Bearer ${user_data.token}`,
-          "X-XSRF-TOKEN": getCookie("XSRF-TOKEN"),
+          // "X-XSRF-TOKEN": getCookie("XSRF-TOKEN"),
         },
-        withCredentials: true,
+        // withCredentials: true,
       });
       setSupplierBill(response.data.suppliers);
     } catch (error) {
@@ -111,24 +114,27 @@ const SupplierBill = () => {
     fetchSupplierBill();
   }, []);
 
-useEffect(() => {
-  const searchText = search.toLowerCase();
+  useEffect(() => {
+    const searchText = search.toLowerCase();
 
-  const result = supplierBill.filter((item) => {
-    return (
-      item.store?.name?.toLowerCase().includes(searchText) ||
-      item.name?.toLowerCase().includes(searchText) ||
-      String(item.gstin || "").toLowerCase().includes(searchText) ||
-      String(item.contact || "").toLowerCase().includes(searchText) ||   // <-- CONTACT SEARCH
-      item.address?.toLowerCase().includes(searchText) ||
-      item.state?.toLowerCase().includes(searchText) ||
-      item.description?.toLowerCase().includes(searchText)
-    );
-  });
+    const result = supplierBill.filter((item) => {
+      return (
+        item.store?.name?.toLowerCase().includes(searchText) ||
+        item.name?.toLowerCase().includes(searchText) ||
+        String(item.gstin || "")
+          .toLowerCase()
+          .includes(searchText) ||
+        String(item.contact || "")
+          .toLowerCase()
+          .includes(searchText) || // <-- CONTACT SEARCH
+        item.address?.toLowerCase().includes(searchText) ||
+        item.state?.toLowerCase().includes(searchText) ||
+        item.description?.toLowerCase().includes(searchText)
+      );
+    });
 
-  setFilteredData(result);
-}, [search, supplierBill]);
-
+    setFilteredData(result);
+  }, [search, supplierBill]);
 
   return (
     <Layout>
@@ -162,15 +168,15 @@ useEffect(() => {
           {/* <!-- all-user --> */}
           <div className="wg-box">
             <div className="flex items-center justify-between gap10 flex-wrap">
-                          <div className="wg-filter flex-grow"></div>
-                          <Link
-                            className="tf-button style-1 w208"
-                            to="/create-suppliers"
-                            onClick={handleCreateSupplier}
-                          >
-                            <i className="icon-plus"></i>Add new
-                          </Link>
-                        </div>
+              <div className="wg-filter flex-grow"></div>
+              <Link
+                className="tf-button style-1 w208"
+                to="/create-suppliers"
+                onClick={handleCreateSupplier}
+              >
+                <i className="icon-plus"></i>Add new
+              </Link>
+            </div>
             <input
               type="text"
               placeholder="Search..."

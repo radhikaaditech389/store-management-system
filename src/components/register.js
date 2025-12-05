@@ -46,16 +46,16 @@ const Register = () => {
     try {
       setLoading(true);
 
-      await axios.get(`${BASE_URL}/sanctum/csrf-cookie`, {
-        withCredentials: true,
-      });
+      // await axios.get(`${BASE_URL}/sanctum/csrf-cookie`, {
+      //   withCredentials: true,
+      // });
 
-      const response = await axios.post(`${BASE_URL}/stores`, user, {
+      const response = await axios.post(`${BASE_URL}/api/stores`, user, {
         headers: {
           accept: "application/json",
-          "X-XSRF-TOKEN": getCookie("XSRF-TOKEN"),
+          // "X-XSRF-TOKEN": getCookie("XSRF-TOKEN"),
         },
-        withCredentials: true,
+        // withCredentials: true,
       });
       if (response) {
         toast.success("Store registered successfully!");

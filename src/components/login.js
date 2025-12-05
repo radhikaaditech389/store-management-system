@@ -4,8 +4,6 @@ import { useHistory } from "react-router-dom";
 import { toast } from "react-toastify";
 import { getCookie } from "../utils/cookies";
 import axios from "axios";
-axios.defaults.baseURL = "http://localhost:8000";
-axios.defaults.withCredentials = true;
 
 const BASE_URL = process.env.REACT_APP_API_BASE_URL;
 
@@ -49,17 +47,17 @@ const Login = () => {
 
     try {
       // 1. Get CSRF cookie
-      await axios.get(`${BASE_URL}/sanctum/csrf-cookie`, {
-        withCredentials: true,
-      });
+      // await axios.get(`${BASE_URL}/sanctum/csrf-cookie`, {
+      //   withCredentials: true,
+      // });
 
-      // 2. Send login request
+      // 2. Send login requests
       const response = await axios.post(`${BASE_URL}/api/login`, formData, {
         headers: {
           accept: "application/json",
-          "X-XSRF-TOKEN": getCookie("XSRF-TOKEN"),
+          // "X-XSRF-TOKEN": getCookie("XSRF-TOKEN"),
         },
-        withCredentials: true,
+        // withCredentials: true,
       });
       const user_detail = response.data;
       localStorage.setItem("user_detail", JSON.stringify(user_detail));

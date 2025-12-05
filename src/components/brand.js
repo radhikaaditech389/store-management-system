@@ -17,16 +17,16 @@ const Brand = () => {
 
   const fetchBrand = async () => {
     try {
-      await axios.get(`${BASE_URL}/sanctum/csrf-cookie`, {
-        withCredentials: true,
-      });
+      // await axios.get(`${BASE_URL}/sanctum/csrf-cookie`, {
+      //   withCredentials: true,
+      // });
       const response = await axios.get(`${BASE_URL}/api/brands`, {
         headers: {
           Accept: "application/json",
           Authorization: `Bearer ${user_data.token}`,
-          "X-XSRF-TOKEN": getCookie("XSRF-TOKEN"),
+          // "X-XSRF-TOKEN": getCookie("XSRF-TOKEN"),
         },
-        withCredentials: true,
+        // withCredentials: true,
       });
       setBrands(response.data.brands);
     } catch (error) {
@@ -42,16 +42,16 @@ const Brand = () => {
   };
 
   const handleDelete = async (id) => {
-    await axios.get(`${BASE_URL}/sanctum/csrf-cookie`, {
-      withCredentials: true,
-    });
+    // await axios.get(`${BASE_URL}/sanctum/csrf-cookie`, {
+    //   withCredentials: true,
+    // });
     const response = await axios.delete(`${BASE_URL}/api/brands/${id}`, {
       headers: {
         accept: "application/json",
-        "X-XSRF-TOKEN": getCookie("XSRF-TOKEN"),
+        // "X-XSRF-TOKEN": getCookie("XSRF-TOKEN"),
         Authorization: `Bearer ${user_data.token}`,
       },
-      withCredentials: true,
+      // withCredentials: true,
     });
     if (response) {
       history.push("/brand");
@@ -64,17 +64,17 @@ const Brand = () => {
   }, []);
 
   useEffect(() => {
-   const searchText = search.toLowerCase();
- 
-   const result = brands.filter((item) => {
-     return (
-       item.name.toLowerCase().includes(searchText) ||
-        item.description.toLowerCase().includes(searchText) 
-     );
-   });
- 
-   setFilteredData(result);
- }, [search, brands]);
+    const searchText = search.toLowerCase();
+
+    const result = brands.filter((item) => {
+      return (
+        item.name.toLowerCase().includes(searchText) ||
+        item.description.toLowerCase().includes(searchText)
+      );
+    });
+
+    setFilteredData(result);
+  }, [search, brands]);
 
   const columns = [
     {
@@ -155,7 +155,7 @@ const Brand = () => {
               placeholder="Search..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-             className="search-input"
+              className="search-input"
             />
             <DataTable
               columns={columns}

@@ -30,27 +30,54 @@ export const scanBarcode = (barcode) =>
     { headers: getAuthHeader() }
   );
 
-export const createSalesBill = (lines) =>
-  axios.post(
-    `${BASE_URL}/api/sales-bills`,
-    { lines },
-    { headers: getAuthHeader() }
-  );
-
 const generateIdempotencyKey = () =>
   "idemp_" +
   Array.from(crypto.getRandomValues(new Uint8Array(16)))
     .map((b) => b.toString(16).padStart(2, "0"))
     .join("");
 
-export const paySalesBill = (sales_bill_id, payments) =>
-  axios.post(
+export const createSalesBill = async (lines) => {
+  let key = localStorage.getItem("store_idemp_key");
+  if (!key) {
+    key = generateIdempotencyKey();
+    localStorage.setItem("store_idemp_key", key);
+  }
+
+  const res = await axios.post(
+    `${BASE_URL}/api/sales-bills`,
+    { lines },
+    {
+      headers: {
+        ...getAuthHeader(),
+        "Idempotency-Key": key,
+      },
+    }
+  );
+
+  localStorage.removeItem("store_idemp_key");
+
+  return res;
+};
+
+export const paySalesBill = async (sales_bill_id, payments) => {
+  let key = localStorage.getItem("pay_idemp_key");
+  if (!key) {
+    key = generateIdempotencyKey();
+    localStorage.setItem("pay_idemp_key", key);
+  }
+
+  const res = await axios.post(
     `${BASE_URL}/api/sales-bills/pay`,
     { sales_bill_id, payments },
     {
       headers: {
         ...getAuthHeader(),
-        "Idempotency-Key": generateIdempotencyKey(),
+        "Idempotency-Key": key,
       },
     }
   );
+
+  localStorage.removeItem("pay_idemp_key");
+
+  return res;
+};

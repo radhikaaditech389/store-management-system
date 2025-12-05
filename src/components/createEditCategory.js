@@ -7,7 +7,6 @@ import { getCookie } from "../utils/cookies";
 import Layout from "./layout";
 import { toast } from "react-toastify";
 
-
 const CreateEditCategory = () => {
   const BASE_URL = process.env.REACT_APP_API_BASE_URL;
   const { id } = useParams(); // if id exists -> Edit Mode
@@ -40,16 +39,16 @@ const CreateEditCategory = () => {
 
   const fetchCategory = async () => {
     try {
-      await axios.get(`${BASE_URL}/sanctum/csrf-cookie`, {
-        withCredentials: true,
-      });
+      // await axios.get(`${BASE_URL}/sanctum/csrf-cookie`, {
+      //   withCredentials: true,
+      // });
       const response = await axios.get(`${BASE_URL}/api/categories`, {
         headers: {
           Accept: "application/json",
           Authorization: `Bearer ${user_data.token}`,
-          "X-XSRF-TOKEN": getCookie("XSRF-TOKEN"),
+          // "X-XSRF-TOKEN": getCookie("XSRF-TOKEN"),
         },
-        withCredentials: true,
+        // withCredentials: true,
       });
       setCategories(response.data.categories);
     } catch (error) {
@@ -72,9 +71,9 @@ const CreateEditCategory = () => {
   // Submit (Create + Update)
   const handleSubmit = async (values) => {
     try {
-      await axios.get(`${BASE_URL}/sanctum/csrf-cookie`, {
-        withCredentials: true,
-      });
+      // await axios.get(`${BASE_URL}/sanctum/csrf-cookie`, {
+      //   withCredentials: true,
+      // });
 
       let url = "";
       let method = "";
@@ -96,11 +95,11 @@ const CreateEditCategory = () => {
         headers: {
           Accept: "application/json",
           Authorization: `Bearer ${user_data.token}`,
-          "X-XSRF-TOKEN": getCookie("XSRF-TOKEN"),
+          // "X-XSRF-TOKEN": getCookie("XSRF-TOKEN"),
         },
-        withCredentials: true,
+        // withCredentials: true,
       });
- toast.success(isEdit ? "Category Updated!" : "Category Created!");
+      toast.success(isEdit ? "Category Updated!" : "Category Created!");
       // alert(isEdit ? "Category Updated!" : "Category Created!");
       history.push("/category");
     } catch (error) {

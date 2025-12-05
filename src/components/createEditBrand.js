@@ -7,7 +7,6 @@ import { getCookie } from "../utils/cookies";
 import Layout from "./layout";
 import { toast } from "react-toastify";
 
-
 const CreateEditBrand = () => {
   const BASE_URL = process.env.REACT_APP_API_BASE_URL;
   const { id } = useParams(); // if id exists -> Edit Mode
@@ -47,9 +46,9 @@ const CreateEditBrand = () => {
   // Submit (Create + Update)
   const handleSubmit = async (values) => {
     try {
-      await axios.get(`${BASE_URL}/sanctum/csrf-cookie`, {
-        withCredentials: true,
-      });
+      // await axios.get(`${BASE_URL}/sanctum/csrf-cookie`, {
+      //   withCredentials: true,
+      // });
 
       let url = "";
       let method = "";
@@ -71,9 +70,9 @@ const CreateEditBrand = () => {
         headers: {
           Accept: "application/json",
           Authorization: `Bearer ${user_data.token}`,
-          "X-XSRF-TOKEN": getCookie("XSRF-TOKEN"),
+          // "X-XSRF-TOKEN": getCookie("XSRF-TOKEN"),
         },
-        withCredentials: true,
+        // withCredentials: true,
       });
       toast.success(isEdit ? "Brand Updated!" : "Brand Created!");
       history.push("/brand");

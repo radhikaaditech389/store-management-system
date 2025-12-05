@@ -52,9 +52,9 @@ const CreateEditBranch = () => {
   // Submit (Create + Update)
   const handleSubmit = async (values) => {
     try {
-      await axios.get(`${BASE_URL}/sanctum/csrf-cookie`, {
-        withCredentials: true,
-      });
+      // await axios.get(`${BASE_URL}/sanctum/csrf-cookie`, {
+      //   withCredentials: true,
+      // });
 
       let url = "";
       let method = "";
@@ -76,9 +76,9 @@ const CreateEditBranch = () => {
         headers: {
           Accept: "application/json",
           Authorization: `Bearer ${user_data.token}`,
-          "X-XSRF-TOKEN": getCookie("XSRF-TOKEN"),
+          // "X-XSRF-TOKEN": getCookie("XSRF-TOKEN"),
         },
-        withCredentials: true,
+        // withCredentials: true,
       });
       toast.success(isEdit ? "Branch Updated!" : "Branch Created!");
       history.push("/branch");
