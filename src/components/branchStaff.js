@@ -19,7 +19,7 @@ const BrachStaff = () => {
       // await axios.get(`${BASE_URL}/sanctum/csrf-cookie`, {
       //   withCredentials: true,
       // });
-      const response = await axios.get(`${BASE_URL}/brands`, {
+      const response = await axios.get(`${BASE_URL}/api/brands`, {
         headers: {
           Accept: "application/json",
           Authorization: `Bearer ${user_data.token}`,

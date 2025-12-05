@@ -23,7 +23,7 @@ const Home = () => {
       // await axios.get(`${BASE_URL}/sanctum/csrf-cookie`, {
       //   withCredentials: true,
       // });
-      const response = await axios.get(`${BASE_URL}/categories`, {
+      const response = await axios.get(`${BASE_URL}/api/categories`, {
         headers: {
           Accept: "application/json",
           Authorization: `Bearer ${user_data.token}`,
@@ -41,7 +41,7 @@ const Home = () => {
       // await axios.get(`${BASE_URL}/sanctum/csrf-cookie`, {
       //   withCredentials: true,
       // });
-      const response = await axios.get(`${BASE_URL}/brands`, {
+      const response = await axios.get(`${BASE_URL}/api/brands`, {
         headers: {
           Accept: "application/json",
           Authorization: `Bearer ${user_data.token}`,
@@ -59,7 +59,7 @@ const Home = () => {
       // await axios.get(`${BASE_URL}/sanctum/csrf-cookie`, {
       //   withCredentials: true,
       // });
-      const response = await axios.get(`${BASE_URL}/branches`, {
+      const response = await axios.get(`${BASE_URL}/api/branches`, {
         headers: {
           Accept: "application/json",
           Authorization: `Bearer ${user_data.token}`,
@@ -77,7 +77,7 @@ const Home = () => {
       // await axios.get(`${BASE_URL}/sanctum/csrf-cookie`, {
       //   withCredentials: true,
       // });
-      const response = await axios.get(`${BASE_URL}/suppliers`, {
+      const response = await axios.get(`${BASE_URL}/api/suppliers`, {
         headers: {
           Accept: "application/json",
           Authorization: `Bearer ${user_data.token}`,
@@ -95,7 +95,7 @@ const Home = () => {
       // await axios.get(`${BASE_URL}/sanctum/csrf-cookie`, {
       //   withCredentials: true,
       // });
-      const response = await axios.get(`${BASE_URL}/products`, {
+      const response = await axios.get(`${BASE_URL}/api/products`, {
         headers: {
           Accept: "application/json",
           Authorization: `Bearer ${user_data.token}`,
@@ -113,7 +113,7 @@ const Home = () => {
       // await axios.get(`${BASE_URL}/sanctum/csrf-cookie`, {
       //   withCredentials: true,
       // });
-      const response = await axios.get(`${BASE_URL}/staff`, {
+      const response = await axios.get(`${BASE_URL}/api/staff`, {
         headers: {
           Accept: "application/json",
           Authorization: `Bearer ${user_data.token}`,
@@ -131,7 +131,7 @@ const Home = () => {
       // await axios.get(`${BASE_URL}/sanctum/csrf-cookie`, {
       //   withCredentials: true,
       // });
-      const response = await axios.get(`${BASE_URL}/gst-rates`, {
+      const response = await axios.get(`${BASE_URL}/api/gst-rates`, {
         headers: {
           Accept: "application/json",
           Authorization: `Bearer ${user_data.token}`,
@@ -149,7 +149,7 @@ const Home = () => {
       // await axios.get(`${BASE_URL}/sanctum/csrf-cookie`, {
       //   withCredentials: true,
       // });
-      const response = await axios.get(`${BASE_URL}/purchase-bill`, {
+      const response = await axios.get(`${BASE_URL}/api/purchase-bill`, {
         headers: {
           Accept: "application/json",
           Authorization: `Bearer ${user_data.token}`,
@@ -167,7 +167,7 @@ const Home = () => {
       // await axios.get(`${BASE_URL}/sanctum/csrf-cookie`, {
       //   withCredentials: true,
       // });
-      const response = await axios.get(`${BASE_URL}/sales-bills`, {
+      const response = await axios.get(`${BASE_URL}/api/sales-bills`, {
         headers: {
           Accept: "application/json",
           Authorization: `Bearer ${user_data.token}`,

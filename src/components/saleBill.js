@@ -8,8 +8,8 @@ import { getCookie } from "../utils/cookies";
 const SaleBill = () => {
   const BASE_URL = process.env.REACT_APP_API_BASE_URL;
   const [search, setSearch] = useState("");
-   const [saleBills, setSaleBills] = useState([]);
-  
+  const [saleBills, setSaleBills] = useState([]);
+
   const [filteredData, setFilteredData] = useState(saleBills);
   const user_data = JSON.parse(localStorage.getItem("user_detail"));
 
@@ -19,17 +19,17 @@ const SaleBill = () => {
       selector: (row) => row.id,
       sortable: true,
     },
-    {
-      name: "Store Name",
-      selector: (row) => row.store.name,
-      sortable: true,
-    },
+    // {
+    //   name: "Store Name",
+    //   selector: (row) => row.store.name,
+    //   sortable: true,
+    // },
     {
       name: "Branch Name",
       selector: (row) => row.branch.name,
       sortable: true,
     },
-     {
+    {
       name: "User Name",
       selector: (row) => row.user.name,
       sortable: true,
@@ -84,7 +84,7 @@ const SaleBill = () => {
       selector: (row) => row.payment_status,
       sortable: true,
     },
-     {
+    {
       name: "bill_status",
       selector: (row) => row.bill_status,
       sortable: true,
@@ -100,7 +100,7 @@ const SaleBill = () => {
       // await axios.get(`${BASE_URL}/sanctum/csrf-cookie`, {
       //   withCredentials: true,
       // });
-      const response = await axios.get(`${BASE_URL}/sales-bills`, {
+      const response = await axios.get(`${BASE_URL}/api/sales-bills`, {
         headers: {
           Accept: "application/json",
           Authorization: `Bearer ${user_data.token}`,
@@ -113,16 +113,16 @@ const SaleBill = () => {
       console.error("Error fetching categories:", error);
     }
   };
-  
+
   useEffect(() => {
     fetchSaleBill();
   }, []);
 
-useEffect(() => {
-  const searchText = search.toLowerCase();
+  useEffect(() => {
+    const searchText = search.toLowerCase();
 
-  const result = saleBills.filter((item) => {
-    const searchable = `
+    const result = saleBills.filter((item) => {
+      const searchable = `
       ${item.id}
       ${item.store?.name}
       ${item.branch?.name}
@@ -140,12 +140,11 @@ useEffect(() => {
       ${item.bill_status}
     `.toLowerCase();
 
-    return searchable.includes(searchText);
-  });
+      return searchable.includes(searchText);
+    });
 
-  setFilteredData(result);
-}, [search, saleBills]);
-
+    setFilteredData(result);
+  }, [search, saleBills]);
 
   return (
     <Layout>

@@ -50,7 +50,7 @@ const Register = () => {
       //   withCredentials: true,
       // });
 
-      const response = await axios.post(`${BASE_URL}/stores`, user, {
+      const response = await axios.post(`${BASE_URL}/api/stores`, user, {
         headers: {
           accept: "application/json",
           // "X-XSRF-TOKEN": getCookie("XSRF-TOKEN"),

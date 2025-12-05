@@ -7,7 +7,6 @@ import { getCookie } from "../utils/cookies";
 import Layout from "./layout";
 import { toast } from "react-toastify";
 
-
 const CreateEditStaff = () => {
   const BASE_URL = process.env.REACT_APP_API_BASE_URL;
   const { id } = useParams(); // if id exists -> Edit Mode
@@ -47,7 +46,7 @@ const CreateEditStaff = () => {
       // await axios.get(`${BASE_URL}/sanctum/csrf-cookie`, {
       //   withCredentials: true,
       // });
-      const response = await axios.get(`${BASE_URL}/branches`, {
+      const response = await axios.get(`${BASE_URL}/api/branches`, {
         headers: {
           Accept: "application/json",
           Authorization: `Bearer ${user_data.token}`,
@@ -88,11 +87,11 @@ const CreateEditStaff = () => {
 
       if (isEdit) {
         // UPDATE PRODUCT
-        url = `${BASE_URL}/staff/${id}`;
+        url = `${BASE_URL}/api/staff/${id}`;
         method = "put";
       } else {
         // CREATE PRODUCT
-        url = `${BASE_URL}/staff`;
+        url = `${BASE_URL}/api/staff`;
         method = "post";
       }
 
@@ -108,7 +107,9 @@ const CreateEditStaff = () => {
         // withCredentials: true,
       });
 
-      toast.success(isEdit ? "Staff updated successfully!" : "Staff created successfully!");
+      toast.success(
+        isEdit ? "Staff updated successfully!" : "Staff created successfully!"
+      );
       actions.resetForm();
       history.push("/staff");
     } catch (error) {

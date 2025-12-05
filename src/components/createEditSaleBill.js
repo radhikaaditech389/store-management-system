@@ -7,7 +7,6 @@ import { getCookie } from "../utils/cookies";
 import Layout from "./layout";
 import { toast } from "react-toastify";
 
-
 const CreateEditSaleBill = () => {
   const BASE_URL = process.env.REACT_APP_API_BASE_URL;
   const { id } = useParams(); // if id exists -> Edit Mode
@@ -19,13 +18,13 @@ const CreateEditSaleBill = () => {
   const user_data = JSON.parse(localStorage.getItem("user_detail"));
 
   const isEdit = Boolean(id);
- 
+
   const fetchBranch = async () => {
     try {
       // await axios.get(`${BASE_URL}/sanctum/csrf-cookie`, {
       //   withCredentials: true,
       // });
-      const response = await axios.get(`${BASE_URL}/manager/branches`, {
+      const response = await axios.get(`${BASE_URL}/api/manager/branches`, {
         headers: {
           Accept: "application/json",
           Authorization: `Bearer ${user_data.token}`,
@@ -48,7 +47,7 @@ const CreateEditSaleBill = () => {
       // await axios.get(`${BASE_URL}/sanctum/csrf-cookie`, {
       //   withCredentials: true,
       // });
-      const response = await axios.get(`${BASE_URL}/suppliers`, {
+      const response = await axios.get(`${BASE_URL}/api/suppliers`, {
         headers: {
           Accept: "application/json",
           Authorization: `Bearer ${user_data.token}`,
@@ -70,7 +69,7 @@ const CreateEditSaleBill = () => {
       // await axios.get(`${BASE_URL}/sanctum/csrf-cookie`, {
       //   withCredentials: true,
       // });
-      const response = await axios.get(`${BASE_URL}/products`, {
+      const response = await axios.get(`${BASE_URL}/api/products`, {
         headers: {
           Accept: "application/json",
           Authorization: `Bearer ${user_data.token}`,
@@ -89,7 +88,7 @@ const CreateEditSaleBill = () => {
 
   // Validation Schema
 
- const initialValues = {
+  const initialValues = {
     lines: [
       {
         product_id: "",
@@ -103,7 +102,9 @@ const CreateEditSaleBill = () => {
       .of(
         Yup.object({
           product_id: Yup.number().required("Product required"),
-          qty: Yup.number().min(1, "Must be at least 1").required("Qty required"),
+          qty: Yup.number()
+            .min(1, "Must be at least 1")
+            .required("Qty required"),
         })
       )
       .min(1, "Add at least one product"),
@@ -126,14 +127,13 @@ const CreateEditSaleBill = () => {
       });
 
       // alert("Sales Bill Created Successfully!");
-      toast.success("Sales Bill Created Successfully!")
+      toast.success("Sales Bill Created Successfully!");
       console.log("RESULT:", response.data);
     } catch (error) {
       console.error("API Error:", error.response?.data);
       alert(error.response?.data?.message || "Error creating sales bill");
     }
   };
-
 
   return (
     <Layout>
@@ -144,78 +144,93 @@ const CreateEditSaleBill = () => {
           </h3>
 
           <div className="wg-box">
-            <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={handleSubmit}>
-        {({ values }) => (
-          <Form>
-            <FieldArray name="lines">
-              {({ push, remove }) => (
-                <>
-                  {values?.lines?.map((line, index) => (
-                    <div className="sales-line-box" key={index}>
-                      <h4 className="sales-line-title">Product {index + 1}</h4>
+            <Formik
+              initialValues={initialValues}
+              validationSchema={validationSchema}
+              onSubmit={handleSubmit}
+            >
+              {({ values }) => (
+                <Form>
+                  <FieldArray name="lines">
+                    {({ push, remove }) => (
+                      <>
+                        {values?.lines?.map((line, index) => (
+                          <div className="sales-line-box" key={index}>
+                            <h4 className="sales-line-title">
+                              Product {index + 1}
+                            </h4>
 
-                      {/* Product Field */}
-                      <div className="sales-field-row">
-                        <label className="sales-field-label">Product</label>
+                            {/* Product Field */}
+                            <div className="sales-field-row">
+                              <label className="sales-field-label">
+                                Product
+                              </label>
 
-                        <Field as="select" name={`lines.${index}.product_id`} className="sales-select">
-                          <option value="">Select Product</option>
-                          {products.map((p) => (
-                            <option value={p.id} key={p.id}>
-                              {p.name}
-                            </option>
-                          ))}
-                        </Field>
+                              <Field
+                                as="select"
+                                name={`lines.${index}.product_id`}
+                                className="sales-select"
+                              >
+                                <option value="">Select Product</option>
+                                {products.map((p) => (
+                                  <option value={p.id} key={p.id}>
+                                    {p.name}
+                                  </option>
+                                ))}
+                              </Field>
 
-                        <ErrorMessage
-                          component="div"
-                          className="sales-error"
-                          name={`lines.${index}.product_id`}
-                        />
-                      </div>
+                              <ErrorMessage
+                                component="div"
+                                className="sales-error"
+                                name={`lines.${index}.product_id`}
+                              />
+                            </div>
 
-                      {/* Qty Field */}
-                      <div className="sales-field-row">
-                        <label className="sales-field-label">Qty</label>
+                            {/* Qty Field */}
+                            <div className="sales-field-row">
+                              <label className="sales-field-label">Qty</label>
 
-                        <Field
-                          type="number"
-                          name={`lines.${index}.qty`}
-                          className="sales-input"
-                          placeholder="Enter Qty"
-                        />
+                              <Field
+                                type="number"
+                                name={`lines.${index}.qty`}
+                                className="sales-input"
+                                placeholder="Enter Qty"
+                              />
 
-                        <ErrorMessage
-                          component="div"
-                          className="sales-error"
-                          name={`lines.${index}.qty`}
-                        />
-                      </div>
+                              <ErrorMessage
+                                component="div"
+                                className="sales-error"
+                                name={`lines.${index}.qty`}
+                              />
+                            </div>
 
-                      <button type="button" className="sales-remove-btn" onClick={() => remove(index)}>
-                        Remove
-                      </button>
-                    </div>
-                  ))}
+                            <button
+                              type="button"
+                              className="sales-remove-btn"
+                              onClick={() => remove(index)}
+                            >
+                              Remove
+                            </button>
+                          </div>
+                        ))}
 
-                  <button
-                    type="button"
-                    className="sales-add-btn"
-                    onClick={() => push({ product_id: "", qty: "" })}
-                  >
-                    + Add Product
+                        <button
+                          type="button"
+                          className="sales-add-btn"
+                          onClick={() => push({ product_id: "", qty: "" })}
+                        >
+                          + Add Product
+                        </button>
+                      </>
+                    )}
+                  </FieldArray>
+
+                  <button type="submit" className="sales-submit-btn">
+                    Submit Sales Bill
                   </button>
-                </>
+                </Form>
               )}
-            </FieldArray>
-
-            <button type="submit" className="sales-submit-btn">
-              Submit Sales Bill
-            </button>
-          </Form>
-        )}
-      </Formik>
-
+            </Formik>
           </div>
         </div>
       </div>

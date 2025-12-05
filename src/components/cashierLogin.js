@@ -51,7 +51,7 @@ const CashierLogin = () => {
       // });
 
       // 2. Send login request
-      const response = await axios.post(`${BASE_URL}/login`, formData, {
+      const response = await axios.post(`${BASE_URL}/api/login`, formData, {
         headers: {
           accept: "application/json",
           // "X-XSRF-TOKEN": getCookie("XSRF-TOKEN"),

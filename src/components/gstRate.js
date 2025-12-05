@@ -18,7 +18,7 @@ const GstRate = () => {
       // await axios.get(`${BASE_URL}/sanctum/csrf-cookie`, {
       //   withCredentials: true,
       // });
-      const response = await axios.get(`${BASE_URL}/gst-rates`, {
+      const response = await axios.get(`${BASE_URL}/api/gst-rates`, {
         headers: {
           Accept: "application/json",
           Authorization: `Bearer ${user_data.token}`,
@@ -31,7 +31,6 @@ const GstRate = () => {
       console.error("Error fetching gst Rates:", error);
     }
   };
-
 
   useEffect(() => {
     fetchGstRate();

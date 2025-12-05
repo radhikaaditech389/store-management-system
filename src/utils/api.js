@@ -13,19 +13,19 @@ const getAuthHeader = () => {
 };
 
 export const getProducts = (params = {}) =>
-  axios.get(`${BASE_URL}/products`, {
+  axios.get(`${BASE_URL}/api/products`, {
     headers: getAuthHeader(),
     params: params,
   });
 
 export const getCategories = () =>
-  axios.get(`${BASE_URL}/categories`, { headers: getAuthHeader() });
+  axios.get(`${BASE_URL}/api/categories`, { headers: getAuthHeader() });
 export const getBrands = () =>
-  axios.get(`${BASE_URL}/brands`, { headers: getAuthHeader() });
+  axios.get(`${BASE_URL}/api/brands`, { headers: getAuthHeader() });
 
 export const scanBarcode = (barcode) =>
   axios.post(
-    `${BASE_URL}/sales/scan`,
+    `${BASE_URL}/api/sales/scan`,
     { barcode },
     { headers: getAuthHeader() }
   );
@@ -44,7 +44,7 @@ export const createSalesBill = async (lines) => {
   }
 
   const res = await axios.post(
-    `${BASE_URL}/sales-bills`,
+    `${BASE_URL}/api/sales-bills`,
     { lines },
     {
       headers: {
@@ -67,7 +67,7 @@ export const paySalesBill = async (sales_bill_id, payments) => {
   }
 
   const res = await axios.post(
-    `${BASE_URL}/sales-bills/pay`,
+    `${BASE_URL}/api/sales-bills/pay`,
     { sales_bill_id, payments },
     {
       headers: {

@@ -61,11 +61,11 @@ const CreateEditBranch = () => {
 
       if (isEdit) {
         // UPDATE PRODUCT
-        url = `${BASE_URL}/branches/${id}`;
+        url = `${BASE_URL}/api/branches/${id}`;
         method = "put";
       } else {
         // CREATE PRODUCT
-        url = `${BASE_URL}/branches`;
+        url = `${BASE_URL}/api/branches`;
         method = "post";
       }
 

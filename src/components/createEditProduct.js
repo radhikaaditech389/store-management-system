@@ -34,7 +34,7 @@ const CreateEditProduct = () => {
 
   // Fetch brands
   const fetchBrands = async () => {
-    const response = await axios.get(`${BASE_URL}/brands`, {
+    const response = await axios.get(`${BASE_URL}/api/brands`, {
       headers: { Authorization: `Bearer ${user_data.token}` },
     });
     setBrands(response.data.brands);
@@ -42,7 +42,7 @@ const CreateEditProduct = () => {
 
   // Fetch categories
   const fetchCategories = async () => {
-    const response = await axios.get(`${BASE_URL}/categories`, {
+    const response = await axios.get(`${BASE_URL}/api/categories`, {
       headers: { Authorization: `Bearer ${user_data.token}` },
     });
     setCategories(response.data.categories);
@@ -97,11 +97,11 @@ const CreateEditProduct = () => {
 
       if (isEdit) {
         // UPDATE PRODUCT
-        url = `${BASE_URL}/products/${id}`;
+        url = `${BASE_URL}/api/products/${id}`;
         method = "put";
       } else {
         // CREATE PRODUCT
-        url = `${BASE_URL}/products`;
+        url = `${BASE_URL}/api/products`;
         method = "post";
       }
 

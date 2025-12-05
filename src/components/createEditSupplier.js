@@ -89,11 +89,11 @@ const CreateEditSupplier = () => {
 
       if (isEdit) {
         // UPDATE PRODUCT
-        url = `${BASE_URL}/suppliers/${id}`;
+        url = `${BASE_URL}/api/suppliers/${id}`;
         method = "put";
       } else {
         // CREATE PRODUCT
-        url = `${BASE_URL}/suppliers`;
+        url = `${BASE_URL}/api/suppliers`;
         method = "post";
       }
       const response = await axios({

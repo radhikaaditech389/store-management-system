@@ -35,7 +35,7 @@ const Store = () => {
     }).then(async (result) => {
       if (result.isConfirmed) {
         try {
-          const response = await axios.delete(`${BASE_URL}/stores/${id}`, {
+          const response = await axios.delete(`${BASE_URL}/api/stores/${id}`, {
             headers: {
               Authorization: `Bearer ${user_data.token}`,
             },
@@ -131,7 +131,7 @@ const Store = () => {
 
   const fetchStore = async () => {
     try {
-      const response = await axios.get(`${BASE_URL}/stores`, {
+      const response = await axios.get(`${BASE_URL}/api/stores`, {
         headers: {
           accept: "application/json",
           Authorization: `Bearer ${user_data.token}`,

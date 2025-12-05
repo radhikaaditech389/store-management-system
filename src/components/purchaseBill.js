@@ -7,7 +7,7 @@ import { getCookie } from "../utils/cookies";
 import { toast } from "react-toastify";
 const PurchaseBill = () => {
   const BASE_URL = process.env.REACT_APP_API_BASE_URL;
-   const APP_URL = process.env.REACT_APP_URL;
+  const APP_URL = process.env.REACT_APP_URL;
 
   const history = useHistory();
   const [products, setProducts] = useState([]);
@@ -27,7 +27,7 @@ const PurchaseBill = () => {
     // await axios.get(`${APP_URL}/sanctum/csrf-cookie`, {
     //   withCredentials: true,
     // });
-    const response = await axios.delete(`${BASE_URL}/purchase-bill/${id}`, {
+    const response = await axios.delete(`${BASE_URL}/api/purchase-bill/${id}`, {
       headers: {
         accept: "application/json",
         // "X-XSRF-TOKEN": getCookie("XSRF-TOKEN"),
@@ -127,17 +127,14 @@ const PurchaseBill = () => {
       // await axios.get(`${BASE_URL}/sanctum/csrf-cookie`, {
       //   withCredentials: true,
       // });
-      const response = await axios.get(
-        `${BASE_URL}/purchase-bill`,
-        {
-          headers: {
-            Accept: "application/json",
-            Authorization: `Bearer ${user_data.token}`,
-            // "X-XSRF-TOKEN": getCookie("XSRF-TOKEN"),
-          },
-          // withCredentials: true,
-        }
-      );
+      const response = await axios.get(`${BASE_URL}/api/purchase-bill`, {
+        headers: {
+          Accept: "application/json",
+          Authorization: `Bearer ${user_data.token}`,
+          // "X-XSRF-TOKEN": getCookie("XSRF-TOKEN"),
+        },
+        // withCredentials: true,
+      });
       setPurchaseBill(response.data.data);
     } catch (error) {
       console.error("Error fetching categories:", error);

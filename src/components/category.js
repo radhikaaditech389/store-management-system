@@ -20,7 +20,7 @@ const Category = () => {
       // await axios.get(`${BASE_URL}/sanctum/csrf-cookie`, {
       //   withCredentials: true,
       // });
-      const response = await axios.get(`${BASE_URL}/categories`, {
+      const response = await axios.get(`${BASE_URL}/api/categories`, {
         headers: {
           Accept: "application/json",
           Authorization: `Bearer ${user_data.token}`,
@@ -41,7 +41,7 @@ const Category = () => {
     // await axios.get(`${BASE_URL}/sanctum/csrf-cookie`, {
     //   withCredentials: true,
     // });
-    const response = await axios.delete(`${BASE_URL}/categories/${id}`, {
+    const response = await axios.delete(`${BASE_URL}/api/categories/${id}`, {
       headers: {
         accept: "application/json",
         // "X-XSRF-TOKEN": getCookie("XSRF-TOKEN"),
@@ -100,20 +100,20 @@ const Category = () => {
     },
   ];
 
- useEffect(() => {
-  const searchText = search.toLowerCase();
+  useEffect(() => {
+    const searchText = search.toLowerCase();
 
-  const result = categories.filter((item) => {
-    return (
-       item.store.name.toLowerCase().includes(searchText) ||
-      item.name.toLowerCase().includes(searchText) ||
-       item.description.toLowerCase().includes(searchText) ||
-      item.parent?.name?.toLowerCase().includes(searchText)
-    );
-  });
+    const result = categories.filter((item) => {
+      return (
+        item.store.name.toLowerCase().includes(searchText) ||
+        item.name.toLowerCase().includes(searchText) ||
+        item.description.toLowerCase().includes(searchText) ||
+        item.parent?.name?.toLowerCase().includes(searchText)
+      );
+    });
 
-  setFilteredData(result);
-}, [search, categories]);
+    setFilteredData(result);
+  }, [search, categories]);
 
   const handleCreateCategory = () => {
     localStorage.setItem("category_detail", null);

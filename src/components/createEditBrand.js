@@ -55,11 +55,11 @@ const CreateEditBrand = () => {
 
       if (isEdit) {
         // UPDATE PRODUCT
-        url = `${BASE_URL}/brands/${id}`;
+        url = `${BASE_URL}/api/brands/${id}`;
         method = "put";
       } else {
         // CREATE PRODUCT
-        url = `${BASE_URL}/brands`;
+        url = `${BASE_URL}/api/brands`;
         method = "post";
       }
 

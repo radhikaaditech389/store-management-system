@@ -7,7 +7,6 @@ import { getCookie } from "../utils/cookies";
 import Layout from "./layout";
 import { toast } from "react-toastify";
 
-
 const CreateEditCategory = () => {
   const BASE_URL = process.env.REACT_APP_API_BASE_URL;
   const { id } = useParams(); // if id exists -> Edit Mode
@@ -43,7 +42,7 @@ const CreateEditCategory = () => {
       // await axios.get(`${BASE_URL}/sanctum/csrf-cookie`, {
       //   withCredentials: true,
       // });
-      const response = await axios.get(`${BASE_URL}/categories`, {
+      const response = await axios.get(`${BASE_URL}/api/categories`, {
         headers: {
           Accept: "application/json",
           Authorization: `Bearer ${user_data.token}`,
@@ -81,11 +80,11 @@ const CreateEditCategory = () => {
 
       if (isEdit) {
         // UPDATE PRODUCT
-        url = `${BASE_URL}/categories/${id}`;
+        url = `${BASE_URL}/api/categories/${id}`;
         method = "put";
       } else {
         // CREATE PRODUCT
-        url = `${BASE_URL}/categories`;
+        url = `${BASE_URL}/api/categories`;
         method = "post";
       }
 
@@ -100,7 +99,7 @@ const CreateEditCategory = () => {
         },
         // withCredentials: true,
       });
- toast.success(isEdit ? "Category Updated!" : "Category Created!");
+      toast.success(isEdit ? "Category Updated!" : "Category Created!");
       // alert(isEdit ? "Category Updated!" : "Category Created!");
       history.push("/category");
     } catch (error) {

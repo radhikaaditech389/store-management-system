@@ -6,7 +6,6 @@ import Layout from "./layout";
 import { getCookie } from "../utils/cookies";
 import { toast } from "react-toastify";
 
-
 const Product = () => {
   const BASE_URL = process.env.REACT_APP_API_BASE_URL;
   const history = useHistory();
@@ -27,7 +26,7 @@ const Product = () => {
     // await axios.get(`${BASE_URL}/sanctum/csrf-cookie`, {
     //   withCredentials: true,
     // });
-    const response = await axios.delete(`${BASE_URL}/products/${id}`, {
+    const response = await axios.delete(`${BASE_URL}/api/products/${id}`, {
       headers: {
         accept: "application/json",
         // "X-XSRF-TOKEN": getCookie("XSRF-TOKEN"),
@@ -123,7 +122,7 @@ const Product = () => {
       // await axios.get(`${BASE_URL}/sanctum/csrf-cookie`, {
       //   withCredentials: true,
       // });
-      const response = await axios.get(`${BASE_URL}/products`, {
+      const response = await axios.get(`${BASE_URL}/api/products`, {
         headers: {
           Accept: "application/json",
           Authorization: `Bearer ${user_data.token}`,
@@ -139,11 +138,11 @@ const Product = () => {
   useEffect(() => {
     fetchProduct();
   }, []);
-useEffect(() => {
-  const text = search.toLowerCase();
+  useEffect(() => {
+    const text = search.toLowerCase();
 
-  const result = products.filter((item) => {
-    const searchString = `
+    const result = products.filter((item) => {
+      const searchString = `
       ${item.id}
       ${item.sku}
       ${item.barcode}
@@ -157,11 +156,11 @@ useEffect(() => {
       ${item.cost_price}
     `.toLowerCase();
 
-    return searchString.includes(text);
-  });
+      return searchString.includes(text);
+    });
 
-  setFilteredData(result);
-}, [search, products]);
+    setFilteredData(result);
+  }, [search, products]);
 
   return (
     <Layout>

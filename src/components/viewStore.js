@@ -19,7 +19,7 @@ const ViewStore = () => {
 
   const fetchStoreDetails = async () => {
     try {
-      const response = await axios.get(`${BASE_URL}/stores/${id}`, {
+      const response = await axios.get(`${BASE_URL}/api/stores/${id}`, {
         headers: {
           accept: "application/json",
           Authorization: `Bearer ${user_data.token}`,
