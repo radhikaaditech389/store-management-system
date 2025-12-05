@@ -54,16 +54,19 @@ const GstRate = () => {
       name: "Id",
       selector: (row) => row.id,
       sortable: true,
+       width: "100px",   
     },
     {
       name: "rate",
       selector: (row) => row.rate,
       sortable: true,
+       width: "150px",   
     },
     {
       name: "Description",
       selector: (row) => row.description,
       sortable: true,
+       width: "250px",   
     },
     {
       name: "Active",
@@ -102,7 +105,7 @@ const GstRate = () => {
             </ul>
           </div>
           {/* <!-- all-user --> */}
-          <div className="wg-box">
+          <div className="wg-box wg-gst-content" style={{width:"60%"}}>
             <input
               type="text"
               placeholder="Search..."

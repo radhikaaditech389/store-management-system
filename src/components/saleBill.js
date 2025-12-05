@@ -18,12 +18,8 @@ const SaleBill = () => {
       name: "Id",
       selector: (row) => row.id,
       sortable: true,
+      width:"100px"
     },
-    // {
-    //   name: "Store Name",
-    //   selector: (row) => row.store.name,
-    //   sortable: true,
-    // },
     {
       name: "Branch Name",
       selector: (row) => row.branch.name,

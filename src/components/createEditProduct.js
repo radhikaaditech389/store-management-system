@@ -128,7 +128,9 @@ const CreateEditProduct = () => {
     <Layout>
       <div className="main-content-inner">
         <div className="main-content-wrap">
-          <h3 className="mb-8">{isEdit ? "Edit Product" : "Create Product"}</h3>
+          <h3 className="mb-20">
+            {isEdit ? "Edit Product" : "Create Product"}
+          </h3>
 
           <div className="wg-box">
             <Formik
@@ -138,146 +140,142 @@ const CreateEditProduct = () => {
               onSubmit={handleSubmit}
             >
               {() => (
-                <Form className="form-new-product form-style-1">
+                <Form className="wg-form">
                   {/* SKU */}
-                  <fieldset>
-                    <div className="body-title">SKU *</div>
-                    <div className="body-content">
-                      <Field type="text" name="sku" className="mb-5" />
-                      <ErrorMessage
-                        name="sku"
-                        className="error-text"
-                        component="div"
-                      />
-                    </div>
-                  </fieldset>
+                  <div className="row mb-20">
+                    <fieldset className="col-md-6">
+                      <div className="body-title">SKU *</div>
+                      <div className="body-content mb-15">
+                        <Field type="text" name="sku" className="mb-5" />
+                        <ErrorMessage
+                          name="sku"
+                          className="error-text"
+                          component="div"
+                        />
+                      </div>
+                    </fieldset>
 
-                  {/* Name */}
-                  <fieldset>
-                    <div className="body-title">Name *</div>
-                    <div className="body-content">
-                      <Field type="text" name="name" className="mb-5" />
-                      <ErrorMessage
-                        name="name"
-                        className="error-text"
-                        component="div"
-                      />
-                    </div>
-                  </fieldset>
-
+                    {/* Name */}
+                    <fieldset className="col-md-6">
+                      <div className="body-title">Name *</div>
+                      <div className="body-content">
+                        <Field type="text" name="name" className="mb-5" />
+                        <ErrorMessage
+                          name="name"
+                          className="error-text"
+                          component="div"
+                        />
+                      </div>
+                    </fieldset>
+                  </div>
                   {/* Brand */}
-                  <fieldset>
-                    <div className="body-title">Brand *</div>
-                    <div className="body-content">
-                      <Field as="select" name="brand_id" className="mb-5">
-                        <option value="">Select Brand</option>
-                        {brands.map((b) => (
-                          <option value={b.id} key={b.id}>
-                            {b.name}
+                  <div className="row mb-20">
+                    <fieldset className="col-md-6 mb-15">
+                      <div className="body-title">Brand *</div>
+                      <div className="body-content">
+                        <Field as="select" name="brand_id" className="mb-5">
+                          <option value="">Select Brand</option>
+                          {brands.map((b) => (
+                            <option value={b.id} key={b.id}>
+                              {b.name}
+                            </option>
+                          ))}
+                        </Field>
+                        <ErrorMessage
+                          name="brand_id"
+                          component="div"
+                          className="error-text"
+                        />
+                      </div>
+                    </fieldset>
+
+                    {/* Category */}
+                    <fieldset className="col-md-6">
+                      <div className="body-title">Category *</div>
+                      <div className="body-content">
+                        <Field as="select" name="category_id" className="mb-5">
+                          <option value="">Select Category</option>
+                          {categories.map((c) => (
+                            <option value={c.id} key={c.id}>
+                              {c.name}
+                            </option>
+                          ))}
+                        </Field>
+                        <ErrorMessage
+                          name="category_id"
+                          component="div"
+                          className="error-text"
+                        />
+                      </div>
+                    </fieldset>
+                  </div>
+
+                  <div className="row mb-20">
+                    <fieldset className="col-md-6">
+                      <div className="body-title">Gst Rate Id *</div>
+                      <div className="body-content mb-15">
+                        <Field as="select" name="gst_rate_id" className="mb-5">
+                          <option value="">Select Gst Rate Id</option>
+                          <option value="1" key="1">
+                            1
                           </option>
-                        ))}
-                      </Field>
-                      <ErrorMessage
-                        name="brand_id"
-                        component="div"
-                        className="error-text"
-                      />
-                    </div>
-                  </fieldset>
-
-                  {/* Category */}
-                  <fieldset>
-                    <div className="body-title">Category *</div>
-                    <div className="body-content">
-                      <Field as="select" name="category_id" className="mb-5">
-                        <option value="">Select Category</option>
-                        {categories.map((c) => (
-                          <option value={c.id} key={c.id}>
-                            {c.name}
+                          <option value="2" key="2">
+                            2
                           </option>
-                        ))}
-                      </Field>
-                      <ErrorMessage
-                        name="category_id"
-                        component="div"
-                        className="error-text"
-                      />
-                    </div>
-                  </fieldset>
+                          <option value="3" key="3">
+                            3
+                          </option>
+                        </Field>
+                        <ErrorMessage
+                          name="category_id"
+                          component="div"
+                          className="error-text"
+                        />
+                      </div>
+                    </fieldset>
+                    <fieldset className="col-md-6">
+                      <div className="body-title">MRP *</div>
+                      <div className="body-content">
+                        <Field type="number" name="mrp" className="mb-5" />
+                        <ErrorMessage
+                          name="mrp"
+                          component="div"
+                          className="error-text"
+                        />
+                      </div>
+                    </fieldset>
+                  </div>
+                  <div className="row mb-20">
+                    <fieldset className="col-md-6">
+                      <div className="body-title">HSN *</div>
+                      <div className="body-content mb-15">
+                        <Field type="text" name="hsn_code" className="mb-5" />
+                        <ErrorMessage
+                          name="hsn_code"
+                          className="error-text"
+                          component="div"
+                        />
+                      </div>
+                    </fieldset>
 
-                  {/* Other fields ... */}
-                  {/* <fieldset>
-                    <div className="body-title">GST Rate *</div>
-                    <Field type="number" name="gst_rate_id" className="mb-2" />
-                    <ErrorMessage
-                      name="gst_rate_id"
-                      component="div"
-                      className="error-text"
-                    />
-                  </fieldset> */}
+                    <fieldset className="col-md-6">
+                      <div className="body-title">Selling Price *</div>
+                      <div className="body-content">
+                        <Field
+                          type="number"
+                          name="selling_price"
+                          className="mb-5"
+                        />
+                        <ErrorMessage
+                          name="selling_price"
+                          component="div"
+                          className="error-text"
+                        />
+                      </div>
+                    </fieldset>
+                  </div>
 
-                  <fieldset>
-                    <div className="body-title">Gst Rate Id *</div>
-                    <div className="body-content">
-                      <Field as="select" name="gst_rate_id" className="mb-5">
-                        <option value="">Select Gst Rate Id</option>
-                        <option value="1" key="1">
-                          1
-                        </option>
-                        <option value="2" key="2">
-                          2
-                        </option>
-                        <option value="3" key="3">
-                          3
-                        </option>
-                      </Field>
-                      <ErrorMessage
-                        name="category_id"
-                        component="div"
-                        className="error-text"
-                      />
-                    </div>
-                  </fieldset>
-                  <fieldset>
-                    <div className="body-title">MRP *</div>
-                    <div className="body-content">
-                      <Field type="number" name="mrp" className="mb-5" />
-                      <ErrorMessage
-                        name="mrp"
-                        component="div"
-                        className="error-text"
-                      />
-                    </div>
-                  </fieldset>
-                  <fieldset>
-                    <div className="body-title">HSN *</div>
-                    <div className="body-content">
-                      <Field type="text" name="hsn_code" className="mb-5" />
-                      <ErrorMessage
-                        name="hsn_code"
-                        className="error-text"
-                        component="div"
-                      />
-                    </div>
-                  </fieldset>
-
-                  <fieldset>
-                    <div className="body-title">Selling Price *</div>
-                    <div className="body-content">
-                      <Field
-                        type="number"
-                        name="selling_price"
-                        className="mb-5"
-                      />
-                      <ErrorMessage
-                        name="selling_price"
-                        component="div"
-                        className="error-text"
-                      />
-                    </div>
-                  </fieldset>
-
-                  <fieldset>
+                  <fieldset className="mb-20 col-md-6">
                     <div className="body-title">Cost Price *</div>
                     <div className="body-content">
                       <Field type="number" name="cost_price" className="mb-5" />

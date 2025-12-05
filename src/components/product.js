@@ -46,6 +46,7 @@ const Product = () => {
       name: "Id",
       selector: (row) => row.id,
       sortable: true,
+      width:"100px"
     },
     {
       name: "SKU",

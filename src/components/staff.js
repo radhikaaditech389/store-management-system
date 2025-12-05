@@ -85,21 +85,25 @@ const Staff = () => {
       name: "Id",
       selector: (row) => row.id,
       sortable: true,
+      width:"150px"
     },
     {
       name: "Name",
       selector: (row) => row.name,
       sortable: true,
+       width:"250px"
     },
     {
       name: "username",
       selector: (row) => row.username,
       sortable: true,
+      width:"250px"
     },
     {
       name: "role",
       selector: (row) => row.role,
       sortable: true,
+      width:"250px"
     },
     {
       name: "Action",
@@ -148,7 +152,7 @@ const Staff = () => {
             </ul>
           </div>
           {/* <!-- all-user --> */}
-          <div className="wg-box">
+          <div className="wg-box wg-content">
             <div className="flex items-center justify-between gap10 flex-wrap">
               <div className="wg-filter flex-grow"></div>
               <Link

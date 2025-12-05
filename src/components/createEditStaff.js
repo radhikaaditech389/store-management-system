@@ -131,93 +131,96 @@ const CreateEditStaff = () => {
               onSubmit={(values, actions) => handleSubmit(values, actions)}
             >
               {({ values, setFieldValue }) => (
-                <Form className="form-new-product form-style-1">
+                <Form className="wg-form">
                   {/* Name */}
-                  <fieldset>
-                    <div className="body-title">Name *</div>
-                    <div className="body-content">
-                      <Field type="text" name="name" className="mb-5" />
-                      <ErrorMessage
-                        name="name"
-                        component="div"
-                        className="error-text"
-                      />
-                    </div>
-                  </fieldset>
+                  <div className="row mb-15">
+                    <fieldset className="col-md-5">
+                      <div className="body-title">Name *</div>
+                      <div className="body-content mb-15">
+                        <Field type="text" name="name" className="mb-5" />
+                        <ErrorMessage
+                          name="name"
+                          component="div"
+                          className="error-text"
+                        />
+                      </div>
+                    </fieldset>
 
-                  {/* Username */}
-                  <fieldset>
-                    <div className="body-title">Username *</div>
-                    <div className="body-content">
-                      <Field type="text" name="username" className="mb-5" />
-                      <ErrorMessage
-                        name="username"
-                        component="div"
-                        className="error-text"
-                      />
-                    </div>
-                  </fieldset>
+                    {/* Username */}
+                    <fieldset className="col-md-5">
+                      <div className="body-title">Username *</div>
+                      <div className="body-content">
+                        <Field type="text" name="username" className="mb-5" />
+                        <ErrorMessage
+                          name="username"
+                          component="div"
+                          className="error-text"
+                        />
+                      </div>
+                    </fieldset>
+                  </div>
+                  <div className="row mb-15">
+                    <fieldset className="col-md-5">
+                      <div className="body-title">Branch IDs *</div>
+                      <div className="body-content mb-15">
+                        <Field
+                          as="select"
+                          name="branch_ids"
+                          multiple
+                          className="mb-5"
+                          value={values.branch_ids.map(String)} // Convert to string if IDs are numbers
+                          onChange={(e) => {
+                            const selected = Array.from(
+                              e.target.selectedOptions,
+                              (option) => Number(option.value) // Store as number
+                            );
+                            setFieldValue("branch_ids", selected);
+                          }}
+                        >
+                          {branches.map((element) => (
+                            <option
+                              key={element.id}
+                              value={element.id}
+                              className={
+                                values.branch_ids.includes(Number(element.id))
+                                  ? "selected-branch-style"
+                                  : "branch-style"
+                              }
+                            >
+                              {element.name}
+                            </option>
+                          ))}
+                        </Field>
 
-                  <fieldset>
-                    <div className="body-title">Branch IDs *</div>
-                    <div className="body-content">
-                      <Field
-                        as="select"
-                        name="branch_ids"
-                        multiple
-                        className="mb-5"
-                        value={values.branch_ids.map(String)} // Convert to string if IDs are numbers
-                        onChange={(e) => {
-                          const selected = Array.from(
-                            e.target.selectedOptions,
-                            (option) => Number(option.value) // Store as number
-                          );
-                          setFieldValue("branch_ids", selected);
-                        }}
-                      >
-                        {branches.map((element) => (
-                          <option
-                            key={element.id}
-                            value={element.id}
-                            className={
-                              values.branch_ids.includes(Number(element.id))
-                                ? "selected-branch-style"
-                                : "branch-style"
-                            }
-                          >
-                            {element.name}
-                          </option>
-                        ))}
-                      </Field>
+                        <ErrorMessage
+                          name="branch_ids"
+                          component="div"
+                          className="error-text"
+                        />
+                      </div>
+                    </fieldset>
 
-                      <ErrorMessage
-                        name="branch_ids"
-                        component="div"
-                        className="error-text"
-                      />
-                    </div>
-                  </fieldset>
-
-                  {/* Role */}
-                  <fieldset>
-                    <div className="body-title">Role *</div>
-                    <div className="body-content">
-                      <Field as="select" name="role" className="mb-5">
-                        <option value="">Select Role</option>
-                        <option value="manager">Manager</option>
-                        <option value="cashier">Cashier</option>
-                      </Field>
-                      <ErrorMessage
-                        name="role"
-                        component="div"
-                        className="error-text"
-                      />
-                    </div>
-                  </fieldset>
+                    {/* Role */}
+                    <fieldset className="col-md-5">
+                      <div className="body-title">Role *</div>
+                      <div className="body-content">
+                        <Field as="select" name="role" className="mb-5">
+                          <option value="">Select Role</option>
+                          <option value="manager">Manager</option>
+                          <option value="cashier">Cashier</option>
+                        </Field>
+                        <ErrorMessage
+                          name="role"
+                          component="div"
+                          className="error-text"
+                        />
+                      </div>
+                    </fieldset>
+                  </div>
                   {values.role === "cashier" && (
                     <fieldset>
                       <div className="body-title">Pin *</div>
-                      <div className="body-content">
+                      <div className="body-content mb-15">
                         <Field
                           type="text"
                           name="pin"

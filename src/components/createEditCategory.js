@@ -111,11 +111,11 @@ const CreateEditCategory = () => {
     <Layout>
       <div className="main-content-inner">
         <div className="main-content-wrap">
-          <h3 className="mb-8">
+          <h3 className="mb-20">
             {isEdit ? "Edit Category" : "Create Category"}
           </h3>
 
-          <div className="wg-box">
+          <div className="wg-box wg-content">
             <Formik
               enableReinitialize
               initialValues={initialValues}
@@ -123,31 +123,38 @@ const CreateEditCategory = () => {
               onSubmit={handleSubmit}
             >
               {() => (
-                <Form className="form-new-product form-style-1">
+                <Form className="wg-form">
                   {/* Name */}
-                  <fieldset>
-                    <div className="body-title">Name *</div>
-                    <div className="body-content">
-                      <Field type="text" name="name" className="mb-5" />
-                      <ErrorMessage
-                        name="name"
-                        className="error-text"
-                        component="div"
-                      />
-                    </div>
-                  </fieldset>
-                  <fieldset>
-                    <div className="body-title">Description *</div>
-                    <div className="body-content">
-                      <Field type="text" name="description" className="mb-5" />
-                      <ErrorMessage
-                        name="description"
-                        className="error-text"
-                        component="div"
-                      />
-                    </div>
-                  </fieldset>
-                  <fieldset>
+                  <div className="row mb-15">
+                    <fieldset className="col-md-6 mb-15">
+                      <div className="body-title">Name *</div>
+                      <div className="body-content">
+                        <Field type="text" name="name" className="mb-5" />
+                        <ErrorMessage
+                          name="name"
+                          className="error-text"
+                          component="div"
+                        />
+                      </div>
+                    </fieldset>
+                    <fieldset className="col-md-6 mb-15">
+                      <div className="body-title">Description *</div>
+                      <div className="body-content">
+                        <Field
+                          as="textarea"
+                          name="description"
+                          className="mb-5 form-control small-textarea"
+                          placeholder="Enter description"
+                        />
+                        <ErrorMessage
+                          name="description"
+                          className="error-text"
+                          component="div"
+                        />
+                      </div>
+                    </fieldset>
+                  </div>
+                  <fieldset className="col-md-6 mb-15">
                     <div className="body-title">Parent Categories *</div>
                     <div className="body-content">
                       <Field as="select" name="parent_id" className="mb-5">

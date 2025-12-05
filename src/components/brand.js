@@ -81,16 +81,19 @@ const Brand = () => {
       name: "Id",
       selector: (row) => row.id,
       sortable: true,
+      width: "100px",   
     },
     {
       name: "Name",
       selector: (row) => row.name,
       sortable: true,
+      width: "250px",
     },
     {
       name: "Description",
       selector: (row) => row.description,
       sortable: true,
+       width: "500px",
     },
     {
       name: "Action",
@@ -139,7 +142,7 @@ const Brand = () => {
             </ul>
           </div>
           {/* <!-- all-user --> */}
-          <div className="wg-box">
+          <div className="wg-box" style={{width:"80%"}}>
             <div className="flex items-center justify-between gap10 flex-wrap">
               <div className="wg-filter flex-grow"></div>
               <Link

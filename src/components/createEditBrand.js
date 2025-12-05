@@ -85,9 +85,9 @@ const CreateEditBrand = () => {
     <Layout>
       <div className="main-content-inner">
         <div className="main-content-wrap">
-          <h3 className="mb-8">{isEdit ? "Edit Brand" : "Create Brand"}</h3>
+          <h3 className="mb-20">{isEdit ? "Edit Brand" : "Create Brand"}</h3>
 
-          <div className="wg-box">
+          <div className="wg-box wg-content">
             <Formik
               enableReinitialize
               initialValues={initialValues}
@@ -95,31 +95,37 @@ const CreateEditBrand = () => {
               onSubmit={handleSubmit}
             >
               {() => (
-                <Form className="form-new-product form-style-1">
+                <Form className="wg-form">
                   {/* Name */}
-                  <fieldset>
-                    <div className="body-title">Name *</div>
-                    <div className="body-content">
-                      <Field type="text" name="name" className="mb-5" />
-                      <ErrorMessage
-                        name="name"
-                        className="error-text"
-                        component="div"
-                      />
-                    </div>
-                  </fieldset>
-                  <fieldset>
-                    <div className="body-title">Description *</div>
-                    <div className="body-content">
-                      <Field type="text" name="description" className="mb-5" />
-                      <ErrorMessage
-                        name="description"
-                        className="error-text"
-                        component="div"
-                      />
-                    </div>
-                  </fieldset>
-
+                  <div className="row mb-20">
+                    <fieldset className="col-md-4">
+                      <div className="body-title mb-10">Name *</div>
+                      <div className="body-content mb-15">
+                        <Field type="text" name="name" className="mb-5" />
+                        <ErrorMessage
+                          name="name"
+                          className="error-text"
+                          component="div"
+                        />
+                      </div>
+                    </fieldset>
+                    <fieldset className="col-md-6">
+                      <div className="body-title mb-10">Description *</div>
+                      <div className="body-content">
+                        <Field
+                          as="textarea"
+                          name="description"
+                          className="mb-5 form-control small-textarea"
+                          placeholder="Enter description"
+                        />
+                        <ErrorMessage
+                          name="description"
+                          className="error-text"
+                          component="div"
+                        />
+                      </div>
+                    </fieldset>
+                  </div>
                   {/* SUBMIT BUTTON */}
                   <button className="tf-button w208" type="submit">
                     {isEdit ? "Update Brand" : "Create Brand"}

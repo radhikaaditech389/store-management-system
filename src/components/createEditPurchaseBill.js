@@ -224,11 +224,11 @@ const CreateEditPurchaseBill = () => {
     <Layout>
       <div className="main-content-inner">
         <div className="main-content-wrap">
-          <h3 className="mb-8">
+          <h3 className="mb-20">
             {isEdit ? "Edit Purchase Bill" : "Create Purchase Bill"}
           </h3>
 
-          <div className="wg-box">
+          <div className="wg-box" style={{width:"80%"}}>
             <Formik
               initialValues={initialValues}
               enableReinitialize={true}
@@ -238,64 +238,71 @@ const CreateEditPurchaseBill = () => {
               {({ values }) => (
                 <Form>
                   {/* ---------------- Basic Form Fields ---------------- */}
-                  <div className="mb-20">
-                    <label className="mb-8 purchase-label">Branch</label>
-                    <Field as="select" name="branch_id" className="mb-6">
-                      <option value="">Select Branch</option>
-                      {branches?.map((b) => (
-                        <option value={b.id} key={b.id}>
-                          {b.name}
-                        </option>
-                      ))}
-                    </Field>
-                    <ErrorMessage
-                      name="branch_id"
-                      className="error-text"
-                      component="div"
-                    />
-                  </div>
+                  <div className="container">
+                    <div className="row mb-20">
+                      <div className="mb-20 col-md-6">
+                        <label className="mb-8 purchase-label">Branch</label>
+                        <Field as="select" name="branch_id" className="mb-6">
+                          <option value="">Select Branch</option>
+                          {branches?.map((b) => (
+                            <option value={b.id} key={b.id}>
+                              {b.name}
+                            </option>
+                          ))}
+                        </Field>
+                        <ErrorMessage
+                          name="branch_id"
+                          className="error-text"
+                          component="div"
+                        />
+                      </div>
 
-                  <div className="mb-20">
-                    <label className="mb-8 purchase-label">Supplier</label>
-                    <Field as="select" name="supplier_id" className="mb-6">
-                      <option value="">Select Supplier</option>
-                      {suppliers.map((s) => (
-                        <option value={s.id} key={s.id}>
-                          {s.name}
-                        </option>
-                      ))}
-                    </Field>
-                    <ErrorMessage
-                      name="supplier_id"
-                      className="error-text"
-                      component="div"
-                    />
+                      <div className="mb-20 col-md-6">
+                        <label className="mb-8 purchase-label">Supplier</label>
+                        <Field as="select" name="supplier_id" className="mb-6">
+                          <option value="">Select Supplier</option>
+                          {suppliers.map((s) => (
+                            <option value={s.id} key={s.id}>
+                              {s.name}
+                            </option>
+                          ))}
+                        </Field>
+                        <ErrorMessage
+                          name="supplier_id"
+                          className="error-text"
+                          component="div"
+                        />
+                      </div>
+                    </div>
                   </div>
+                  {/* <div className="container"> */}
+                  <div className="row mb-20">
+                    <div className="mb-20 col-md-6">
+                      <label className="mb-8 purchase-label">Bill No</label>
+                      <Field type="text" name="bill_no" className="mb-6" />
+                      <ErrorMessage
+                        name="bill_no"
+                        className="error-text"
+                        component="div"
+                      />
+                    </div>
 
-                  <div className="mb-20">
-                    <label className="mb-8 purchase-label">Bill No</label>
-                    <Field type="text" name="bill_no" className="mb-6" />
-                    <ErrorMessage
-                      name="bill_no"
-                      className="error-text"
-                      component="div"
-                    />
+                    <div className="mb-20 col-md-6">
+                      <label
+                        className="mb-8 purchase-label"
+                        style={{ fontSize: "15px" }}
+                      >
+                        Bill Date
+                      </label>
+                      <Field type="date" name="bill_date" className="mb-6" />
+                      <ErrorMessage
+                        name="bill_date"
+                        className="error-text"
+                        component="div"
+                      />
+                    </div>
                   </div>
-
-                  <div className="mb-20">
-                    <label
-                      className="mb-8 purchase-label"
-                      style={{ fontSize: "15px" }}
-                    >
-                      Bill Date
-                    </label>
-                    <Field type="date" name="bill_date" className="mb-6" />
-                    <ErrorMessage
-                      name="bill_date"
-                      className="error-text"
-                      component="div"
-                    />
-                  </div>
+                  {/* </div> */}
 
                   {/* ---------------- Line Items ---------------- */}
                   <FieldArray name="lines">
@@ -491,6 +498,7 @@ const CreateEditPurchaseBill = () => {
 
                         <button
                           type="button"
+                          className="mt-12"
                           onClick={() =>
                             push({
                               product_id: "",

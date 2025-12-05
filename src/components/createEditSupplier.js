@@ -118,11 +118,11 @@ const CreateEditSupplier = () => {
     <Layout>
       <div className="main-content-inner">
         <div className="main-content-wrap">
-          <h3 className="mb-8">
+          <h3 className="mb-20">
             {isEdit ? "Edit Supplier" : "Create Supplier"}
           </h3>
 
-          <div className="wg-box">
+          <div className="wg-box wg-content">
             <Formik
               enableReinitialize
               initialValues={initialValues}
@@ -130,11 +130,12 @@ const CreateEditSupplier = () => {
               onSubmit={handleSubmit}
             >
               {() => (
-                <Form className="form-new-product form-style-1">
+                <Form className="wg-form" >
                   {/* Name */}
-                  <fieldset>
+                  <div className="row mb-12">
+                  <fieldset className="col-md-6">
                     <div className="body-title">Name *</div>
-                    <div className="body-content">
+                    <div className="body-content mb-15">
                       <Field type="text" name="name" className="mb-5" />
                       <ErrorMessage
                         name="name"
@@ -143,7 +144,7 @@ const CreateEditSupplier = () => {
                       />
                     </div>
                   </fieldset>
-                  <fieldset>
+                  <fieldset className="col-md-6">
                     <div className="body-title">GstIn *</div>
                     <div className="body-content">
                       <Field type="text" name="gstin" className="mb-5" />
@@ -154,9 +155,11 @@ const CreateEditSupplier = () => {
                       />
                     </div>
                   </fieldset>
-                  <fieldset>
+                  </div>
+                  <div className="row mb-12">
+                  <fieldset className="col-md-6">
                     <div className="body-title">Contact *</div>
-                    <div className="body-content">
+                    <div className="body-content mb-15">
                       <Field
                         type="text"
                         name="contact"
@@ -170,7 +173,7 @@ const CreateEditSupplier = () => {
                       />
                     </div>
                   </fieldset>
-                  <fieldset>
+                  <fieldset className="col-md-6">
                     <div className="body-title">Address *</div>
                     <div className="body-content">
                       <Field type="text" name="address" className="mb-5" />
@@ -181,7 +184,8 @@ const CreateEditSupplier = () => {
                       />
                     </div>
                   </fieldset>
-                  <fieldset>
+                  </div>
+                  <fieldset className="col-md-6 mb-12">
                     <div className="body-title">State *</div>
                     <div className="body-content">
                       <Field type="text" name="state" className="mb-5" />

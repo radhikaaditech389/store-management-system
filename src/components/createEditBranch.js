@@ -101,60 +101,62 @@ const CreateEditBranch = () => {
               onSubmit={handleSubmit}
             >
               {() => (
-                <Form className="form-new-product form-style-1">
+                <Form className="wg-form">
                   {/* Name */}
-                  <fieldset>
-                    <div className="body-title">Name *</div>
-                    <div className="body-content">
-                      <Field type="text" name="name" className="mb-5" />
-                      <ErrorMessage
-                        name="name"
-                        className="error-text"
-                        component="div"
-                      />
-                    </div>
-                  </fieldset>
-                  <fieldset>
-                    <div className="body-title">Address *</div>
-                    <div className="body-content">
-                      <Field type="text" name="address" className="mb-5" />
-                      <ErrorMessage
-                        name="address"
-                        className="error-text"
-                        component="div"
-                      />
-                    </div>
-                  </fieldset>
+                  <div className="row mb-15">
+                    <fieldset className="col-md-5">
+                      <div className="body-title">Name *</div>
+                      <div className="body-content mb-15">
+                        <Field type="text" name="name" className="mb-5" />
+                        <ErrorMessage
+                          name="name"
+                          className="error-text"
+                          component="div"
+                        />
+                      </div>
+                    </fieldset>
+                    <fieldset className="col-md-5">
+                      <div className="body-title">Address *</div>
+                      <div className="body-content">
+                        <Field type="text" name="address" className="mb-5" />
+                        <ErrorMessage
+                          name="address"
+                          className="error-text"
+                          component="div"
+                        />
+                      </div>
+                    </fieldset>
+                  </div>
+                  <div className="row mb-15">
+                    <fieldset  className="col-md-5">
+                      <div className="body-title">State *</div>
+                      <div className="body-content mb-15">
+                        <Field type="text" name="state" className="mb-5" />
+                        <ErrorMessage
+                          name="state"
+                          className="error-text"
+                          component="div"
+                        />
+                      </div>
+                    </fieldset>
 
-                  <fieldset>
-                    <div className="body-title">State *</div>
-                    <div className="body-content">
-                      <Field type="text" name="state" className="mb-5" />
-                      <ErrorMessage
-                        name="state"
-                        className="error-text"
-                        component="div"
-                      />
-                    </div>
-                  </fieldset>
-
-                  <fieldset>
-                    <div className="body-title">Phone *</div>
-                    <div className="body-content">
-                      <Field
-                        type="text"
-                        name="phone"
-                        className="mb-5"
-                        maxLength={10}
-                      />
-                      <ErrorMessage
-                        name="phone"
-                        className="error-text"
-                        component="div"
-                      />
-                    </div>
-                  </fieldset>
-
+                    <fieldset className="col-md-5">
+                      <div className="body-title">Phone *</div>
+                      <div className="body-content">
+                        <Field
+                          type="text"
+                          name="phone"
+                          className="mb-5"
+                          maxLength={10}
+                        />
+                        <ErrorMessage
+                          name="phone"
+                          className="error-text"
+                          component="div"
+                        />
+                      </div>
+                    </fieldset>
+                  </div>
                   {/* SUBMIT BUTTON */}
                   <button className="tf-button w208" type="submit">
                     {isEdit ? "Update Branch" : "Create Branch"}

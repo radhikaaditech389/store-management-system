@@ -85,26 +85,31 @@ const Branch = () => {
       name: "Id",
       selector: (row) => row.id,
       sortable: true,
+      width:"100px"
     },
     {
       name: "Name",
       selector: (row) => row.name,
       sortable: true,
+       width:"200px"
     },
     {
       name: "Address",
       selector: (row) => row.address,
       sortable: true,
+       width:"300px"
     },
     {
       name: "State",
       selector: (row) => row.state,
       sortable: true,
+       width:"200px"
     },
     {
       name: "Phone",
       selector: (row) => row.phone,
       sortable: true,
+       width:"200px"
     },
     {
       name: "Action",
@@ -153,7 +158,7 @@ const Branch = () => {
             </ul>
           </div>
           {/* <!-- all-user --> */}
-          <div className="wg-box">
+          <div className="wg-box wg-content">
             <div className="flex items-center justify-between gap10 flex-wrap">
               <div className="wg-filter flex-grow"></div>
               <Link

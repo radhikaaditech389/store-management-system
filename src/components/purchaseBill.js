@@ -46,6 +46,7 @@ const PurchaseBill = () => {
       name: "Id",
       selector: (row) => row.id,
       sortable: true,
+       width:"100px"
     },
     {
       name: "Branch Name",

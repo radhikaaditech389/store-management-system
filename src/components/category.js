@@ -61,21 +61,25 @@ const Category = () => {
       name: "Id",
       selector: (row) => row.id,
       sortable: true,
+       width: "100px",   
     },
     {
       name: "Name",
       selector: (row) => row.name,
       sortable: true,
+       width: "250px",
     },
     {
       name: "Description",
       selector: (row) => row.description,
       sortable: true,
+       width: "400px",
     },
     {
       name: "Parent Category",
       selector: (row) => row?.parent?.name,
       sortable: true,
+       width: "300px",
     },
     {
       name: "Action",
@@ -151,7 +155,7 @@ const Category = () => {
             </ul>
           </div>
           {/* <!-- all-user --> */}
-          <div className="wg-box">
+          <div className="wg-box wg-content">
             <div className="flex items-center justify-between gap10 flex-wrap">
               <div className="wg-filter flex-grow"></div>
               <Link

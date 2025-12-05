@@ -6008,7 +6008,7 @@ select.h40 {
 form.form-style-1 > * {
   display: flex;
   align-items: center;
-  justify-content: center !important;
+  /* justify-content: center !important; */
   gap: 10px;
 }
 .cart-details{
@@ -6024,13 +6024,32 @@ form.form-style-1 > * {
 .cart-max-width{
   max-width: 80rem;
 }
+.wg-form{
+  padding: 15px;
+}
 .pay-btn{
   width: 100%!important;
     background: #b4b4d8!important;
     padding: 16px!important;
 }
+.wg-content{
+  width:80% !important
+}
+.wg-gst-content{
+   width:50%!important
+}
+.small-textarea {
+  border:1px solid #ecf0f4;
+  border-radius: 10px;
+  height: 70px!important;     /* smaller height */
+  resize: none;     /* optional: prevent resizing */
+  font-size: 14px;
+  color: #111;
+  font-family: sans-serif;
+  padding: 12px 15px;
+}
+@media (min-width: 992px) { 
 
-@media (min-width: 992px) {
   .layout-wrap.menu-style-icon-default.full-width .section-menu-left {
     left: 0;
   }
@@ -7260,6 +7279,12 @@ form.form-style-1 > * {
   }
 }
 @media (max-width: 767px) {
+  .wg-content{
+  width:100% !important
+}
+.wg-gst-content{
+   width:100% !important
+}
   .form-style-1 > * {
     flex-wrap: wrap;
   }
