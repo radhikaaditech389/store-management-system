@@ -121,6 +121,10 @@ export default function CartPanel({ cart, setCart }) {
             </div>
           ))}
         </div>
+        {/* <div className="cart-details">
+          <button className="cart-btn">Cash</button>
+          <button className="cart-btn">Online</button>
+        </div> */}
 
         <div className="pt-8 border-t mt-8">
           <div className="flex justify-between text-4xl font-extrabold mb-8">

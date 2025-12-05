@@ -5746,37 +5746,37 @@ select.h40 {
 
 .line-row {
   display: flex;
-  flex-wrap: nowrap;     /* Prevent breaking into next line */
-  gap: 15px;             /* Space between fields */
+  flex-wrap: nowrap; /* Prevent breaking into next line */
+  gap: 15px; /* Space between fields */
   align-items: flex-end; /* Align inputs nicely */
-  overflow-x: auto;      /* Allow horizontal scroll if too many fields */
+  overflow-x: auto; /* Allow horizontal scroll if too many fields */
   padding-bottom: 5px;
 }
 
 .line-col {
   display: flex;
   flex-direction: column;
-  min-width: 150px;      /* FIXED width so all stay in one row */
+  min-width: 150px; /* FIXED width so all stay in one row */
 }
 
 .line-col label {
   font-weight: 500;
   margin-bottom: 3px;
 }
-.purchase-label{
-  font-size:15px;
-  font-weight:500
+.purchase-label {
+  font-size: 15px;
+  font-weight: 500;
 }
 .error-danger {
-  color: #e63946!important;      /* red */
+  color: #e63946 !important; /* red */
   font-size: 12px;
   margin-top: 4px;
 }
-.search-input{
+.search-input {
   margin-bottom: 10px;
   padding: 8px;
   width: 250px;
-  border:2px solid black
+  border: 2px solid black;
 }
 
 @media (max-width: 991px) {
@@ -6010,6 +6010,24 @@ form.form-style-1 > * {
   align-items: center;
   justify-content: center !important;
   gap: 10px;
+}
+.cart-details{
+  display: flex;
+  gap:12px;
+}
+.cart-btn {
+  width: 50%;
+  border: 1px solid black;
+  padding: 15px;
+  font-size: 15px;
+}
+.cart-max-width{
+  max-width: 80rem;
+}
+.pay-btn{
+  width: 100%!important;
+    background: #b4b4d8!important;
+    padding: 16px!important;
 }
 
 @media (min-width: 992px) {

@@ -25,9 +25,7 @@ const ViewStore = () => {
           Authorization: `Bearer ${user_data.token}`,
         },
       });
-
       const data = response.data.data;
-
       const admin = Array.isArray(data.users)
         ? data.users.find((u) => u.role === "admin")
         : null;

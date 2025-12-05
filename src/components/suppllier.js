@@ -48,11 +48,6 @@ const SupplierBill = () => {
       sortable: true,
     },
     {
-      name: "Store Name",
-      selector: (row) => row?.store?.name,
-      sortable: true,
-    },
-    {
       name: "Name",
       selector: (row) => row.name,
       sortable: true,
