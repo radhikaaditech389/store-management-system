@@ -40,15 +40,15 @@ export default function LeftSidebar({
     <div className="w-80 bg-gray-50 h-screen border-r shadow-lg flex flex-col">
       {/* HEADER */}
       <div className="p-8 border-b">
-        <h2 className="text-3xl font-bold text-gray-800">Filters</h2>
-        <p className="text-lg text-gray-500 mt-1">Categories & Brands</p>
+        <h2 className="text-4xl font-bold text-gray-800">Filters</h2>
+        <p className="text-2xl text-gray-500 mt-1">Categories & Brands</p>
       </div>
 
       {/* SCROLL AREA */}
       <div className="flex-1 overflow-y-auto p-6 space-y-8">
         {/* CATEGORIES */}
         <div>
-          <h3 className="text-2xl font-semibold text-gray-700 mb-4">
+          <h3 className="text-3xl font-semibold text-gray-700 mb-4">
             Categories
           </h3>
           <div className="space-y-4">
@@ -56,7 +56,7 @@ export default function LeftSidebar({
               <button
                 key={c.id}
                 onClick={() => handleCategory(c.id)}
-                className={`w-full text-left px-6 py-4 rounded-2xl font-bold text-xl transition-all duration-200
+                className={`w-full text-left px-6 py-4 rounded-2xl font-bold text-2xl transition-all duration-200
                   ${
                     activeCategory === c.id
                       ? "bg-blue-600 text-white shadow-xl transform scale-105"
@@ -72,13 +72,13 @@ export default function LeftSidebar({
 
         {/* BRANDS */}
         <div>
-          <h3 className="text-2xl font-semibold text-gray-700 mb-4">Brands</h3>
+          <h3 className="text-3xl font-semibold text-gray-700 mb-4">Brands</h3>
           <div className="space-y-4">
             {brands.map((b) => (
               <button
                 key={b.id}
                 onClick={() => handleBrand(b.id)}
-                className={`w-full text-left px-6 py-4 rounded-2xl font-bold text-xl transition-all duration-200
+                className={`w-full text-left px-6 py-4 rounded-2xl font-bold text-2xl transition-all duration-200
                   ${
                     activeBrand === b.id
                       ? "bg-green-600 text-white shadow-xl transform scale-105"

@@ -7,6 +7,7 @@ export default function ProductList({
   addToCart,
   setSelectedCategory,
   setSelectedBrand,
+  refreshProducts,
 }) {
   const resetFilters = () => {
     setSearch("");
@@ -34,6 +35,10 @@ export default function ProductList({
     setProducts(res.data.products || []);
     setLoading(false);
   };
+
+  useEffect(() => {
+    fetchProducts();
+  }, [selectedCategory, selectedBrand, search, refreshProducts]);
 
   useEffect(() => {
     barcodeRef.current?.focus();
@@ -92,16 +97,16 @@ export default function ProductList({
 
         {products.length === 0 && !loading && (
           <div className="col-span-3 text-center py-20">
-            <h2 className="text-3xl font-bold text-gray-700">
+            <h2 className="text-5xl font-bold text-gray-700">
               No Products Found
             </h2>
-            <p className="text-gray-500 text-lg mt-2">
+            <p className="text-gray-500 text-2xl mt-8">
               Try adjusting your search, category, or brand filters.
             </p>
 
             <button
               onClick={resetFilters}
-              className="mt-6 px-6 py-3 text-lg rounded-xl bg-blue-600 text-white shadow hover:bg-blue-700 transition"
+              className="mt-8 px-6 py-3 text-2xl rounded-xl bg-blue-600 text-white shadow hover:bg-blue-700 transition"
             >
               Reset Filters
             </button>
@@ -121,16 +126,16 @@ export default function ProductList({
         }`}
             >
               <div className="flex-1">
-                <h3 className="font-extrabold text-2xl mb-2">{p.name}</h3>
-                <p className="text-gray-600 text-lg">{p.brand?.name}</p>
-                <p className="text-gray-600 text-lg">{p.category?.name}</p>
+                <h3 className="font-extrabold text-3xl mb-2">{p.name}</h3>
+                <p className="text-gray-600 text-xl mt-2">{p.brand?.name}</p>
+                <p className="text-gray-600 text-xl mt-2">{p.category?.name}</p>
               </div>
-              <div className="mt-5 flex justify-between items-center">
+              <div className="mt-4 flex justify-between items-center">
                 <span className="text-3xl font-bold text-blue-700">
                   ₹{p.selling_price}
                 </span>
                 <span
-                  className={`px-4 py-2 rounded-full text-lg font-semibold ${
+                  className={`px-4 py-2 rounded-full text-xl font-semibold ${
                     p.stock < 5
                       ? "bg-red-100 text-red-700"
                       : "bg-green-100 text-green-700"

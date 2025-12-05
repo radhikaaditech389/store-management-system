@@ -7,6 +7,11 @@ export default function POSApp() {
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [selectedBrand, setSelectedBrand] = useState(null);
   const [cart, setCart] = useState([]);
+  const [refreshProducts, setRefreshProducts] = useState(false);
+
+  const triggerRefresh = () => {
+    setRefreshProducts((prev) => !prev);
+  };
 
   return (
     <div className="flex h-screen bg-gray-100">
@@ -21,6 +26,7 @@ export default function POSApp() {
         selectedBrand={selectedBrand}
         setSelectedCategory={setSelectedCategory}
         setSelectedBrand={setSelectedBrand}
+        refreshProducts={refreshProducts}
         addToCart={(p) => {
           const exists = cart.find((i) => i.id === p.id);
           if (exists) {
@@ -32,7 +38,11 @@ export default function POSApp() {
           }
         }}
       />
-      <CartPanel cart={cart} setCart={setCart} />
+      <CartPanel
+        cart={cart}
+        setCart={setCart}
+        triggerRefresh={triggerRefresh}
+      />
     </div>
   );
 }

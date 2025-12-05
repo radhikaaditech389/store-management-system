@@ -4,7 +4,7 @@ import PaymentModal from "./PaymentModal";
 import { toast } from "react-toastify";
 import { Link, useHistory } from "react-router-dom";
 
-export default function CartPanel({ cart, setCart }) {
+export default function CartPanel({ cart, setCart, triggerRefresh }) {
   const [showPayment, setShowPayment] = useState(false);
 
   const getPriceWithGST = (item) => {
@@ -50,6 +50,7 @@ export default function CartPanel({ cart, setCart }) {
 
       toast.success("Salesbill created successfully!");
       setCart([]);
+      triggerRefresh();
       setShowPayment(false);
     } catch (err) {
       toast.error("Error paying bill");
@@ -60,66 +61,77 @@ export default function CartPanel({ cart, setCart }) {
     <>
       <div className="w-1/3 bg-gray-50 border-l shadow-2xl p-10 flex flex-col">
         <div className="flex items-center justify-between mb-10">
-          <h2 className="font-extrabold text-4xl">Cart</h2>
+          <h2 className="font-extrabold text-5xl">Cart</h2>
 
           <Link
             to="/dashboard"
-            className="px-8 py-4 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-semibold shadow-md transition"
+            className="px-8 py-4 text-2xl rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-semibold shadow-md transition"
           >
             Dashboard
           </Link>
         </div>
 
         <div className="flex-1 overflow-y-auto space-y-6">
-          {cart.map((item) => (
-            <div
-              key={item.id}
-              className="bg-white p-6 rounded-3xl shadow-2xl flex justify-between items-center"
-            >
-              <div>
-                <p className="font-bold text-2xl">{item.name}</p>
-
-                {(() => {
-                  const { gstAmount, finalPrice } = getPriceWithGST(item);
-                  return (
-                    <>
-                      <p className="text-gray-600 text-xl">
-                        Base: ₹{item.selling_price}
-                      </p>
-                      <p className="text-gray-600 text-xl">
-                        GST ({item.gst_rate?.rate}%): ₹{gstAmount.toFixed(2)}
-                      </p>
-                      <p className="font-bold text-2xl text-green-700">
-                        Final: ₹{finalPrice.toFixed(2)}
-                      </p>
-                    </>
-                  );
-                })()}
-              </div>
-
-              <div className="flex items-center gap-6">
-                <button
-                  onClick={() => decreaseQty(item)}
-                  className="bg-gray-200 hover:bg-gray-300 rounded-full w-16 h-16 text-3xl flex items-center justify-center"
-                >
-                  -
-                </button>
-                <span className="text-3xl font-bold">{item.qty}</span>
-                <button
-                  onClick={() => increaseQty(item)}
-                  className="bg-gray-200 hover:bg-gray-300 rounded-full w-16 h-16 text-3xl flex items-center justify-center"
-                >
-                  +
-                </button>
-                <button
-                  onClick={() => removeItem(item)}
-                  className="bg-red-100 hover:bg-red-200 rounded-full w-16 h-16 text-red-600 flex items-center justify-center text-3xl"
-                >
-                  ✕
-                </button>
-              </div>
+          {cart.length === 0 ? (
+            <div className="flex flex-col items-center justify-center text-center py-20">
+              <p className="text-5xl font-extrabold text-gray-400">
+                Empty Cart
+              </p>
+              <p className="text-2xl text-gray-500 mt-8">
+                Add products to begin billing
+              </p>
             </div>
-          ))}
+          ) : (
+            cart.map((item) => (
+              <div
+                key={item.id}
+                className="bg-white p-6 rounded-3xl shadow-2xl flex justify-between items-center"
+              >
+                <div>
+                  <p className="font-bold text-xl">{item.name}</p>
+
+                  {(() => {
+                    const { gstAmount, finalPrice } = getPriceWithGST(item);
+                    return (
+                      <>
+                        <p className="text-gray-600 text-xl">
+                          Base: ₹{item.selling_price}
+                        </p>
+                        <p className="text-gray-600 text-xl">
+                          GST ({item.gst_rate?.rate}%): ₹{gstAmount.toFixed(2)}
+                        </p>
+                        <p className="font-bold text-2xl text-green-700">
+                          Final: ₹{finalPrice.toFixed(2)}
+                        </p>
+                      </>
+                    );
+                  })()}
+                </div>
+
+                <div className="flex items-center gap-6">
+                  <button
+                    onClick={() => decreaseQty(item)}
+                    className="bg-gray-200 hover:bg-gray-300 rounded-full w-16 h-16 text-3xl flex items-center justify-center"
+                  >
+                    -
+                  </button>
+                  <span className="text-3xl font-bold">{item.qty}</span>
+                  <button
+                    onClick={() => increaseQty(item)}
+                    className="bg-gray-200 hover:bg-gray-300 rounded-full w-16 h-16 text-3xl flex items-center justify-center"
+                  >
+                    +
+                  </button>
+                  <button
+                    onClick={() => removeItem(item)}
+                    className="bg-red-100 hover:bg-red-200 rounded-full w-16 h-16 text-red-600 flex items-center justify-center text-3xl"
+                  >
+                    ✕
+                  </button>
+                </div>
+              </div>
+            ))
+          )}
         </div>
         {/* <div className="cart-details">
           <button className="cart-btn">Cash</button>
