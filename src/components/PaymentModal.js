@@ -79,7 +79,9 @@ export default function PaymentModal({ total, onClose, onConfirm }) {
       <div className="bg-white rounded-3xl shadow-2xl w-full cart-max-width p-6 grid grid-cols-3 gap-6">
         {/* LEFT SIDE – METHOD LIST */}
         <div className="col-span-1 flex flex-col gap-4">
-          <h2 className="text-xl font-bold mb-2" style={{fontSize:"1.8rem"}}>Payment Options</h2>
+          <h2 className="text-xl font-bold mb-2" style={{ fontSize: "1.8rem" }}>
+            Payment Options
+          </h2>
 
           {/* CASH */}
           <button
@@ -117,9 +119,7 @@ export default function PaymentModal({ total, onClose, onConfirm }) {
             >
               Online
             </div>
-              <div className="text-sm opacity-70 text-center">
-             Scan Only
-            </div>
+            <div className="text-sm opacity-70 text-center">Scan Only</div>
           </button>
 
           <div style={{ fontSize: "16px", marginBottom: "10px" }}>
@@ -132,7 +132,9 @@ export default function PaymentModal({ total, onClose, onConfirm }) {
 
         {/* MIDDLE AREA */}
         <div className="col-span-1 space-y-6">
-          <h2 className="text-xl font-bold" style={{fontSize:"1.8rem"}}>Enter Amount</h2>
+          <h2 className="text-xl font-bold" style={{ fontSize: "1.8rem" }}>
+            Enter Amount
+          </h2>
 
           {method === "cash" && (
             <div>
@@ -243,7 +245,7 @@ export default function PaymentModal({ total, onClose, onConfirm }) {
             <button
               onClick={onClose}
               className="px-6 py-4 bg-gray-300 rounded-xl font-semibold"
-              style={{width:"100px",fontSize:"14px"}}
+              style={{ width: "100px", fontSize: "14px" }}
             >
               Cancel
             </button>
@@ -256,7 +258,7 @@ export default function PaymentModal({ total, onClose, onConfirm }) {
                   ? "bg-gray-400 cursor-not-allowed"
                   : "bg-green-600 hover:bg-green-700"
               }`}
-              style={{width:"100px",fontSize:"14px"}}
+              style={{ width: "100px", fontSize: "14px" }}
             >
               Confirm
             </button>
