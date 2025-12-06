@@ -21,18 +21,17 @@ const SupplierBill = () => {
   const handleEdit = (row) => {
     localStorage.setItem("supplier_detail", JSON.stringify(row));
   };
-
+const handleDeleteConfirm = (id) => {
+    if (window.confirm("Are you sure you want to delete this Supplier?")) {
+      handleDelete(id);
+    }
+  };
   const handleDelete = async (id) => {
-    // await axios.get(`${BASE_URL}/sanctum/csrf-cookie`, {
-    //   withCredentials: true,
-    // });
     const response = await axios.delete(`${BASE_URL}/api/suppliers/${id}`, {
       headers: {
         accept: "application/json",
-        // "X-XSRF-TOKEN": getCookie("XSRF-TOKEN"),
         Authorization: `Bearer ${user_data.token}`,
       },
-      // withCredentials: true,
     });
     if (response) {
       toast.success("Supplier deleted successfully!");
@@ -85,7 +84,7 @@ const SupplierBill = () => {
               <i className="icon-edit-3"></i>
             </Link>
           </div>
-          <div className="item trash" onClick={() => handleDelete(row.id)}>
+          <div className="item trash" onClick={() => handleDeleteConfirm(row.id)}>
             <i className="icon-trash-2"></i>
           </div>
         </div>

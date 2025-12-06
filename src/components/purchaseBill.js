@@ -22,18 +22,17 @@ const PurchaseBill = () => {
   const handleEdit = (row) => {
     localStorage.setItem("purchase_bills_create", JSON.stringify(row));
   };
-
+ const handleDeleteConfirm = (id) => {
+    if (window.confirm("Are you sure you want to delete this Purchase Bill?")) {
+      handleDelete(id);
+    }
+  };
   const handleDelete = async (id) => {
-    // await axios.get(`${APP_URL}/sanctum/csrf-cookie`, {
-    //   withCredentials: true,
-    // });
     const response = await axios.delete(`${BASE_URL}/api/purchase-bill/${id}`, {
       headers: {
         accept: "application/json",
-        // "X-XSRF-TOKEN": getCookie("XSRF-TOKEN"),
         Authorization: `Bearer ${user_data.token}`,
       },
-      // withCredentials: true,
     });
     if (response) {
       history.push("/purchase-bill");
@@ -115,7 +114,7 @@ const PurchaseBill = () => {
               <i className="icon-edit-3"></i>
             </Link>
           </div>
-          <div className="item trash" onClick={() => handleDelete(row.id)}>
+          <div className="item trash" onClick={() => handleDeleteConfirm(row.id)}>
             <i className="icon-trash-2"></i>
           </div>
         </div>
@@ -125,16 +124,11 @@ const PurchaseBill = () => {
 
   const fetchPurchaseBill = async () => {
     try {
-      // await axios.get(`${BASE_URL}/sanctum/csrf-cookie`, {
-      //   withCredentials: true,
-      // });
       const response = await axios.get(`${BASE_URL}/api/purchase-bill`, {
         headers: {
           Accept: "application/json",
           Authorization: `Bearer ${user_data.token}`,
-          // "X-XSRF-TOKEN": getCookie("XSRF-TOKEN"),
         },
-        // withCredentials: true,
       });
       setPurchaseBill(response.data.data);
     } catch (error) {
@@ -144,6 +138,7 @@ const PurchaseBill = () => {
   useEffect(() => {
     fetchPurchaseBill();
   }, []);
+
   useEffect(() => {
     const searchText = search.toLowerCase();
 
@@ -162,7 +157,6 @@ const PurchaseBill = () => {
       ${item.total_tax}
       ${item.total_amount}
     `.toLowerCase();
-
       return searchable.includes(searchText);
     });
 

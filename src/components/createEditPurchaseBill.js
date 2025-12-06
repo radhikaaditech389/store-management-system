@@ -184,30 +184,25 @@ const CreateEditPurchaseBill = () => {
 
   const handleSubmit = async (values, actions) => {
     try {
-      // await axios.get("/sanctum/csrf-cookie", { withCredentials: true });
 
       let response;
 
       if (isEdit) {
         // UPDATE
-        response = await axios.put(`/purchase-bill/${id}`, values, {
+        response = await axios.put(`/api/purchase-bill/${id}`, values, {
           headers: {
             Accept: "application/json",
             Authorization: `Bearer ${user_data.token}`,
-            // "X-XSRF-TOKEN": getCookie("XSRF-TOKEN"),
           },
-          // withCredentials: true,
         });
         toast.success("Purchase Bill Updated!");
       } else {
         // CREATE
-        response = await axios.post("/purchase-bill", values, {
+        response = await axios.post("/api/purchase-bill", values, {
           headers: {
             Accept: "application/json",
             Authorization: `Bearer ${user_data.token}`,
-            // "X-XSRF-TOKEN": getCookie("XSRF-TOKEN"),
           },
-          // withCredentials: true,
         });
         actions.resetForm();
         toast.success("Purchase Bill Saved!");

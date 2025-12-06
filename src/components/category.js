@@ -38,16 +38,11 @@ const Category = () => {
   }, []);
 
   const handleDelete = async (id) => {
-    // await axios.get(`${BASE_URL}/sanctum/csrf-cookie`, {
-    //   withCredentials: true,
-    // });
     const response = await axios.delete(`${BASE_URL}/api/categories/${id}`, {
       headers: {
         accept: "application/json",
-        // "X-XSRF-TOKEN": getCookie("XSRF-TOKEN"),
         Authorization: `Bearer ${user_data.token}`,
       },
-      // withCredentials: true,
     });
     if (response) {
       history.push("/category");
@@ -96,7 +91,7 @@ const Category = () => {
               <i className="icon-edit-3"></i>
             </Link>
           </div>
-          <div className="item trash" onClick={() => handleDelete(row.id)}>
+          <div className="item trash" onClick={() => handleDeleteConfirm(row.id)}>
             <i className="icon-trash-2"></i>
           </div>
         </div>
@@ -125,6 +120,12 @@ const Category = () => {
   const handleEdit = (row) => {
     localStorage.setItem("category_detail", JSON.stringify(row));
   };
+
+  const handleDeleteConfirm = (id) => {
+  if (window.confirm("Are you sure you want to delete this category?")) {
+    handleDelete(id);
+  }
+};
   return (
     <Layout>
       <div className="main-content-inner">

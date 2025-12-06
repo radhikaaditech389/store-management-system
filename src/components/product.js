@@ -17,7 +17,12 @@ const Product = () => {
   const handleEdit = (row) => {
     localStorage.setItem("product_detail", JSON.stringify(row));
   };
-
+  const handleDeleteConfirm = (id) => {
+    if (window.confirm("Are you sure you want to delete this Product?")) {
+      handleDelete(id);
+    }
+  };
+ 
   const handleCreateProduct = () => {
     localStorage.setItem("product_detail", null);
   };
@@ -110,7 +115,7 @@ const Product = () => {
               <i className="icon-edit-3"></i>
             </Link>
           </div>
-          <div className="item trash" onClick={() => handleDelete(row.id)}>
+          <div className="item trash" onClick={() => handleDeleteConfirm(row.id)}>
             <i className="icon-trash-2"></i>
           </div>
         </div>

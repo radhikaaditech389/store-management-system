@@ -22,7 +22,11 @@ const Store = () => {
       state: { storeData: row },
     });
   };
-
+const handleDeleteConfirm = (id) => {
+    if (window.confirm("Are you sure you want to delete this Purchase Bill?")) {
+      handleDelete(id);
+    }
+  };
   const handleDelete = (id) => {
     Swal.fire({
       title: "Are you sure?",
@@ -121,7 +125,7 @@ const Store = () => {
           <div className="item edit" onClick={() => handleEdit(row)}>
             <i className="icon-edit-3"></i>
           </div>
-          <div className="item trash" onClick={() => handleDelete(row.id)}>
+          <div className="item trash" onClick={() => handleDeleteConfirm(row.id)}>
             <i className="icon-trash-2"></i>
           </div>
         </div>

@@ -40,18 +40,17 @@ const Brand = () => {
   const handleEdit = (row) => {
     localStorage.setItem("brand_detail", JSON.stringify(row));
   };
-
+  const handleDeleteConfirm = (id) => {
+    if (window.confirm("Are you sure you want to delete this Brand?")) {
+      handleDelete(id);
+    }
+  };
   const handleDelete = async (id) => {
-    // await axios.get(`${BASE_URL}/sanctum/csrf-cookie`, {
-    //   withCredentials: true,
-    // });
     const response = await axios.delete(`${BASE_URL}/api/brands/${id}`, {
       headers: {
         accept: "application/json",
-        // "X-XSRF-TOKEN": getCookie("XSRF-TOKEN"),
         Authorization: `Bearer ${user_data.token}`,
       },
-      // withCredentials: true,
     });
     if (response) {
       history.push("/brand");
@@ -81,7 +80,7 @@ const Brand = () => {
       name: "Id",
       selector: (row) => row.id,
       sortable: true,
-      width: "100px",   
+      width: "100px",
     },
     {
       name: "Name",
@@ -93,7 +92,7 @@ const Brand = () => {
       name: "Description",
       selector: (row) => row.description,
       sortable: true,
-       width: "500px",
+      width: "500px",
     },
     {
       name: "Action",
@@ -104,7 +103,10 @@ const Brand = () => {
               <i className="icon-edit-3"></i>
             </Link>
           </div>
-          <div className="item trash" onClick={() => handleDelete(row.id)}>
+          <div
+            className="item trash"
+            onClick={() => handleDeleteConfirm(row.id)}
+          >
             <i className="icon-trash-2"></i>
           </div>
         </div>
@@ -142,7 +144,7 @@ const Brand = () => {
             </ul>
           </div>
           {/* <!-- all-user --> */}
-          <div className="wg-box" style={{width:"80%"}}>
+          <div className="wg-box" style={{ width: "80%" }}>
             <div className="flex items-center justify-between gap10 flex-wrap">
               <div className="wg-filter flex-grow"></div>
               <Link
