@@ -87,22 +87,13 @@ const SaleBill = () => {
     },
   ];
 
-  //  const handleCreateSaleBill = () => {
-  //   localStorage.setItem("sale_bill_detail", null);
-  // };
-
   const fetchSaleBill = async () => {
     try {
-      // await axios.get(`${BASE_URL}/sanctum/csrf-cookie`, {
-      //   withCredentials: true,
-      // });
       const response = await axios.get(`${BASE_URL}/api/sales-bills`, {
         headers: {
           Accept: "application/json",
           Authorization: `Bearer ${user_data.token}`,
-          // "X-XSRF-TOKEN": getCookie("XSRF-TOKEN"),
         },
-        // withCredentials: true,
       });
       setSaleBills(response.data.data);
     } catch (error) {
@@ -173,16 +164,6 @@ const SaleBill = () => {
           </div>
           {/* <!-- all-user --> */}
           <div className="wg-box">
-            {/* <div className="flex items-center justify-between gap10 flex-wrap">
-                          <div className="wg-filter flex-grow"></div>
-                          <Link
-                            className="tf-button style-1 w208"
-                            to="/create-sale-bill"
-                            onClick={handleCreateSaleBill}
-                          >
-                            <i className="icon-plus"></i>Add new
-                          </Link>
-                        </div> */}
             <input
               type="text"
               placeholder="Search..."

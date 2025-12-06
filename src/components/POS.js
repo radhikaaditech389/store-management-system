@@ -14,7 +14,7 @@ export default function POSApp() {
   };
 
   return (
-    <div className="flex h-screen bg-gray-100">
+    <div className="pos-flex h-screen bg-gray-100">
       <LeftSidebar
         selectedCategory={selectedCategory}
         selectedBrand={selectedBrand}

@@ -88,19 +88,19 @@ export default function CartPanel({ cart, setCart, triggerRefresh }) {
                 className="bg-white p-6 rounded-3xl shadow-2xl flex justify-between items-center"
               >
                 <div>
-                  <p className="font-bold text-xl">{item.name}</p>
+                  <p className="font-bold text-xl mb-5" style={{fontSize:"17px",color:"black"}}><strong>{item.name}</strong></p>
 
                   {(() => {
                     const { gstAmount, finalPrice } = getPriceWithGST(item);
                     return (
                       <>
-                        <p className="text-gray-600 text-xl">
+                        <p className="text-gray-600 text-xl mb-5">
                           Base: ₹{item.selling_price}
                         </p>
-                        <p className="text-gray-600 text-xl">
+                        <p className="text-gray-600 text-xl mb-5">
                           GST ({item.gst_rate?.rate}%): ₹{gstAmount.toFixed(2)}
                         </p>
-                        <p className="font-bold text-2xl text-green-700">
+                        <p className="font-bold text-2xl text-green-700 mb-5">
                           Final: ₹{finalPrice.toFixed(2)}
                         </p>
                       </>
@@ -108,7 +108,7 @@ export default function CartPanel({ cart, setCart, triggerRefresh }) {
                   })()}
                 </div>
 
-                <div className="flex items-center gap-6">
+                <div className="items-flex items-center gap-6">
                   <button
                     onClick={() => decreaseQty(item)}
                     className="bg-gray-200 hover:bg-gray-300 rounded-full w-16 h-16 text-3xl flex items-center justify-center"

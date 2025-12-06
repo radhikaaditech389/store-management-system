@@ -125,21 +125,21 @@ export default function PaymentModal({ total, onClose, onConfirm }) {
           <div style={{ fontSize: "16px", marginBottom: "10px" }}>
             <strong>Paid: </strong> ₹{cashApplied.toFixed(2)}
           </div>
-          <div style={{ fontSize: "16px" }}>
+          <div style={{ fontSize: "16px", marginBottom: "20px" }}>
             <strong>Change: </strong> ₹{balanceReturn.toFixed(2)}
           </div>
         </div>
 
         {/* MIDDLE AREA */}
         <div className="col-span-1 space-y-6">
-          <h2 className="text-xl font-bold" style={{ fontSize: "1.8rem" }}>
+          <h2 className="text-xl font-bold" style={{ fontSize: "2.4rem" }}>
             Enter Amount
           </h2>
 
           {method === "cash" && (
             <div>
               <input
-                className="w-full p-5 text-3xl text-center border rounded-xl shadow"
+                className="w-full p-5 text-3xl text-center border rounded-xl shadow mb-20"
                 value={cashGiven}
                 onChange={(e) => setCashGiven(e.target.value)}
                 placeholder="Cash Received"
@@ -245,7 +245,7 @@ export default function PaymentModal({ total, onClose, onConfirm }) {
             <button
               onClick={onClose}
               className="px-6 py-4 bg-gray-300 rounded-xl font-semibold"
-              style={{ width: "100px", fontSize: "14px" }}
+              style={{ width: "100%", fontSize: "14px" }}
             >
               Cancel
             </button>
@@ -258,7 +258,7 @@ export default function PaymentModal({ total, onClose, onConfirm }) {
                   ? "bg-gray-400 cursor-not-allowed"
                   : "bg-green-600 hover:bg-green-700"
               }`}
-              style={{ width: "100px", fontSize: "14px" }}
+              style={{ width: "100%", fontSize: "14px" }}
             >
               Confirm
             </button>

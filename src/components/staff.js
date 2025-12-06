@@ -16,16 +16,11 @@ const Staff = () => {
 
   const fetchStaff = async () => {
     try {
-      // await axios.get(`${BASE_URL}/sanctum/csrf-cookie`, {
-      //   withCredentials: true,
-      // });
       const response = await axios.get(`${BASE_URL}/api/staff`, {
         headers: {
           Accept: "application/json",
           Authorization: `Bearer ${user_data.token}`,
-          // "X-XSRF-TOKEN": getCookie("XSRF-TOKEN"),
         },
-        // withCredentials: true,
       });
       setStaffs(response.data.data);
     } catch (error) {

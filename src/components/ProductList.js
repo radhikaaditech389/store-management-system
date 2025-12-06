@@ -51,7 +51,7 @@ export default function ProductList({
           ref={barcodeRef}
           type="text"
           placeholder="Scan barcode..."
-          className="border p-5 text-2xl w-96 rounded-2xl shadow-lg focus:outline-none focus:ring-4 focus:ring-blue-400"
+          className="border p-5 text-2xl w-96 rounded-2xl shadow-lg focus:outline-none focus:ring-4 focus:ring-blue-400 mb-12"
           value={barcode}
           onChange={async (e) => {
             const value = e.target.value;
@@ -82,7 +82,7 @@ export default function ProductList({
           [...Array(6)].map((_, i) => (
             <div
               key={i}
-              className="bg-white p-6 rounded-3xl shadow-2xl animate-pulse"
+              className="bg-white p-6 rounded-3xl shadow-2xl animate-pulse mb-15"
             >
               <div className="h-6 bg-gray-300 rounded mb-3"></div>
               <div className="h-4 bg-gray-200 rounded mb-2 w-2/3"></div>
@@ -118,7 +118,7 @@ export default function ProductList({
             <div
               key={p.id}
               onClick={() => p.stock > 0 && addToCart({ ...p, qty: 1 })}
-              className={`bg-white p-6 rounded-3xl shadow-2xl flex flex-col justify-between transition-transform transform 
+              className={`bg-white p-6 rounded-3xl shadow-2xl flex flex-col justify-between transition-transform transform mb-15
         ${
           p.stock > 0
             ? "cursor-pointer hover:scale-105"

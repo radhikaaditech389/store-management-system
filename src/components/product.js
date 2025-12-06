@@ -3,7 +3,6 @@ import DataTable from "react-data-table-component";
 import { Link, useHistory } from "react-router-dom";
 import axios from "axios";
 import Layout from "./layout";
-import { getCookie } from "../utils/cookies";
 import { toast } from "react-toastify";
 
 const Product = () => {
@@ -28,16 +27,11 @@ const Product = () => {
   };
 
   const handleDelete = async (id) => {
-    // await axios.get(`${BASE_URL}/sanctum/csrf-cookie`, {
-    //   withCredentials: true,
-    // });
     const response = await axios.delete(`${BASE_URL}/api/products/${id}`, {
       headers: {
         accept: "application/json",
-        // "X-XSRF-TOKEN": getCookie("XSRF-TOKEN"),
         Authorization: `Bearer ${user_data.token}`,
       },
-      // withCredentials: true,
     });
     if (response) {
       history.push("/product");
@@ -125,16 +119,11 @@ const Product = () => {
 
   const fetchProduct = async () => {
     try {
-      // await axios.get(`${BASE_URL}/sanctum/csrf-cookie`, {
-      //   withCredentials: true,
-      // });
       const response = await axios.get(`${BASE_URL}/api/products`, {
         headers: {
           Accept: "application/json",
           Authorization: `Bearer ${user_data.token}`,
-          // "X-XSRF-TOKEN": getCookie("XSRF-TOKEN"),
         },
-        // withCredentials: true,
       });
       setProducts(response.data.products);
     } catch (error) {

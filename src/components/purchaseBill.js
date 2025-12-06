@@ -7,8 +7,6 @@ import { getCookie } from "../utils/cookies";
 import { toast } from "react-toastify";
 const PurchaseBill = () => {
   const BASE_URL = process.env.REACT_APP_API_BASE_URL;
-  const APP_URL = process.env.REACT_APP_URL;
-
   const history = useHistory();
   const [products, setProducts] = useState([]);
   const [search, setSearch] = useState("");
