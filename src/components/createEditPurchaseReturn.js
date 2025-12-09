@@ -400,7 +400,7 @@ const CreateEditPurchaseReturn = () => {
                                     marginTop: "12px",
                                   }}
                                 >
-                                  Purchase Line name
+                                  Batch no
                                 </label>
                                 <Field
                                   as="select"
@@ -476,7 +476,7 @@ const CreateEditPurchaseReturn = () => {
                               </div>
 
                               <div className="line-col">
-                                <label style={{ fontSize: "15px" }}>Rate</label>
+                                <label style={{ fontSize: "15px" }}>Purchase Rate</label>
                                 <Field
                                   type="number"
                                   name={`lines.${index}.rate`}
@@ -489,7 +489,7 @@ const CreateEditPurchaseReturn = () => {
                               </div>
 
                               <div className="line-col">
-                                <label style={{ fontSize: "15px" }}>HSN</label>
+                                <label style={{ fontSize: "15px" }}>HSN Code</label>
                                 <Field
                                   type="text"
                                   name={`lines.${index}.hsn_code`}
@@ -523,7 +523,7 @@ const CreateEditPurchaseReturn = () => {
                               </div>
                               <div className="line-col">
                                 <label style={{ fontSize: "15px" }}>
-                                  taxable_value
+                                  Taxable Value
                                 </label>
                                 <Field
                                   type="text"
@@ -537,7 +537,7 @@ const CreateEditPurchaseReturn = () => {
                               </div>
 
                               <div className="line-col">
-                                <label style={{ fontSize: "15px" }}>Cgst</label>
+                                <label style={{ fontSize: "15px" }}>CGST</label>
                                 <Field
                                   type="text"
                                   name={`lines.${index}.cgst`}
@@ -550,7 +550,7 @@ const CreateEditPurchaseReturn = () => {
                               </div>
 
                               <div className="line-col">
-                                <label style={{ fontSize: "15px" }}>Sgst</label>
+                                <label style={{ fontSize: "15px" }}>SGST</label>
                                 <Field
                                   type="text"
                                   name={`lines.${index}.sgst`}
@@ -563,7 +563,7 @@ const CreateEditPurchaseReturn = () => {
                               </div>
 
                               <div className="line-col">
-                                <label style={{ fontSize: "15px" }}>igst</label>
+                                <label style={{ fontSize: "15px" }}>IGST</label>
                                 <Field
                                   type="text"
                                   name={`lines.${index}.igst`}
