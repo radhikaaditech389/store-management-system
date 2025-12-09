@@ -88,7 +88,12 @@ export default function CartPanel({ cart, setCart, triggerRefresh }) {
                 className="bg-white p-6 rounded-3xl shadow-2xl flex justify-between items-center"
               >
                 <div>
-                  <p className="font-bold text-xl mb-5" style={{fontSize:"17px",color:"black"}}><strong>{item.name}</strong></p>
+                  <p
+                    className="font-bold text-xl mb-5"
+                    style={{ fontSize: "17px", color: "black" }}
+                  >
+                    <strong>{item.name}</strong>
+                  </p>
 
                   {(() => {
                     const { gstAmount, finalPrice } = getPriceWithGST(item);
@@ -108,20 +113,59 @@ export default function CartPanel({ cart, setCart, triggerRefresh }) {
                   })()}
                 </div>
 
-                <div className="items-flex items-center gap-6">
+                <div className="flex items-center gap-6">
+                  {/* Decrease */}
                   <button
                     onClick={() => decreaseQty(item)}
                     className="bg-gray-200 hover:bg-gray-300 rounded-full w-16 h-16 text-3xl flex items-center justify-center"
                   >
                     -
                   </button>
-                  <span className="text-3xl font-bold">{item.qty}</span>
+
+                  {/* Qty Input (NEW) */}
+                  <input
+                    type="text"
+                    min="1"
+                    value={item.qty}
+                    onFocus={(e) => {
+                      // Select all text so typing replaces it
+                      e.target.select();
+                    }}
+                    onChange={(e) => {
+                      let val = e.target.value;
+
+                      // If user clears input → dont crash, keep empty temporarily
+                      if (val === "") {
+                        setCart(
+                          cart.map((i) =>
+                            i.id === item.id ? { ...i, qty: "" } : i
+                          )
+                        );
+                        return;
+                      }
+
+                      // Convert to number
+                      const newQty = Math.max(1, Number(val));
+
+                      setCart(
+                        cart.map((i) =>
+                          i.id === item.id ? { ...i, qty: newQty } : i
+                        )
+                      );
+                    }}
+                    className="w-20 text-center text-3xl font-bold border rounded-xl p-2"
+                    style={{ appearance: "textfield" }}
+                  />
+
+                  {/* Increase */}
                   <button
                     onClick={() => increaseQty(item)}
                     className="bg-gray-200 hover:bg-gray-300 rounded-full w-16 h-16 text-3xl flex items-center justify-center"
                   >
                     +
                   </button>
+
+                  {/* Remove */}
                   <button
                     onClick={() => removeItem(item)}
                     className="bg-red-100 hover:bg-red-200 rounded-full w-16 h-16 text-red-600 flex items-center justify-center text-3xl"
