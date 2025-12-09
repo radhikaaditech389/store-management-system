@@ -41,7 +41,7 @@ const CreateEditPurchaseReturn = () => {
         rate: "",
         gst_rate_id: "",
         hsn_code: "",
-         taxable_value: "",
+        taxable_value: "",
         cgst: "",
         sgst: "",
         igst: "",
@@ -252,7 +252,7 @@ const CreateEditPurchaseReturn = () => {
                     <div className="row mb-20">
                       <div className="mb-20 col-md-6">
                         <label className="mb-8 purchase-label">
-                          Purchase Bill Name
+                          Purchase Bill No
                         </label>
                         <Field
                           as="select"
@@ -305,8 +305,8 @@ const CreateEditPurchaseReturn = () => {
                           component="div"
                         />
                       </div>
-                    </div>       
-                        <div className="mb-20 col-md-6">
+                    </div>
+                    <div className="mb-20 col-md-6">
                       <label
                         className="mb-8 purchase-label"
                         style={{ fontSize: "15px" }}
@@ -319,7 +319,7 @@ const CreateEditPurchaseReturn = () => {
                         className="error-text"
                         component="div"
                       />
-                    </div>       
+                    </div>
                     {/* <div className="row mb-20">
                       <div className="mb-20 col-md-6">
                         <label className="mb-8 purchase-label">Total Gst</label>

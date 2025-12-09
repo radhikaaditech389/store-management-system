@@ -29,7 +29,7 @@ const PurchaseReturn = () => {
        width:"100px"
     },
      {
-      name: "Purchase Bill Name",
+      name: "Purchase Bill No",
       selector: (row) => row?.purchase_bill?.bill_no,
       sortable: true,
     },
