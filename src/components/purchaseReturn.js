@@ -58,24 +58,21 @@ const PurchaseReturn = () => {
       selector: (row) => row.total_amount,
       sortable: true,
     },
-    {
-      name: "Action",
-      cell: (row) => (
-        <div className="list-icon-function">
-          <div className="item edit">
-            <Link
-              to={`/purchase-return-bill/edit/${row.id}`}
-              onClick={() => handleEdit(row)}
-            >
-              <i className="icon-edit-3"></i>
-            </Link>
-          </div>
-          {/* <div className="item trash" onClick={() => handleDeleteConfirm(row.id)}>
-            <i className="icon-trash-2"></i>
-          </div> */}
-        </div>
-      ),
-    },
+    // {
+    //   name: "Action",
+    //   cell: (row) => (
+    //     <div className="list-icon-function">
+    //       <div className="item edit">
+    //         <Link
+    //           to={`/purchase-return-bill/edit/${row.id}`}
+    //           onClick={() => handleEdit(row)}
+    //         >
+    //           <i className="icon-edit-3"></i>
+    //         </Link>
+    //       </div>         
+    //     </div>
+    //   ),
+    // },
   ];
 
   const fetchPurchaseReturn = async () => {

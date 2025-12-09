@@ -16,6 +16,7 @@ const CreateEditPurchaseReturn = () => {
   const [products, setProducts] = useState([]);
   const [purchaseBills, setPurchaseBills] = useState([]);
   const [purchaseLines, setPurchaseLines] = useState([]);
+  const [gstRates, setGstRates] = useState([]);
 
   const user_data = JSON.parse(localStorage.getItem("user_detail"));
   const store_purchase_return_bill = localStorage.getItem(
@@ -141,12 +142,21 @@ const CreateEditPurchaseReturn = () => {
       console.error("Error fetching categories:", error);
     }
   };
+
+  const fetchGstRates = async () => {
+    const response = await axios.get(`${BASE_URL}/api/gst-rates`, {
+      headers: { Authorization: `Bearer ${user_data.token}` },
+    });
+    setGstRates(response.data.gstRates);
+  };
+
   useEffect(() => {
     fetchBranch();
     fetchSupplierBill();
     fetchProduct();
     fetchPurchaseBill();
     fetchPurchaseLine();
+    fetchGstRates();
   }, []);
 
   // Validation Schema
@@ -509,11 +519,16 @@ const CreateEditPurchaseReturn = () => {
                                   as="select"
                                   name={`lines.${index}.gst_rate_id`}
                                 >
-                                  <option value="">Select</option>
-                                  <option value="1">5%</option>
-                                  <option value="2">12%</option>
-                                  <option value="3">18%</option>
-                                  <option value="4">28%</option>
+                                  <option value="">Select Gst Rates</option>
+                                  {gstRates.map((element) => {
+                                    return (
+                                      <>
+                                        <option value={element.id} key="1">
+                                          {element.rate}%
+                                        </option>
+                                      </>
+                                    );
+                                  })}
                                 </Field>
                                 <ErrorMessage
                                   name={`lines.${index}.gst_rate_id`}
