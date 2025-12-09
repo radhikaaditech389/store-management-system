@@ -76,7 +76,7 @@ export default function PaymentModal({ total, onClose, onConfirm }) {
 
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
-      <div className="bg-white rounded-3xl shadow-2xl w-full cart-max-width p-6 grid grid-cols-3 gap-6">
+      <div className="bg-white rounded-3xl shadow-2xl w-full cart-max-width p-5 grid grid-cols-3">
         {/* LEFT SIDE – METHOD LIST */}
         <div className="col-span-2  flex flex-col gap-4">
         <div className="col-span-1 flex flex-col gap-4">
@@ -253,7 +253,7 @@ export default function PaymentModal({ total, onClose, onConfirm }) {
           <div className="flex gap-4">
             <button
               onClick={onClose}
-              className="px-6 py-4 bg-gray-300 rounded-xl font-semibold"
+              className="px-8 py-4 bg-gray-300 rounded-xl font-semibold"
               style={{ width: "100%", fontSize: "14px" }}
             >
               Cancel

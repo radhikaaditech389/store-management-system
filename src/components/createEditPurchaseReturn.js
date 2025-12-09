@@ -406,7 +406,7 @@ const CreateEditPurchaseReturn = () => {
                                   as="select"
                                   name={`lines.${index}.purchase_line_id`}
                                 >
-                                  <option value="">Select Purchase Bill</option>
+                                  <option value="">Select Purchase Line</option>
                                   {purchaseLines.map((p) => (
                                     <option value={p.id} key={p.id}>
                                       {p.batch_no}
