@@ -38,14 +38,14 @@ const CreateEditPurchaseReturn = () => {
         purchase_line_id: "",
         product_id: "",
         qty: "",
-        free: "",
+        free_qty: "",
         rate: "",
         gst_rate_id: "",
         hsn_code: "",
-        taxable_value: "",
-        cgst: "",
-        sgst: "",
-        igst: "",
+        // taxable_value: "",
+        // cgst: "",
+        // sgst: "",
+        // igst: "",
       },
     ],
   });
@@ -61,7 +61,7 @@ const CreateEditPurchaseReturn = () => {
               purchase_line_id: line.purchase_line_id?.toString() || "",
               product_id: line.product_id || "",
               qty: line.qty || "",
-              free: line.free || "",
+              free_qty: line.free_qty || "",
               rate: line.rate || "",
               taxable_value: line.taxable_value || "",
               gst_rate_id: line.gst_rate_id?.toString() || "",
@@ -178,7 +178,7 @@ const CreateEditPurchaseReturn = () => {
             .required("Qty required")
             .min(0.0001, "Qty must be greater than 0"),
 
-          free: Yup.number()
+          free_qty: Yup.number()
             .nullable()
             .typeError("Free Qty must be a number")
             .min(0, "Free Qty cannot be negative"),
@@ -458,60 +458,6 @@ const CreateEditPurchaseReturn = () => {
                               </div>
 
                               <div className="line-col">
-                                <label style={{ fontSize: "15px" }}>Qty</label>
-                                <Field
-                                  type="number"
-                                  name={`lines.${index}.qty`}
-                                />
-                                <ErrorMessage
-                                  name={`lines.${index}.qty`}
-                                  className="error-text"
-                                  component="div"
-                                />
-                              </div>
-
-                              <div className="line-col">
-                                <label style={{ fontSize: "15px" }}>
-                                  Free Qty
-                                </label>
-                                <Field
-                                  type="number"
-                                  name={`lines.${index}.free`}
-                                />
-                                <ErrorMessage
-                                  name={`lines.${index}.free`}
-                                  className="error-text"
-                                  component="div"
-                                />
-                              </div>
-
-                              <div className="line-col">
-                                <label style={{ fontSize: "15px" }}>Purchase Rate</label>
-                                <Field
-                                  type="number"
-                                  name={`lines.${index}.rate`}
-                                />
-                                <ErrorMessage
-                                  name={`lines.${index}.rate`}
-                                  className="error-text"
-                                  component="div"
-                                />
-                              </div>
-
-                              <div className="line-col">
-                                <label style={{ fontSize: "15px" }}>HSN Code</label>
-                                <Field
-                                  type="text"
-                                  name={`lines.${index}.hsn_code`}
-                                />
-                                <ErrorMessage
-                                  name={`lines.${index}.hsn_code`}
-                                  className="error-text"
-                                  component="div"
-                                />
-                              </div>
-
-                              <div className="line-col">
                                 <label style={{ fontSize: "15px" }}>
                                   GST Rate
                                 </label>
@@ -536,7 +482,66 @@ const CreateEditPurchaseReturn = () => {
                                   component="div"
                                 />
                               </div>
+
                               <div className="line-col">
+                                <label style={{ fontSize: "15px" }}>
+                                  HSN Code
+                                </label>
+                                <Field
+                                  type="text"
+                                  name={`lines.${index}.hsn_code`}
+                                />
+                                <ErrorMessage
+                                  name={`lines.${index}.hsn_code`}
+                                  className="error-text"
+                                  component="div"
+                                />
+                              </div>
+
+                              <div className="line-col">
+                                <label style={{ fontSize: "15px" }}>
+                                  Purchase Rate
+                                </label>
+                                <Field
+                                  type="number"
+                                  name={`lines.${index}.purchase_rate`}
+                                />
+                                <ErrorMessage
+                                  name={`lines.${index}.purchase_rate`}
+                                  className="error-text"
+                                  component="div"
+                                />
+                              </div>
+
+                              <div className="line-col">
+                                <label style={{ fontSize: "15px" }}>Qty</label>
+                                <Field
+                                  type="number"
+                                  name={`lines.${index}.qty`}
+                                />
+                                <ErrorMessage
+                                  name={`lines.${index}.qty`}
+                                  className="error-text"
+                                  component="div"
+                                />
+                              </div>
+
+                              <div className="line-col">
+                                <label style={{ fontSize: "15px" }}>
+                                  Free Qty
+                                </label>
+                                <Field
+                                  type="number"
+                                  name={`lines.${index}.free_qty`}
+                                />
+                                <ErrorMessage
+                                  name={`lines.${index}.free_qty`}
+                                  className="error-text"
+                                  component="div"
+                                />
+                              </div>
+
+                              {/* <div className="line-col">
                                 <label style={{ fontSize: "15px" }}>
                                   Taxable Value
                                 </label>
@@ -588,7 +593,7 @@ const CreateEditPurchaseReturn = () => {
                                   className="error-text"
                                   component="div"
                                 />
-                              </div>
+                              </div> */}
                             </div>
 
                             <button type="button" onClick={() => remove(index)}>
@@ -605,10 +610,10 @@ const CreateEditPurchaseReturn = () => {
                             push({
                               product_id: "",
                               qty: "",
-                              free: "",
+                              free_qty: "",
                               purchase_rate: "",
-                              discount_type: "",
-                              discount: "",
+                              // discount_type: "",
+                              // discount: "",
                               hsn_code: "",
                               gst_rate_id: "",
                               batch_no: "",
