@@ -7,124 +7,134 @@ import { getCookie } from "../utils/cookies";
 import Layout from "./layout";
 import { toast } from "react-toastify";
 
-const CreateEditPurchaseBill = () => {
+const CreateEditPurchaseReturn = () => {
   const BASE_URL = process.env.REACT_APP_API_BASE_URL;
   const { id } = useParams(); // if id exists -> Edit Mode
   const history = useHistory();
   const [branches, setBranches] = useState([]);
   const [suppliers, setSupplierBill] = useState([]);
   const [products, setProducts] = useState([]);
+  const [purchaseBills, setPurchaseBills] = useState([]);
+  const [purchaseLines, setPurchaseLines] = useState([]);
 
   const user_data = JSON.parse(localStorage.getItem("user_detail"));
-  const store_purchase_bill = localStorage.getItem("purchase_bills_create");
-  const incomingBill = store_purchase_bill
-    ? JSON.parse(store_purchase_bill)
+  const store_purchase_return_bill = localStorage.getItem(
+    "purchase_return_bills_create"
+  );
+  const incomingReturnBill = store_purchase_return_bill
+    ? JSON.parse(store_purchase_return_bill)
     : null;
 
   const isEdit = Boolean(id);
 
   const [initialValues, setInitialValues] = useState({
-    branch_id: "",
+    purchase_bill_id: "",
     supplier_id: "",
-    bill_no: "",
-    bill_date: "",
+    branch_id: "",
+    return_date: "",
     lines: [
       {
+        purchase_line_id: "",
         product_id: "",
         qty: "",
-        free_qty: "",
-        purchase_rate: "",
-        discount_type: "",
-        discount: "",
-        hsn_code: "",
+        free: "",
+        rate: "",
         gst_rate_id: "",
-        batch_no: "",
-        expiry_date: "",
+        hsn_code: "",
+         taxable_value: "",
+        cgst: "",
+        sgst: "",
+        igst: "",
       },
     ],
   });
   useEffect(() => {
-    if (incomingBill) {
+    if (incomingReturnBill) {
       setInitialValues({
-        branch_id: incomingBill.branch_id?.toString() || "",
-        supplier_id: incomingBill.supplier_id?.toString() || "",
-        bill_no: incomingBill.bill_no || "",
-        bill_date: incomingBill.bill_date || "",
-
-        lines: incomingBill.lines?.length
-          ? incomingBill.lines.map((line) => ({
-              product_id: line.product_id?.toString() || "",
+        purchase_bill_id: incomingReturnBill.purchase_bill_id?.toString() || "",
+        supplier_id: incomingReturnBill.supplier_id?.toString() || "",
+        branch_id: incomingReturnBill.branch_id || "",
+        return_date: incomingReturnBill.return_date || "",
+        lines: incomingReturnBill.lines?.length
+          ? incomingReturnBill.lines.map((line) => ({
+              purchase_line_id: line.purchase_line_id?.toString() || "",
+              product_id: line.product_id || "",
               qty: line.qty || "",
-              free_qty: line.free_qty || "",
-              purchase_rate: line.purchase_rate || "",
-              discount_type: line.discount_type || "",
-              discount: line.discount || "",
-              hsn_code: line.hsn_code || "",
+              free: line.free || "",
+              rate: line.rate || "",
+              taxable_value: line.taxable_value || "",
               gst_rate_id: line.gst_rate_id?.toString() || "",
-              batch_no: line.batch_no || "",
-              expiry_date: line.expiry_date || "",
+              hsn_code: line.hsn_code || "",
+              cgst: line.cgst || "",
+              sgst: line.sgst || "",
+              igst: line.igst || "",
             }))
           : initialValues.lines, // fallback
       });
     }
   }, []);
+  const fetchPurchaseBill = async () => {
+    try {
+      const response = await axios.get(`${BASE_URL}/api/purchase-bill`, {
+        headers: {
+          Accept: "application/json",
+          Authorization: `Bearer ${user_data.token}`,
+        },
+      });
+      setPurchaseBills(response.data.data);
+    } catch (error) {
+      console.error("Error fetching categories:", error);
+    }
+  };
+
+  const fetchPurchaseLine = async () => {
+    try {
+      const response = await axios.get(`${BASE_URL}/api/purchase-line`, {
+        headers: {
+          Accept: "application/json",
+          Authorization: `Bearer ${user_data.token}`,
+        },
+      });
+      setPurchaseLines(response.data.data);
+    } catch (error) {
+      console.error("Error fetching categories:", error);
+    }
+  };
   const fetchBranch = async () => {
     try {
-      // await axios.get(`${BASE_URL}/sanctum/csrf-cookie`, {
-      //   withCredentials: true,
-      // });
       const response = await axios.get(`${BASE_URL}/api/manager/branches`, {
         headers: {
           Accept: "application/json",
           Authorization: `Bearer ${user_data.token}`,
-          // "X-XSRF-TOKEN": getCookie("XSRF-TOKEN"),
         },
-        // withCredentials: true,
       });
-
       setBranches(response.data.branches);
     } catch (error) {
       console.error("Error fetching categories:", error);
     }
   };
-  useEffect(() => {
-    fetchBranch();
-  }, []);
 
   const fetchSupplierBill = async () => {
     try {
-      // await axios.get(`${BASE_URL}/sanctum/csrf-cookie`, {
-      //   withCredentials: true,
-      // });
       const response = await axios.get(`${BASE_URL}/api/suppliers`, {
         headers: {
           Accept: "application/json",
           Authorization: `Bearer ${user_data.token}`,
-          // "X-XSRF-TOKEN": getCookie("XSRF-TOKEN"),
         },
-        // withCredentials: true,
       });
       setSupplierBill(response.data.suppliers);
     } catch (error) {
       console.error("Error fetching categories:", error);
     }
   };
-  useEffect(() => {
-    fetchSupplierBill();
-  }, []);
 
   const fetchProduct = async () => {
     try {
-      // await axios.get(`${BASE_URL}/sanctum/csrf-cookie`, {
-      //   withCredentials: true,
-      // });
       const response = await axios.get(`${BASE_URL}/api/products`, {
         headers: {
           Accept: "application/json",
           Authorization: `Bearer ${user_data.token}`,
-          // "X-XSRF-TOKEN": getCookie("XSRF-TOKEN"),
         },
-        // withCredentials: true,
       });
       setProducts(response.data.products);
     } catch (error) {
@@ -132,7 +142,11 @@ const CreateEditPurchaseBill = () => {
     }
   };
   useEffect(() => {
+    fetchBranch();
+    fetchSupplierBill();
     fetchProduct();
+    fetchPurchaseBill();
+    fetchPurchaseLine();
   }, []);
 
   // Validation Schema
@@ -154,7 +168,7 @@ const CreateEditPurchaseBill = () => {
             .required("Qty required")
             .min(0.0001, "Qty must be greater than 0"),
 
-          free_qty: Yup.number()
+          free: Yup.number()
             .nullable()
             .typeError("Free Qty must be a number")
             .min(0, "Free Qty cannot be negative"),
@@ -184,31 +198,30 @@ const CreateEditPurchaseBill = () => {
 
   const handleSubmit = async (values, actions) => {
     try {
-
       let response;
 
       if (isEdit) {
         // UPDATE
-        response = await axios.put(`/api/purchase-bill/${id}`, values, {
+        response = await axios.put(`/api/purchase-return/${id}`, values, {
           headers: {
             Accept: "application/json",
             Authorization: `Bearer ${user_data.token}`,
           },
         });
-        toast.success("Purchase Bill Updated!");
+        toast.success("Purchase Return Updated!");
       } else {
         // CREATE
-        response = await axios.post("/api/purchase-bill", values, {
+        response = await axios.post("/api/purchase-return", values, {
           headers: {
             Accept: "application/json",
             Authorization: `Bearer ${user_data.token}`,
           },
         });
         actions.resetForm();
-        toast.success("Purchase Bill Saved!");
+        toast.success("Purchase Return Saved!");
       }
 
-      history.push("/purchase-bill");
+      history.push("/purchase-return-bill");
     } catch (error) {
       console.log(error.response?.data);
       alert(error.response?.data?.message || "Something went wrong");
@@ -220,14 +233,16 @@ const CreateEditPurchaseBill = () => {
       <div className="main-content-inner">
         <div className="main-content-wrap">
           <h3 className="mb-20">
-            {isEdit ? "Edit Purchase Bill" : "Create Purchase Bill"}
+            {isEdit
+              ? "Edit Purchase Return Bill"
+              : "Create Purchase Return Bill"}
           </h3>
 
-          <div className="wg-box" style={{width:"80%"}}>
+          <div className="wg-box" style={{ width: "80%" }}>
             <Formik
               initialValues={initialValues}
               enableReinitialize={true}
-              validationSchema={validationSchema}
+              //   validationSchema={validationSchema}
               onSubmit={(values, actions) => handleSubmit(values, actions)}
             >
               {({ values }) => (
@@ -235,6 +250,28 @@ const CreateEditPurchaseBill = () => {
                   {/* ---------------- Basic Form Fields ---------------- */}
                   <div className="container">
                     <div className="row mb-20">
+                      <div className="mb-20 col-md-6">
+                        <label className="mb-8 purchase-label">
+                          Purchase Bill Name
+                        </label>
+                        <Field
+                          as="select"
+                          name="purchase_bill_id"
+                          className="mb-6"
+                        >
+                          <option value="">Select Purchase Bill</option>
+                          {purchaseBills?.map((b) => (
+                            <option value={b.id} key={b.id}>
+                              {b.bill_no}
+                            </option>
+                          ))}
+                        </Field>
+                        <ErrorMessage
+                          name="purchase_bill_id"
+                          className="error-text"
+                          component="div"
+                        />
+                      </div>
                       <div className="mb-20 col-md-6">
                         <label className="mb-8 purchase-label">Branch</label>
                         <Field as="select" name="branch_id" className="mb-6">
@@ -268,10 +305,50 @@ const CreateEditPurchaseBill = () => {
                           component="div"
                         />
                       </div>
-                    </div>
+                    </div>       
+                        <div className="mb-20 col-md-6">
+                      <label
+                        className="mb-8 purchase-label"
+                        style={{ fontSize: "15px" }}
+                      >
+                        Return Date
+                      </label>
+                      <Field type="date" name="return_date" className="mb-6" />
+                      <ErrorMessage
+                        name="return_date"
+                        className="error-text"
+                        component="div"
+                      />
+                    </div>       
+                    {/* <div className="row mb-20">
+                      <div className="mb-20 col-md-6">
+                        <label className="mb-8 purchase-label">Total Gst</label>
+                        <Field type="text" name="total_gst" className="mb-6" />
+                        <ErrorMessage
+                          name="total_gst"
+                          className="error-text"
+                          component="div"
+                        />
+                      </div>
+                      <div className="mb-20 col-md-6">
+                        <label className="mb-8 purchase-label">
+                          Total Amount
+                        </label>
+                        <Field
+                          type="text"
+                          name="total_amount"
+                          className="mb-6"
+                        />
+                        <ErrorMessage
+                          name="total_amount"
+                          className="error-text"
+                          component="div"
+                        />
+                      </div>
+                    </div> */}
                   </div>
                   {/* <div className="container"> */}
-                  <div className="row mb-20">
+                  {/* <div className="row mb-20">
                     <div className="mb-20 col-md-6">
                       <label className="mb-8 purchase-label">Bill No</label>
                       <Field type="text" name="bill_no" className="mb-6" />
@@ -296,7 +373,7 @@ const CreateEditPurchaseBill = () => {
                         component="div"
                       />
                     </div>
-                  </div>
+                  </div> */}
                   {/* </div> */}
 
                   {/* ---------------- Line Items ---------------- */}
@@ -315,6 +392,33 @@ const CreateEditPurchaseBill = () => {
                             <h4>Product {index + 1}</h4>
 
                             <div className="line-row">
+                              <div className="line-col">
+                                <label
+                                  className="mb-8 mt-12"
+                                  style={{
+                                    fontSize: "15px",
+                                    marginTop: "12px",
+                                  }}
+                                >
+                                  Purchase Line name
+                                </label>
+                                <Field
+                                  as="select"
+                                  name={`lines.${index}.purchase_line_id`}
+                                >
+                                  <option value="">Select Purchase Bill</option>
+                                  {purchaseLines.map((p) => (
+                                    <option value={p.id} key={p.id}>
+                                      {p.batch_no}
+                                    </option>
+                                  ))}
+                                </Field>
+                                <ErrorMessage
+                                  name={`lines.${index}.purchase_line_id`}
+                                  className="error-text"
+                                  component="div"
+                                />
+                              </div>
                               <div className="line-col">
                                 <label
                                   className="mb-8 mt-12"
@@ -362,59 +466,23 @@ const CreateEditPurchaseBill = () => {
                                 </label>
                                 <Field
                                   type="number"
-                                  name={`lines.${index}.free_qty`}
+                                  name={`lines.${index}.free`}
                                 />
                                 <ErrorMessage
-                                  name={`lines.${index}.free_qty`}
+                                  name={`lines.${index}.free`}
                                   className="error-text"
                                   component="div"
                                 />
                               </div>
 
                               <div className="line-col">
-                                <label style={{ fontSize: "15px" }}>
-                                  Purchase Rate
-                                </label>
+                                <label style={{ fontSize: "15px" }}>Rate</label>
                                 <Field
                                   type="number"
-                                  name={`lines.${index}.purchase_rate`}
+                                  name={`lines.${index}.rate`}
                                 />
                                 <ErrorMessage
-                                  name={`lines.${index}.purchase_rate`}
-                                  className="error-text"
-                                  component="div"
-                                />
-                              </div>
-
-                              <div className="line-col">
-                                <label style={{ fontSize: "15px" }}>
-                                  Discount Type
-                                </label>
-                                <Field
-                                  as="select"
-                                  name={`lines.${index}.discount_type`}
-                                >
-                                  <option value="">None</option>
-                                  <option value="percent">%</option>
-                                  <option value="fixed">Fixed</option>
-                                </Field>
-                                <ErrorMessage
-                                  name={`lines.${index}.discount_type`}
-                                  className="error-text"
-                                  component="div"
-                                />
-                              </div>
-
-                              <div className="line-col">
-                                <label style={{ fontSize: "15px" }}>
-                                  Discount
-                                </label>
-                                <Field
-                                  type="number"
-                                  name={`lines.${index}.discount`}
-                                />
-                                <ErrorMessage
-                                  name={`lines.${index}.discount`}
+                                  name={`lines.${index}.rate`}
                                   className="error-text"
                                   component="div"
                                 />
@@ -453,32 +521,55 @@ const CreateEditPurchaseBill = () => {
                                   component="div"
                                 />
                               </div>
-
                               <div className="line-col">
                                 <label style={{ fontSize: "15px" }}>
-                                  Batch
+                                  taxable_value
                                 </label>
                                 <Field
                                   type="text"
-                                  name={`lines.${index}.batch_no`}
+                                  name={`lines.${index}.taxable_value`}
                                 />
                                 <ErrorMessage
-                                  name={`lines.${index}.batch_no`}
+                                  name={`lines.${index}.taxable_value`}
                                   className="error-text"
                                   component="div"
                                 />
                               </div>
 
                               <div className="line-col">
-                                <label style={{ fontSize: "15px" }}>
-                                  Expiry
-                                </label>
+                                <label style={{ fontSize: "15px" }}>Cgst</label>
                                 <Field
-                                  type="date"
-                                  name={`lines.${index}.expiry_date`}
+                                  type="text"
+                                  name={`lines.${index}.cgst`}
                                 />
                                 <ErrorMessage
-                                  name={`lines.${index}.expiry_date`}
+                                  name={`lines.${index}.cgst`}
+                                  className="error-text"
+                                  component="div"
+                                />
+                              </div>
+
+                              <div className="line-col">
+                                <label style={{ fontSize: "15px" }}>Sgst</label>
+                                <Field
+                                  type="text"
+                                  name={`lines.${index}.sgst`}
+                                />
+                                <ErrorMessage
+                                  name={`lines.${index}.sgst`}
+                                  className="error-text"
+                                  component="div"
+                                />
+                              </div>
+
+                              <div className="line-col">
+                                <label style={{ fontSize: "15px" }}>igst</label>
+                                <Field
+                                  type="text"
+                                  name={`lines.${index}.igst`}
+                                />
+                                <ErrorMessage
+                                  name={`lines.${index}.igst`}
                                   className="error-text"
                                   component="div"
                                 />
@@ -494,12 +585,12 @@ const CreateEditPurchaseBill = () => {
                         <button
                           type="button"
                           className="mt-12"
-                          style={{marginRight:"12px"}}
+                          style={{ marginRight: "12px" }}
                           onClick={() =>
                             push({
                               product_id: "",
                               qty: "",
-                              free_qty: "",
+                              free: "",
                               purchase_rate: "",
                               discount_type: "",
                               discount: "",
@@ -515,7 +606,9 @@ const CreateEditPurchaseBill = () => {
                       </>
                     )}
                   </FieldArray>
-                  <button type="submit">{isEdit ? "Update Bill":"Save Bill"}</button>
+                  <button type="submit">
+                    {isEdit ? "Update Return Bill" : "Save Return Bill"}
+                  </button>
                 </Form>
               )}
             </Formik>
@@ -526,4 +619,4 @@ const CreateEditPurchaseBill = () => {
   );
 };
 
-export default CreateEditPurchaseBill;
+export default CreateEditPurchaseReturn;

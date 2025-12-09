@@ -7,61 +7,54 @@ import { getCookie } from "../utils/cookies";
 import Layout from "./layout";
 import { toast } from "react-toastify";
 
-const CreateEditBranch = () => {
+const CreateEditGstRates = () => {
   const BASE_URL = process.env.REACT_APP_API_BASE_URL;
   const { id } = useParams(); // if id exists -> Edit Mode
   const history = useHistory();
 
   const user_data = JSON.parse(localStorage.getItem("user_detail"));
-  const store_branch = localStorage.getItem("branch_detail");
+  const store_gst_rate_detail = localStorage.getItem("gst_rate_detail");
 
-  const incomingBranch = store_branch && JSON.parse(store_branch);
+  const incomingGstRateDetail= store_gst_rate_detail && JSON.parse(store_gst_rate_detail);
   const isEdit = Boolean(id);
 
   const [initialValues, setInitialValues] = useState({
-    name: "",
-    address: "",
-    phone: "",
-    state: "",
+    rate: "",
+    description: "",
   });
-
   // If editing → set initial values
-  const loadBranchData = () => {
-    if (incomingBranch) {
+  const loadGstData = () => {
+    if (incomingGstRateDetail) {
       setInitialValues({
-        name: incomingBranch.name,
-        address: incomingBranch.address,
-        phone: incomingBranch.phone,
-        state: incomingBranch.state,
+        rate: incomingGstRateDetail.rate,
+        description: incomingGstRateDetail.description,
       });
     }
   };
-
   useEffect(() => {
-    loadBranchData();
+    loadGstData();
   }, []);
 
   // Validation Schema
   const validationSchema = Yup.object({
-    name: Yup.string().required("Name is required"),
-    address: Yup.string().required("Address is required"),
-    state: Yup.string().required("State is required"),
-    phone: Yup.string().required("Phone is required"),
+    rate: Yup.string().required("Rate is required"),
+    description: Yup.string().required("Description is required"),
   });
 
   // Submit (Create + Update)
   const handleSubmit = async (values) => {
     try {
+
       let url = "";
       let method = "";
 
       if (isEdit) {
         // UPDATE PRODUCT
-        url = `${BASE_URL}/api/branches/${id}`;
+        url = `${BASE_URL}/api/gst-rates/${id}`;
         method = "put";
       } else {
         // CREATE PRODUCT
-        url = `${BASE_URL}/api/branches`;
+        url = `${BASE_URL}/api/gst-rates`;
         method = "post";
       }
 
@@ -74,8 +67,8 @@ const CreateEditBranch = () => {
           Authorization: `Bearer ${user_data.token}`,
         },
       });
-      toast.success(isEdit ? "Branch Updated!" : "Branch Created!");
-      history.push("/branch");
+      toast.success(isEdit ? "Gst Rate Updated!" : "Gst Rate Created!");
+      history.push("/gst-rates");
     } catch (error) {
       console.error("Error saving product:", error);
     }
@@ -85,9 +78,11 @@ const CreateEditBranch = () => {
     <Layout>
       <div className="main-content-inner">
         <div className="main-content-wrap">
-          <h3 className="mb-8">{isEdit ? "Edit Branch" : "Create Branch"}</h3>
+          <h3 className="mb-20">
+            {isEdit ? "Edit Gst Rates" : "Create Gst Rates"}
+          </h3>
 
-          <div className="wg-box">
+          <div className="wg-box wg-content">
             <Formik
               enableReinitialize
               initialValues={initialValues}
@@ -98,53 +93,28 @@ const CreateEditBranch = () => {
                 <Form className="wg-form">
                   {/* Name */}
                   <div className="row mb-15">
-                    <fieldset className="col-md-5">
-                      <div className="body-title">Name *</div>
-                      <div className="body-content mb-15">
-                        <Field type="text" name="name" className="mb-5" />
-                        <ErrorMessage
-                          name="name"
-                          className="error-text"
-                          component="div"
-                        />
-                      </div>
-                    </fieldset>
-                    <fieldset className="col-md-5">
-                      <div className="body-title">Address *</div>
+                    <fieldset className="col-md-6 mb-15">
+                      <div className="body-title">Rate *</div>
                       <div className="body-content">
-                        <Field type="text" name="address" className="mb-5" />
+                        <Field type="text" name="rate" className="mb-5" />
                         <ErrorMessage
-                          name="address"
+                          name="rate"
                           className="error-text"
                           component="div"
                         />
                       </div>
                     </fieldset>
-                  </div>
-                  <div className="row mb-15">
-                    <fieldset  className="col-md-5">
-                      <div className="body-title">State *</div>
-                      <div className="body-content mb-15">
-                        <Field type="text" name="state" className="mb-5" />
-                        <ErrorMessage
-                          name="state"
-                          className="error-text"
-                          component="div"
-                        />
-                      </div>
-                    </fieldset>
-
-                    <fieldset className="col-md-5">
-                      <div className="body-title">Phone *</div>
+                    <fieldset className="col-md-6 mb-15">
+                      <div className="body-title">Description *</div>
                       <div className="body-content">
                         <Field
-                          type="text"
-                          name="phone"
-                          className="mb-5"
-                          maxLength={10}
+                          as="textarea"
+                          name="description"
+                          className="mb-5 form-control small-textarea"
+                          placeholder="Enter description"
                         />
                         <ErrorMessage
-                          name="phone"
+                          name="description"
                           className="error-text"
                           component="div"
                         />
@@ -153,7 +123,7 @@ const CreateEditBranch = () => {
                   </div>
                   {/* SUBMIT BUTTON */}
                   <button className="tf-button w208" type="submit">
-                    {isEdit ? "Update Branch" : "Create Branch"}
+                    {isEdit ? "Update Gst Rates" : "Create Gst Rates"}
                   </button>
                 </Form>
               )}
@@ -165,4 +135,4 @@ const CreateEditBranch = () => {
   );
 };
 
-export default CreateEditBranch;
+export default CreateEditGstRates;

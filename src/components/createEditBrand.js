@@ -46,10 +46,6 @@ const CreateEditBrand = () => {
   // Submit (Create + Update)
   const handleSubmit = async (values) => {
     try {
-      // await axios.get(`${BASE_URL}/sanctum/csrf-cookie`, {
-      //   withCredentials: true,
-      // });
-
       let url = "";
       let method = "";
 
@@ -70,9 +66,7 @@ const CreateEditBrand = () => {
         headers: {
           Accept: "application/json",
           Authorization: `Bearer ${user_data.token}`,
-          // "X-XSRF-TOKEN": getCookie("XSRF-TOKEN"),
         },
-        // withCredentials: true,
       });
       toast.success(isEdit ? "Brand Updated!" : "Brand Created!");
       history.push("/brand");

@@ -66,16 +66,11 @@ const CreateEditSaleBill = () => {
 
   const fetchProduct = async () => {
     try {
-      // await axios.get(`${BASE_URL}/sanctum/csrf-cookie`, {
-      //   withCredentials: true,
-      // });
       const response = await axios.get(`${BASE_URL}/api/products`, {
         headers: {
           Accept: "application/json",
           Authorization: `Bearer ${user_data.token}`,
-          // "X-XSRF-TOKEN": getCookie("XSRF-TOKEN"),
         },
-        // withCredentials: true,
       });
       setProducts(response.data.products);
     } catch (error) {
@@ -118,15 +113,8 @@ const CreateEditSaleBill = () => {
         headers: {
           Accept: "application/json",
           Authorization: `Bearer ${user?.token}`,
-          // "X-XSRF-TOKEN": document.cookie
-          //   .split("; ")
-          //   .find((r) => r.startsWith("XSRF-TOKEN="))
-          //   ?.split("=")[1],
         },
-        // withCredentials: true,
       });
-
-      // alert("Sales Bill Created Successfully!");
       toast.success("Sales Bill Created Successfully!");
       console.log("RESULT:", response.data);
     } catch (error) {

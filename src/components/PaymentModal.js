@@ -78,6 +78,7 @@ export default function PaymentModal({ total, onClose, onConfirm }) {
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
       <div className="bg-white rounded-3xl shadow-2xl w-full cart-max-width p-6 grid grid-cols-3 gap-6">
         {/* LEFT SIDE – METHOD LIST */}
+        <div className="col-span-2  flex flex-col gap-4">
         <div className="col-span-1 flex flex-col gap-4">
           <h2 className="text-xl font-bold mb-2" style={{ fontSize: "1.8rem" }}>
             Payment Options
@@ -91,6 +92,7 @@ export default function PaymentModal({ total, onClose, onConfirm }) {
                 ? "bg-blue-600 text-white shadow-xl scale-105"
                 : "bg-gray-100 hover:bg-gray-200"
             }`}
+            style={{width:"80%"}}
           >
             <div
               className="text-xl font-semibold text-center"
@@ -111,35 +113,35 @@ export default function PaymentModal({ total, onClose, onConfirm }) {
                 ? "bg-blue-600 text-white shadow-xl scale-105"
                 : "bg-gray-100 hover:bg-gray-200"
             }`}
-            style={{ marginBottom: "20px" }}
+            style={{ marginBottom: "20px",width:"80%"}}
           >
             <div
               className="text-xl font-semibold text-center"
-              style={{ fontSize: "25px" }}
+              style={{ fontSize: "25px"}}
             >
               Online
             </div>
             <div className="text-sm opacity-70 text-center">Scan Only</div>
           </button>
 
-          <div style={{ fontSize: "16px", marginBottom: "10px" }}>
+          {/* <div style={{ fontSize: "50px", marginBottom: "10px" }}>
             <strong>Paid: </strong> ₹{cashApplied.toFixed(2)}
           </div>
-          <div style={{ fontSize: "16px", marginBottom: "20px" }}>
+          <div style={{ fontSize: "50px", marginBottom: "20px" }}>
             <strong>Change: </strong> ₹{balanceReturn.toFixed(2)}
-          </div>
+          </div> */}
         </div>
 
         {/* MIDDLE AREA */}
         <div className="col-span-1 space-y-6">
-          <h2 className="text-xl font-bold" style={{ fontSize: "2.4rem" }}>
+          <h2 className="text-xl font-bold mb-20" style={{ fontSize: "2.4rem" }}>
             Enter Amount
           </h2>
 
           {method === "cash" && (
             <div>
               <input
-                className="w-full p-5 text-3xl text-center border rounded-xl shadow mb-20"
+                className="payment-cash p-5 text-3xl text-center border rounded-xl shadow mb-20"
                 value={cashGiven}
                 onChange={(e) => setCashGiven(e.target.value)}
                 placeholder="Cash Received"
@@ -169,9 +171,16 @@ export default function PaymentModal({ total, onClose, onConfirm }) {
               )}
             </div>
           )}
+           <div style={{ fontSize: "50px", marginBottom: "10px" }}>
+            <strong>Paid: </strong> ₹{cashApplied.toFixed(2)}
+          </div>
+          <div style={{ fontSize: "50px", marginBottom: "20px" }}>
+            <strong>Change: </strong> ₹{balanceReturn.toFixed(2)}
+          </div>
           {/* <div style={{fontSize: "16px"}}>Paid: ₹{cashApplied.toFixed(2)}</div>
             <br />
             <div style={{fontSize: "16px"}}>Change: ₹{balanceReturn.toFixed(2)}</div> */}
+        </div>
         </div>
 
         {/* KEYPAD (only cash mode) */}

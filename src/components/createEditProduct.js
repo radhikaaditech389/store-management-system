@@ -20,6 +20,8 @@ const CreateEditProduct = () => {
 
   const [brands, setBrands] = useState([]);
   const [categories, setCategories] = useState([]);
+  const [gstRates, setGstRates] = useState([]);
+
   const [initialValues, setInitialValues] = useState({
     sku: "",
     name: "",
@@ -38,6 +40,12 @@ const CreateEditProduct = () => {
       headers: { Authorization: `Bearer ${user_data.token}` },
     });
     setBrands(response.data.brands);
+  };
+  const fetchGstRates = async () => {
+    const response = await axios.get(`${BASE_URL}/api/gst-rates`, {
+      headers: { Authorization: `Bearer ${user_data.token}` },
+    });
+    setGstRates(response.data.gstRates);
   };
 
   // Fetch categories
@@ -69,6 +77,7 @@ const CreateEditProduct = () => {
     fetchBrands();
     fetchCategories();
     loadProductData();
+    fetchGstRates();
   }, []);
 
   // Validation Schema
@@ -86,12 +95,7 @@ const CreateEditProduct = () => {
 
   // Submit (Create + Update)
   const handleSubmit = async (values) => {
-    console.log("create data");
     try {
-      // await axios.get(`${BASE_URL}/sanctum/csrf-cookie`, {
-      //   withCredentials: true,
-      // });
-
       let url = "";
       let method = "";
 
@@ -112,13 +116,10 @@ const CreateEditProduct = () => {
         headers: {
           Accept: "application/json",
           Authorization: `Bearer ${user_data.token}`,
-          // "X-XSRF-TOKEN": getCookie("XSRF-TOKEN"),
         },
-        // withCredentials: true,
       });
       toast.success(isEdit ? "Product Updated!" : "Product Created!");
       history.push("/product");
-      // navigate("/product");
     } catch (error) {
       console.error("Error saving product:", error);
     }
@@ -216,18 +217,18 @@ const CreateEditProduct = () => {
                       <div className="body-content mb-15">
                         <Field as="select" name="gst_rate_id" className="mb-5">
                           <option value="">Select Gst Rate Id</option>
-                          <option value="1" key="1">
-                            1
-                          </option>
-                          <option value="2" key="2">
-                            2
-                          </option>
-                          <option value="3" key="3">
-                            3
-                          </option>
+                          {gstRates.map((element) => {
+                            return (
+                              <>
+                                <option value={element.id} key="1">
+                                  {element.rate}
+                                </option>
+                              </>
+                            );
+                          })}
                         </Field>
                         <ErrorMessage
-                          name="category_id"
+                          name="gst_rate_id"
                           component="div"
                           className="error-text"
                         />

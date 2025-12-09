@@ -3,7 +3,6 @@ import Layout from "./layout";
 import { Link, useHistory } from "react-router-dom";
 import DataTable from "react-data-table-component";
 import axios from "axios";
-import { getCookie } from "../utils/cookies";
 import { toast } from "react-toastify";
 
 const Brand = () => {
@@ -17,16 +16,11 @@ const Brand = () => {
 
   const fetchBrand = async () => {
     try {
-      // await axios.get(`${BASE_URL}/sanctum/csrf-cookie`, {
-      //   withCredentials: true,
-      // });
       const response = await axios.get(`${BASE_URL}/api/brands`, {
         headers: {
           Accept: "application/json",
           Authorization: `Bearer ${user_data.token}`,
-          // "X-XSRF-TOKEN": getCookie("XSRF-TOKEN"),
         },
-        // withCredentials: true,
       });
       setBrands(response.data.brands);
     } catch (error) {

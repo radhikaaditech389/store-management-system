@@ -80,9 +80,6 @@ const Category = () => {
       name: "Action",
       cell: (row) => (
         <div className="list-icon-function">
-          {/* <div className="item eye">
-            <i className="icon-eye"></i>
-          </div> */}
           <div className="item edit">
             <Link
               to={`/category/edit/${row.id}`}

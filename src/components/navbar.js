@@ -135,6 +135,14 @@ const Navbar = () => {
                       <div className="text">Purchase Bill</div>
                     </Link>
                   </li>
+                     <li className="menu-item">
+                    <Link to="/purchase-return-bill" className="menu-item-button">
+                      <div className="icon">
+                        <i className="icon-users"></i>
+                      </div>
+                      <div className="text">Purchase Return Bill</div>
+                    </Link>
+                  </li>
                   <li className="menu-item">
                     <Link to="/sale-bill" className="menu-item-button">
                       <div className="icon">

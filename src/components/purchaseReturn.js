@@ -1,125 +1,123 @@
-import React, { useState, useEffect } from "react";
-import Layout from "./layout";
-import { Link, useHistory } from "react-router-dom";
+import React, { useEffect, useState } from "react";
 import DataTable from "react-data-table-component";
+import { Link, useHistory } from "react-router-dom";
 import axios from "axios";
+import Layout from "./layout";
 import { getCookie } from "../utils/cookies";
 import { toast } from "react-toastify";
-
-const Branch = () => {
+const PurchaseReturn = () => {
   const BASE_URL = process.env.REACT_APP_API_BASE_URL;
-
   const history = useHistory();
+  const [products, setProducts] = useState([]);
   const [search, setSearch] = useState("");
-  const [branches, setBranches] = useState([]);
-  const [filteredData, setFilteredData] = useState(branches);
+  const [PurchaseReturn, setPurchaseReturn] = useState([]);
+  const [filteredData, setFilteredData] = useState(products);
+
   const user_data = JSON.parse(localStorage.getItem("user_detail"));
-
-  const fetchBranch = async () => {
-    try {
-      const response = await axios.get(`${BASE_URL}/api/branches`, {
-        headers: {
-          Accept: "application/json",
-          Authorization: `Bearer ${user_data.token}`,
-        },
-      });
-      setBranches(response.data.data);
-    } catch (error) {
-      console.error("Error fetching categories:", error);
-    }
-  };
-  useEffect(() => {
-    fetchBranch();
-  }, []);
-
-  const handleCreateBranch = () => {
-    localStorage.setItem("branch_detail", null);
+  const handleCreatePurchaseReturns = () => {
+    localStorage.setItem("purchase_return_bills_create", null);
   };
   const handleEdit = (row) => {
-    localStorage.setItem("branch_detail", JSON.stringify(row));
+    localStorage.setItem("purchase_return_bills_create", JSON.stringify(row));
   };
- const handleDeleteConfirm = (id) => {
-    if (window.confirm("Are you sure you want to delete this Brand?")) {
-      handleDelete(id);
-    }
-  };
-  const handleDelete = async (id) => {
-    const response = await axios.delete(`${BASE_URL}/branches/${id}`, {
-      headers: {
-        accept: "application/json",
-        Authorization: `Bearer ${user_data.token}`,
-      },
-    });
-    if (response) {
-      history.push("/branch");
-       toast.success("Branch Deleted");
-      fetchBranch();
-    }
-  };
-
-  useEffect(() => {
-  const s = search.toLowerCase();
-
-  const result = branches.filter((item) => {
-    return (
-      item.id.toString().includes(s) ||
-      item.name?.toLowerCase().includes(s) ||
-      item.address?.toLowerCase().includes(s) ||
-      item.state?.toLowerCase().includes(s) ||
-      item.phone?.toString().includes(s)
-    );
-  });
-
-  setFilteredData(result);
-}, [search, branches]);
 
   const columns = [
     {
       name: "Id",
       selector: (row) => row.id,
       sortable: true,
-      width:"100px"
+       width:"100px"
+    },
+     {
+      name: "Purchase Bill Name",
+      selector: (row) => row?.purchase_bill?.bill_no,
+      sortable: true,
     },
     {
-      name: "Name",
-      selector: (row) => row.name,
+      name: "Branch Name",
+      selector: (row) => row.branch.name,
       sortable: true,
-       width:"200px"
     },
     {
-      name: "Address",
-      selector: (row) => row.address,
+      name: "Supplier Name",
+      selector: (row) => row.supplier.name,
       sortable: true,
-       width:"300px"
     },
     {
-      name: "State",
-      selector: (row) => row.state,
+      name: "Return date",
+      selector: (row) => row.return_date,
       sortable: true,
-       width:"200px"
     },
     {
-      name: "Phone",
-      selector: (row) => row.phone,
+      name: "Total Gst",
+      selector: (row) => row.total_gst,
       sortable: true,
-       width:"200px"
+    },
+    {
+      name: "Total Amount",
+      selector: (row) => row.total_amount,
+      sortable: true,
     },
     {
       name: "Action",
       cell: (row) => (
         <div className="list-icon-function">
           <div className="item edit">
-            <Link to={`/branch/edit/${row.id}`} onClick={() => handleEdit(row)}>
+            <Link
+              to={`/purchase-return-bill/edit/${row.id}`}
+              onClick={() => handleEdit(row)}
+            >
               <i className="icon-edit-3"></i>
             </Link>
           </div>
-          <div className="item trash"  onClick={() => handleDeleteConfirm(row.id)}>
+          {/* <div className="item trash" onClick={() => handleDeleteConfirm(row.id)}>
             <i className="icon-trash-2"></i>
-          </div>
+          </div> */}
         </div>
       ),
     },
   ];
+
+  const fetchPurchaseReturn = async () => {
+    try {
+      const response = await axios.get(`${BASE_URL}/api/purchase-return`, {
+        headers: {
+          Accept: "application/json",
+          Authorization: `Bearer ${user_data.token}`,
+        },
+      });
+      setPurchaseReturn(response.data.data);
+    } catch (error) {
+      console.error("Error fetching categories:", error);
+    }
+  };
+  useEffect(() => {
+    fetchPurchaseReturn();
+  }, []);
+
+  useEffect(() => {
+    const searchText = search.toLowerCase();
+
+    const result = PurchaseReturn.filter((item) => {
+      const searchable = `
+      ${item.id}
+      ${item.branch?.name}
+      ${item.supplier?.name}
+      ${item.bill_no}
+      ${item.bill_date}
+      ${item.taxable_value}
+      ${item.cgst_amount}
+      ${item.sgst_amount}
+      ${item.igst_amount}
+      ${item.cess_amount}
+      ${item.total_tax}
+      ${item.total_amount}
+    `.toLowerCase();
+      return searchable.includes(searchText);
+    });
+
+    setFilteredData(result);
+  }, [search, PurchaseReturn]);
 
   return (
     <Layout>
@@ -127,7 +125,7 @@ const Branch = () => {
         {/* <!-- main-content-wrap --> */}
         <div className="main-content-wrap">
           <div className="flex items-center flex-wrap justify-between gap20 mb-27">
-            <h3>All Branches</h3>
+            <h3>All Purchase Return Bills</h3>
             <ul className="breadcrumbs flex items-center flex-wrap justify-start gap10">
               <li>
                 <Link to="/">
@@ -139,25 +137,25 @@ const Branch = () => {
               </li>
               <li>
                 <Link to="#">
-                  <div className="text-tiny">Branch</div>
+                  <div className="text-tiny">Purchase Bill</div>
                 </Link>
               </li>
               <li>
                 <i className="icon-chevron-right"></i>
               </li>
               <li>
-                <div className="text-tiny">All Branch</div>
+                <div className="text-tiny">All Purchase Bill</div>
               </li>
             </ul>
           </div>
           {/* <!-- all-user --> */}
-          <div className="wg-box wg-content">
+          <div className="wg-box">
             <div className="flex items-center justify-between gap10 flex-wrap">
               <div className="wg-filter flex-grow"></div>
               <Link
                 className="tf-button style-1 w208"
-                to="/create-branch"
-                onClick={handleCreateBranch}
+                to="/create-purchase-return-bill"
+                onClick={handleCreatePurchaseReturns}
               >
                 <i className="icon-plus"></i>Add new
               </Link>
@@ -168,6 +166,11 @@ const Branch = () => {
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               className="search-input"
+              style={{
+                marginBottom: "10px",
+                padding: "8px",
+                width: "250px",
+              }}
             />
             <DataTable
               columns={columns}
@@ -194,4 +197,4 @@ const Branch = () => {
     </Layout>
   );
 };
-export default Branch;
+export default PurchaseReturn;

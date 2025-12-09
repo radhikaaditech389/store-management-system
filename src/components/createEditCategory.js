@@ -39,16 +39,11 @@ const CreateEditCategory = () => {
 
   const fetchCategory = async () => {
     try {
-      // await axios.get(`${BASE_URL}/sanctum/csrf-cookie`, {
-      //   withCredentials: true,
-      // });
       const response = await axios.get(`${BASE_URL}/api/categories`, {
         headers: {
           Accept: "application/json",
           Authorization: `Bearer ${user_data.token}`,
-          // "X-XSRF-TOKEN": getCookie("XSRF-TOKEN"),
         },
-        // withCredentials: true,
       });
       setCategories(response.data.categories);
     } catch (error) {
@@ -71,9 +66,6 @@ const CreateEditCategory = () => {
   // Submit (Create + Update)
   const handleSubmit = async (values) => {
     try {
-      // await axios.get(`${BASE_URL}/sanctum/csrf-cookie`, {
-      //   withCredentials: true,
-      // });
 
       let url = "";
       let method = "";
@@ -95,12 +87,9 @@ const CreateEditCategory = () => {
         headers: {
           Accept: "application/json",
           Authorization: `Bearer ${user_data.token}`,
-          // "X-XSRF-TOKEN": getCookie("XSRF-TOKEN"),
         },
-        // withCredentials: true,
       });
       toast.success(isEdit ? "Category Updated!" : "Category Created!");
-      // alert(isEdit ? "Category Updated!" : "Category Created!");
       history.push("/category");
     } catch (error) {
       console.error("Error saving product:", error);

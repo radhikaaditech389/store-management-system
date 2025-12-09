@@ -1087,6 +1087,10 @@ a:focus {
   border-radius: 50%;
   background: rgba(203, 213, 225, 0.3);
 }
+.payment-cash{
+  font-size: 30px;
+  width:80%
+}
 .image-select .dropdown-toggle .filter-option-inner-inner {
   line-height: 20px;
   height: 20px;

@@ -39,25 +39,15 @@ const Login = () => {
   // Submit form
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     if (!validate()) {
       console.log("Validation failed");
       return; // Stop here
     }
-
     try {
-      // 1. Get CSRF cookie
-      // await axios.get(`${BASE_URL}/sanctum/csrf-cookie`, {
-      //   withCredentials: true,
-      // });
-
-      // 2. Send login requests
       const response = await axios.post(`${BASE_URL}/api/login`, formData, {
         headers: {
           accept: "application/json",
-          // "X-XSRF-TOKEN": getCookie("XSRF-TOKEN"),
         },
-        // withCredentials: true,
       });
       const user_detail = response.data;
       localStorage.setItem("user_detail", JSON.stringify(user_detail));
@@ -91,7 +81,6 @@ const Login = () => {
                 name="username"
                 value={formData.username}
                 onChange={handleChange}
-                // disabled={formData.pin !== ""}
               />
               {errors.username && (
                 <small className="text-red">{errors.username}</small>
@@ -109,29 +98,11 @@ const Login = () => {
                 name="password"
                 value={formData.password}
                 onChange={handleChange}
-                // disabled={formData.pin !== ""}
               />
               {errors.password && (
                 <small className="text-red">{errors.password}</small>
               )}
             </fieldset>
-
-            {/* PIN Login */}
-            {/* <fieldset className="pin">
-              <div className="body-title mb-10">
-                Cashier PIN <span className="tf-color-1">*</span>
-              </div>
-              <input
-                type="text"
-                placeholder="Enter your PIN"
-                name="pin"
-                value={formData.pin}
-                onChange={handleChange}
-                // disabled={formData.username !== "" || formData.password !== ""}
-              />
-              {errors.pin && <small className="text-red">{errors.pin}</small>}
-            </fieldset> */}
-
             <button type="submit" className="tf-button w-full">
               Login
             </button>
