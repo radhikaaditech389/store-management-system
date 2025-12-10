@@ -16,7 +16,6 @@ const CreateEditPurchaseReturn = () => {
   const [products, setProducts] = useState([]);
   const [purchaseBills, setPurchaseBills] = useState([]);
   const [purchaseLines, setPurchaseLines] = useState([]);
-  const [gstRates, setGstRates] = useState([]);
 
   const user_data = JSON.parse(localStorage.getItem("user_detail"));
   const store_purchase_return_bill = localStorage.getItem(
@@ -42,7 +41,7 @@ const CreateEditPurchaseReturn = () => {
         rate: "",
         gst_rate_id: "",
         hsn_code: "",
-        taxable_value: "",
+         taxable_value: "",
         cgst: "",
         sgst: "",
         igst: "",
@@ -142,53 +141,57 @@ const CreateEditPurchaseReturn = () => {
       console.error("Error fetching categories:", error);
     }
   };
-
-  const fetchGstRates = async () => {
-    const response = await axios.get(`${BASE_URL}/api/gst-rates`, {
-      headers: { Authorization: `Bearer ${user_data.token}` },
-    });
-    setGstRates(response.data.gstRates);
-  };
-
   useEffect(() => {
     fetchBranch();
     fetchSupplierBill();
     fetchProduct();
     fetchPurchaseBill();
     fetchPurchaseLine();
-    fetchGstRates();
   }, []);
 
   // Validation Schema
 
   const validationSchema = Yup.object().shape({
-    purchase_bill_id: Yup.string().required("Purchase Bill Id is required"),
     branch_id: Yup.string().required("Branch is required"),
     supplier_id: Yup.string().required("Supplier is required"),
-    return_date: Yup.string().required("Return Date is required"),
+    bill_no: Yup.string().required("Bill No is required"),
+    bill_date: Yup.date().required("Bill date is required"),
+
     lines: Yup.array()
       .min(1, "At least one product is required")
       .of(
         Yup.object().shape({
-           purchase_line_id: Yup.string().required("Purchase Line Id is required"),
           product_id: Yup.string().required("Product is required"),
+
           qty: Yup.number()
             .typeError("Quantity must be a number")
             .required("Qty required")
             .min(0.0001, "Qty must be greater than 0"),
+
           free: Yup.number()
             .nullable()
             .typeError("Free Qty must be a number")
             .min(0, "Free Qty cannot be negative"),
-          rate: Yup.number()
-            .typeError("rate must be a number")
-            .required("rate required")
+
+          purchase_rate: Yup.number()
+            .typeError("Purchase rate must be a number")
+            .required("Purchase rate required")
             .min(0, "Rate cannot be negative"),
+
+          discount_type: Yup.string().required(),
+
+          discount: Yup.number()
+            .nullable()
+            .typeError("Discount must be a number")
+            .min(0, "Discount cannot be negative"),
+
           hsn_code: Yup.string().required(),
-            taxable_value: Yup.string().required(),
-          cgst: Yup.string().required(),
-          sgst: Yup.date().required(),
-           igst: Yup.date().required(),
+
+          gst_rate_id: Yup.string().required("GST rate required"),
+
+          batch_no: Yup.string().required(),
+
+          expiry_date: Yup.date().required(),
         })
       ),
   });
@@ -239,7 +242,7 @@ const CreateEditPurchaseReturn = () => {
             <Formik
               initialValues={initialValues}
               enableReinitialize={true}
-                validationSchema={validationSchema}
+              //   validationSchema={validationSchema}
               onSubmit={(values, actions) => handleSubmit(values, actions)}
             >
               {({ values }) => (
@@ -249,7 +252,7 @@ const CreateEditPurchaseReturn = () => {
                     <div className="row mb-20">
                       <div className="mb-20 col-md-6">
                         <label className="mb-8 purchase-label">
-                          Purchase Bill No
+                          Purchase Bill Name
                         </label>
                         <Field
                           as="select"
@@ -302,8 +305,8 @@ const CreateEditPurchaseReturn = () => {
                           component="div"
                         />
                       </div>
-                    </div>
-                    <div className="mb-20 col-md-6">
+                    </div>       
+                        <div className="mb-20 col-md-6">
                       <label
                         className="mb-8 purchase-label"
                         style={{ fontSize: "15px" }}
@@ -316,7 +319,7 @@ const CreateEditPurchaseReturn = () => {
                         className="error-text"
                         component="div"
                       />
-                    </div>
+                    </div>       
                     {/* <div className="row mb-20">
                       <div className="mb-20 col-md-6">
                         <label className="mb-8 purchase-label">Total Gst</label>
@@ -397,13 +400,13 @@ const CreateEditPurchaseReturn = () => {
                                     marginTop: "12px",
                                   }}
                                 >
-                                  Batch no
+                                  Purchase Line name
                                 </label>
                                 <Field
                                   as="select"
                                   name={`lines.${index}.purchase_line_id`}
                                 >
-                                  <option value="">Select Purchase Line</option>
+                                  <option value="">Select Purchase Bill</option>
                                   {purchaseLines.map((p) => (
                                     <option value={p.id} key={p.id}>
                                       {p.batch_no}
@@ -473,9 +476,7 @@ const CreateEditPurchaseReturn = () => {
                               </div>
 
                               <div className="line-col">
-                                <label style={{ fontSize: "15px" }}>
-                                  Purchase Rate
-                                </label>
+                                <label style={{ fontSize: "15px" }}>Rate</label>
                                 <Field
                                   type="number"
                                   name={`lines.${index}.rate`}
@@ -488,9 +489,7 @@ const CreateEditPurchaseReturn = () => {
                               </div>
 
                               <div className="line-col">
-                                <label style={{ fontSize: "15px" }}>
-                                  HSN Code
-                                </label>
+                                <label style={{ fontSize: "15px" }}>HSN</label>
                                 <Field
                                   type="text"
                                   name={`lines.${index}.hsn_code`}
@@ -510,16 +509,11 @@ const CreateEditPurchaseReturn = () => {
                                   as="select"
                                   name={`lines.${index}.gst_rate_id`}
                                 >
-                                  <option value="">Select Gst Rates</option>
-                                  {gstRates.map((element) => {
-                                    return (
-                                      <>
-                                        <option value={element.id} key="1">
-                                          {element.rate}%
-                                        </option>
-                                      </>
-                                    );
-                                  })}
+                                  <option value="">Select</option>
+                                  <option value="1">5%</option>
+                                  <option value="2">12%</option>
+                                  <option value="3">18%</option>
+                                  <option value="4">28%</option>
                                 </Field>
                                 <ErrorMessage
                                   name={`lines.${index}.gst_rate_id`}
@@ -529,7 +523,7 @@ const CreateEditPurchaseReturn = () => {
                               </div>
                               <div className="line-col">
                                 <label style={{ fontSize: "15px" }}>
-                                  Taxable Value
+                                  taxable_value
                                 </label>
                                 <Field
                                   type="text"
@@ -543,7 +537,7 @@ const CreateEditPurchaseReturn = () => {
                               </div>
 
                               <div className="line-col">
-                                <label style={{ fontSize: "15px" }}>CGST</label>
+                                <label style={{ fontSize: "15px" }}>Cgst</label>
                                 <Field
                                   type="text"
                                   name={`lines.${index}.cgst`}
@@ -556,7 +550,7 @@ const CreateEditPurchaseReturn = () => {
                               </div>
 
                               <div className="line-col">
-                                <label style={{ fontSize: "15px" }}>SGST</label>
+                                <label style={{ fontSize: "15px" }}>Sgst</label>
                                 <Field
                                   type="text"
                                   name={`lines.${index}.sgst`}
@@ -569,7 +563,7 @@ const CreateEditPurchaseReturn = () => {
                               </div>
 
                               <div className="line-col">
-                                <label style={{ fontSize: "15px" }}>IGST</label>
+                                <label style={{ fontSize: "15px" }}>igst</label>
                                 <Field
                                   type="text"
                                   name={`lines.${index}.igst`}
