@@ -162,46 +162,33 @@ const CreateEditPurchaseReturn = () => {
   // Validation Schema
 
   const validationSchema = Yup.object().shape({
+    purchase_bill_id: Yup.string().required("Purchase Bill Id is required"),
     branch_id: Yup.string().required("Branch is required"),
     supplier_id: Yup.string().required("Supplier is required"),
-    bill_no: Yup.string().required("Bill No is required"),
-    bill_date: Yup.date().required("Bill date is required"),
-
+    return_date: Yup.string().required("Return Date is required"),
     lines: Yup.array()
       .min(1, "At least one product is required")
       .of(
         Yup.object().shape({
+           purchase_line_id: Yup.string().required("Purchase Line Id is required"),
           product_id: Yup.string().required("Product is required"),
-
           qty: Yup.number()
             .typeError("Quantity must be a number")
             .required("Qty required")
             .min(0.0001, "Qty must be greater than 0"),
-
           free: Yup.number()
             .nullable()
             .typeError("Free Qty must be a number")
             .min(0, "Free Qty cannot be negative"),
-
-          purchase_rate: Yup.number()
-            .typeError("Purchase rate must be a number")
-            .required("Purchase rate required")
+          rate: Yup.number()
+            .typeError("rate must be a number")
+            .required("rate required")
             .min(0, "Rate cannot be negative"),
-
-          discount_type: Yup.string().required(),
-
-          discount: Yup.number()
-            .nullable()
-            .typeError("Discount must be a number")
-            .min(0, "Discount cannot be negative"),
-
           hsn_code: Yup.string().required(),
-
-          gst_rate_id: Yup.string().required("GST rate required"),
-
-          batch_no: Yup.string().required(),
-
-          expiry_date: Yup.date().required(),
+            taxable_value: Yup.string().required(),
+          cgst: Yup.string().required(),
+          sgst: Yup.date().required(),
+           igst: Yup.date().required(),
         })
       ),
   });
@@ -252,7 +239,7 @@ const CreateEditPurchaseReturn = () => {
             <Formik
               initialValues={initialValues}
               enableReinitialize={true}
-              //   validationSchema={validationSchema}
+                validationSchema={validationSchema}
               onSubmit={(values, actions) => handleSubmit(values, actions)}
             >
               {({ values }) => (
@@ -486,7 +473,9 @@ const CreateEditPurchaseReturn = () => {
                               </div>
 
                               <div className="line-col">
-                                <label style={{ fontSize: "15px" }}>Purchase Rate</label>
+                                <label style={{ fontSize: "15px" }}>
+                                  Purchase Rate
+                                </label>
                                 <Field
                                   type="number"
                                   name={`lines.${index}.rate`}
@@ -499,7 +488,9 @@ const CreateEditPurchaseReturn = () => {
                               </div>
 
                               <div className="line-col">
-                                <label style={{ fontSize: "15px" }}>HSN Code</label>
+                                <label style={{ fontSize: "15px" }}>
+                                  HSN Code
+                                </label>
                                 <Field
                                   type="text"
                                   name={`lines.${index}.hsn_code`}

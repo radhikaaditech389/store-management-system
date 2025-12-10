@@ -3,17 +3,16 @@ import DataTable from "react-data-table-component";
 import { Link, useHistory } from "react-router-dom";
 import axios from "axios";
 import Layout from "./layout";
-import { getCookie } from "../utils/cookies";
-import { toast } from "react-toastify";
+
 const PurchaseReturn = () => {
   const BASE_URL = process.env.REACT_APP_API_BASE_URL;
-  const history = useHistory();
   const [products, setProducts] = useState([]);
   const [search, setSearch] = useState("");
   const [PurchaseReturn, setPurchaseReturn] = useState([]);
   const [filteredData, setFilteredData] = useState(products);
 
   const user_data = JSON.parse(localStorage.getItem("user_detail"));
+
   const handleCreatePurchaseReturns = () => {
     localStorage.setItem("purchase_return_bills_create", null);
   };
@@ -58,21 +57,6 @@ const PurchaseReturn = () => {
       selector: (row) => row.total_amount,
       sortable: true,
     },
-    // {
-    //   name: "Action",
-    //   cell: (row) => (
-    //     <div className="list-icon-function">
-    //       <div className="item edit">
-    //         <Link
-    //           to={`/purchase-return-bill/edit/${row.id}`}
-    //           onClick={() => handleEdit(row)}
-    //         >
-    //           <i className="icon-edit-3"></i>
-    //         </Link>
-    //       </div>         
-    //     </div>
-    //   ),
-    // },
   ];
 
   const fetchPurchaseReturn = async () => {

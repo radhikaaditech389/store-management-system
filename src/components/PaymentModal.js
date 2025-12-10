@@ -70,21 +70,18 @@ export default function PaymentModal({ total, onClose, onConfirm }) {
     onConfirm(payments);
   };
   const handleMethod = (type) => {
-    // console.log({type});
     setPaymentType(type);
   };
 
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
-      <div className="bg-white rounded-3xl shadow-2xl w-full cart-max-width p-5 grid grid-cols-3">
+      <div className="row bg-white rounded-3xl shadow-2xl w-full cart-max-width p-5">
         {/* LEFT SIDE – METHOD LIST */}
-        <div className="col-span-2  flex flex-col gap-4">
+        <div className="col-md-7  flex flex-col gap-4">
         <div className="col-span-1 flex flex-col gap-4">
-          <h2 className="text-xl font-bold mb-2" style={{ fontSize: "1.8rem" }}>
+          <h2 className="text-xl font-bold mb-2" style={{ fontSize: "2.5rem" }}>
             Payment Options
           </h2>
-
-          {/* CASH */}
           <button
             onClick={() => handleMethod("cash")}
             className={`p-5 rounded-2xl text-left transition-all border ${
@@ -92,10 +89,10 @@ export default function PaymentModal({ total, onClose, onConfirm }) {
                 ? "bg-blue-600 text-white shadow-xl scale-105"
                 : "bg-gray-100 hover:bg-gray-200"
             }`}
-            style={{width:"80%"}}
+            style={{width:"90%"}}
           >
             <div
-              className="text-xl font-semibold text-center"
+              className="text-xl font-semibold text-center mb-5"
               style={{ fontSize: "25px" }}
             >
               Cash
@@ -113,23 +110,17 @@ export default function PaymentModal({ total, onClose, onConfirm }) {
                 ? "bg-blue-600 text-white shadow-xl scale-105"
                 : "bg-gray-100 hover:bg-gray-200"
             }`}
-            style={{ marginBottom: "20px",width:"80%"}}
+            style={{ marginBottom: "20px",width:"90%"}}
           >
             <div
-              className="text-xl font-semibold text-center"
+              className="text-xl font-semibold text-center mb-5"
               style={{ fontSize: "25px"}}
             >
               Online
             </div>
             <div className="text-sm opacity-70 text-center">Scan Only</div>
           </button>
-
-          {/* <div style={{ fontSize: "50px", marginBottom: "10px" }}>
-            <strong>Paid: </strong> ₹{cashApplied.toFixed(2)}
-          </div>
-          <div style={{ fontSize: "50px", marginBottom: "20px" }}>
-            <strong>Change: </strong> ₹{balanceReturn.toFixed(2)}
-          </div> */}
+          
         </div>
 
         {/* MIDDLE AREA */}
@@ -146,11 +137,6 @@ export default function PaymentModal({ total, onClose, onConfirm }) {
                 onChange={(e) => setCashGiven(e.target.value)}
                 placeholder="Cash Received"
               />
-              {/* <div className="text-gray-500 mt-2 text-sm">
-                Applied: ₹{cashApplied.toFixed(2)}
-                <br />
-                Change: ₹{balanceReturn.toFixed(2)}
-              </div> */}
             </div>
           )}
 
@@ -171,22 +157,19 @@ export default function PaymentModal({ total, onClose, onConfirm }) {
               )}
             </div>
           )}
-           <div style={{ fontSize: "50px", marginBottom: "10px" }}>
+           <div style={{ fontSize: "45px", marginBottom: "10px" }}>
             <strong>Paid: </strong> ₹{cashApplied.toFixed(2)}
           </div>
-          <div style={{ fontSize: "50px", marginBottom: "20px" }}>
+          <div style={{ fontSize: "45px", marginBottom: "20px" }}>
             <strong>Change: </strong> ₹{balanceReturn.toFixed(2)}
           </div>
-          {/* <div style={{fontSize: "16px"}}>Paid: ₹{cashApplied.toFixed(2)}</div>
-            <br />
-            <div style={{fontSize: "16px"}}>Change: ₹{balanceReturn.toFixed(2)}</div> */}
         </div>
         </div>
 
         {/* KEYPAD (only cash mode) */}
         {method === "cash" && (
           <>
-            <div className="col-span-1">
+            <div className="col-md-5">
               <div className="grid grid-cols-3 gap-3">
                 {[
                   "1",
@@ -225,36 +208,17 @@ export default function PaymentModal({ total, onClose, onConfirm }) {
         {/* SUMMARY + ACTION BUTTONS */}
         <div className="col-span-3 flex justify-between items-center mt-6">
           <div>
-            {/* <div>Total: ₹{total.toFixed(2)}</div> */}
-
-            {/* {method === "cash" && (
-              <>
-                <div className="text-green-600 font-semibold">
-                  Paid: ₹{cashApplied.toFixed(2)}
-                </div>
-
-                <div className="text-red-500">
-                  Remaining: ₹{remaining.toFixed(2)}
-                </div>
-              </>
-            )} */}
-
             {method === "upi" && (
               <div className="text-green-600 font-semibold">
                 Waiting for customer to scan
               </div>
             )}
           </div>
-          {/* <div className="flex gap-4">
-            <div style={{fontSize: "16px"}}>Paid: ₹{cashApplied.toFixed(2)}</div>
-            <br />
-            <div style={{fontSize: "16px"}}>Change: ₹{balanceReturn.toFixed(2)}</div>
-          </div> */}
           <div className="flex gap-4">
             <button
               onClick={onClose}
-              className="px-8 py-4 bg-gray-300 rounded-xl font-semibold"
-              style={{ width: "100%", fontSize: "14px" }}
+              className="bg-gray-300 rounded-xl font-semibold"
+              style={{ width: "100%", fontSize: "16px",padding:"14px 30px" }}
             >
               Cancel
             </button>
@@ -262,12 +226,12 @@ export default function PaymentModal({ total, onClose, onConfirm }) {
             <button
               disabled={method === "cash" && remaining > 0}
               onClick={handleConfirm}
-              className={`px-8 py-4 rounded-xl text-white font-bold ${
+              className={`rounded-xl text-white font-bold ${
                 method === "cash" && remaining > 0
                   ? "bg-gray-400 cursor-not-allowed"
                   : "bg-green-600 hover:bg-green-700"
               }`}
-              style={{ width: "100%", fontSize: "14px" }}
+              style={{ width: "100%", fontSize: "16px",padding:"14px 30px" }}
             >
               Confirm
             </button>
