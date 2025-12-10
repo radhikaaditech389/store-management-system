@@ -16,6 +16,7 @@ const CreateEditPurchaseReturn = () => {
   const [products, setProducts] = useState([]);
   const [purchaseBills, setPurchaseBills] = useState([]);
   const [purchaseLines, setPurchaseLines] = useState([]);
+  const [gstRates, setGstRates] = useState([]);
 
   const user_data = JSON.parse(localStorage.getItem("user_detail"));
   const store_purchase_return_bill = localStorage.getItem(
@@ -37,14 +38,14 @@ const CreateEditPurchaseReturn = () => {
         purchase_line_id: "",
         product_id: "",
         qty: "",
-        free: "",
+        free_qty: "",
         rate: "",
         gst_rate_id: "",
         hsn_code: "",
-         taxable_value: "",
-        cgst: "",
-        sgst: "",
-        igst: "",
+        // taxable_value: "",
+        // cgst: "",
+        // sgst: "",
+        // igst: "",
       },
     ],
   });
@@ -60,7 +61,7 @@ const CreateEditPurchaseReturn = () => {
               purchase_line_id: line.purchase_line_id?.toString() || "",
               product_id: line.product_id || "",
               qty: line.qty || "",
-              free: line.free || "",
+              free_qty: line.free_qty || "",
               rate: line.rate || "",
               taxable_value: line.taxable_value || "",
               gst_rate_id: line.gst_rate_id?.toString() || "",
@@ -141,57 +142,53 @@ const CreateEditPurchaseReturn = () => {
       console.error("Error fetching categories:", error);
     }
   };
+
+  const fetchGstRates = async () => {
+    const response = await axios.get(`${BASE_URL}/api/gst-rates`, {
+      headers: { Authorization: `Bearer ${user_data.token}` },
+    });
+    setGstRates(response.data.gstRates);
+  };
+
   useEffect(() => {
     fetchBranch();
     fetchSupplierBill();
     fetchProduct();
     fetchPurchaseBill();
     fetchPurchaseLine();
+    fetchGstRates();
   }, []);
 
   // Validation Schema
 
   const validationSchema = Yup.object().shape({
+    purchase_bill_id: Yup.string().required("Purchase Bill Id is required"),
     branch_id: Yup.string().required("Branch is required"),
     supplier_id: Yup.string().required("Supplier is required"),
-    bill_no: Yup.string().required("Bill No is required"),
-    bill_date: Yup.date().required("Bill date is required"),
-
+    return_date: Yup.string().required("Return Date is required"),
     lines: Yup.array()
       .min(1, "At least one product is required")
       .of(
         Yup.object().shape({
+           purchase_line_id: Yup.string().required("Purchase Line Id is required"),
           product_id: Yup.string().required("Product is required"),
-
           qty: Yup.number()
             .typeError("Quantity must be a number")
             .required("Qty required")
             .min(0.0001, "Qty must be greater than 0"),
-
           free: Yup.number()
             .nullable()
             .typeError("Free Qty must be a number")
             .min(0, "Free Qty cannot be negative"),
-
-          purchase_rate: Yup.number()
-            .typeError("Purchase rate must be a number")
-            .required("Purchase rate required")
+          rate: Yup.number()
+            .typeError("rate must be a number")
+            .required("rate required")
             .min(0, "Rate cannot be negative"),
-
-          discount_type: Yup.string().required(),
-
-          discount: Yup.number()
-            .nullable()
-            .typeError("Discount must be a number")
-            .min(0, "Discount cannot be negative"),
-
           hsn_code: Yup.string().required(),
-
-          gst_rate_id: Yup.string().required("GST rate required"),
-
-          batch_no: Yup.string().required(),
-
-          expiry_date: Yup.date().required(),
+            taxable_value: Yup.string().required(),
+          cgst: Yup.string().required(),
+          sgst: Yup.date().required(),
+           igst: Yup.date().required(),
         })
       ),
   });
@@ -242,7 +239,7 @@ const CreateEditPurchaseReturn = () => {
             <Formik
               initialValues={initialValues}
               enableReinitialize={true}
-              //   validationSchema={validationSchema}
+                validationSchema={validationSchema}
               onSubmit={(values, actions) => handleSubmit(values, actions)}
             >
               {({ values }) => (
@@ -252,7 +249,7 @@ const CreateEditPurchaseReturn = () => {
                     <div className="row mb-20">
                       <div className="mb-20 col-md-6">
                         <label className="mb-8 purchase-label">
-                          Purchase Bill Name
+                          Purchase Bill No
                         </label>
                         <Field
                           as="select"
@@ -305,8 +302,8 @@ const CreateEditPurchaseReturn = () => {
                           component="div"
                         />
                       </div>
-                    </div>       
-                        <div className="mb-20 col-md-6">
+                    </div>
+                    <div className="mb-20 col-md-6">
                       <label
                         className="mb-8 purchase-label"
                         style={{ fontSize: "15px" }}
@@ -319,7 +316,7 @@ const CreateEditPurchaseReturn = () => {
                         className="error-text"
                         component="div"
                       />
-                    </div>       
+                    </div>
                     {/* <div className="row mb-20">
                       <div className="mb-20 col-md-6">
                         <label className="mb-8 purchase-label">Total Gst</label>
@@ -400,13 +397,13 @@ const CreateEditPurchaseReturn = () => {
                                     marginTop: "12px",
                                   }}
                                 >
-                                  Purchase Line name
+                                  Batch no
                                 </label>
                                 <Field
                                   as="select"
                                   name={`lines.${index}.purchase_line_id`}
                                 >
-                                  <option value="">Select Purchase Bill</option>
+                                  <option value="">Select Purchase Line</option>
                                   {purchaseLines.map((p) => (
                                     <option value={p.id} key={p.id}>
                                       {p.batch_no}
@@ -476,7 +473,9 @@ const CreateEditPurchaseReturn = () => {
                               </div>
 
                               <div className="line-col">
-                                <label style={{ fontSize: "15px" }}>Rate</label>
+                                <label style={{ fontSize: "15px" }}>
+                                  Purchase Rate
+                                </label>
                                 <Field
                                   type="number"
                                   name={`lines.${index}.rate`}
@@ -489,7 +488,9 @@ const CreateEditPurchaseReturn = () => {
                               </div>
 
                               <div className="line-col">
-                                <label style={{ fontSize: "15px" }}>HSN</label>
+                                <label style={{ fontSize: "15px" }}>
+                                  HSN Code
+                                </label>
                                 <Field
                                   type="text"
                                   name={`lines.${index}.hsn_code`}
@@ -509,11 +510,16 @@ const CreateEditPurchaseReturn = () => {
                                   as="select"
                                   name={`lines.${index}.gst_rate_id`}
                                 >
-                                  <option value="">Select</option>
-                                  <option value="1">5%</option>
-                                  <option value="2">12%</option>
-                                  <option value="3">18%</option>
-                                  <option value="4">28%</option>
+                                  <option value="">Select Gst Rates</option>
+                                  {gstRates.map((element) => {
+                                    return (
+                                      <>
+                                        <option value={element.id} key="1">
+                                          {element.rate}%
+                                        </option>
+                                      </>
+                                    );
+                                  })}
                                 </Field>
                                 <ErrorMessage
                                   name={`lines.${index}.gst_rate_id`}
@@ -521,9 +527,68 @@ const CreateEditPurchaseReturn = () => {
                                   component="div"
                                 />
                               </div>
+
                               <div className="line-col">
                                 <label style={{ fontSize: "15px" }}>
-                                  taxable_value
+                                  HSN Code
+                                </label>
+                                <Field
+                                  type="text"
+                                  name={`lines.${index}.hsn_code`}
+                                />
+                                <ErrorMessage
+                                  name={`lines.${index}.hsn_code`}
+                                  className="error-text"
+                                  component="div"
+                                />
+                              </div>
+
+                              <div className="line-col">
+                                <label style={{ fontSize: "15px" }}>
+                                  Purchase Rate
+                                </label>
+                                <Field
+                                  type="number"
+                                  name={`lines.${index}.purchase_rate`}
+                                />
+                                <ErrorMessage
+                                  name={`lines.${index}.purchase_rate`}
+                                  className="error-text"
+                                  component="div"
+                                />
+                              </div>
+
+                              <div className="line-col">
+                                <label style={{ fontSize: "15px" }}>Qty</label>
+                                <Field
+                                  type="number"
+                                  name={`lines.${index}.qty`}
+                                />
+                                <ErrorMessage
+                                  name={`lines.${index}.qty`}
+                                  className="error-text"
+                                  component="div"
+                                />
+                              </div>
+
+                              <div className="line-col">
+                                <label style={{ fontSize: "15px" }}>
+                                  Free Qty
+                                </label>
+                                <Field
+                                  type="number"
+                                  name={`lines.${index}.free_qty`}
+                                />
+                                <ErrorMessage
+                                  name={`lines.${index}.free_qty`}
+                                  className="error-text"
+                                  component="div"
+                                />
+                              </div>
+
+                              {/* <div className="line-col">
+                                <label style={{ fontSize: "15px" }}>
+                                  Taxable Value
                                 </label>
                                 <Field
                                   type="text"
@@ -537,7 +602,7 @@ const CreateEditPurchaseReturn = () => {
                               </div>
 
                               <div className="line-col">
-                                <label style={{ fontSize: "15px" }}>Cgst</label>
+                                <label style={{ fontSize: "15px" }}>CGST</label>
                                 <Field
                                   type="text"
                                   name={`lines.${index}.cgst`}
@@ -550,7 +615,7 @@ const CreateEditPurchaseReturn = () => {
                               </div>
 
                               <div className="line-col">
-                                <label style={{ fontSize: "15px" }}>Sgst</label>
+                                <label style={{ fontSize: "15px" }}>SGST</label>
                                 <Field
                                   type="text"
                                   name={`lines.${index}.sgst`}
@@ -563,7 +628,7 @@ const CreateEditPurchaseReturn = () => {
                               </div>
 
                               <div className="line-col">
-                                <label style={{ fontSize: "15px" }}>igst</label>
+                                <label style={{ fontSize: "15px" }}>IGST</label>
                                 <Field
                                   type="text"
                                   name={`lines.${index}.igst`}
@@ -573,7 +638,7 @@ const CreateEditPurchaseReturn = () => {
                                   className="error-text"
                                   component="div"
                                 />
-                              </div>
+                              </div> */}
                             </div>
 
                             <button type="button" onClick={() => remove(index)}>
@@ -590,10 +655,10 @@ const CreateEditPurchaseReturn = () => {
                             push({
                               product_id: "",
                               qty: "",
-                              free: "",
+                              free_qty: "",
                               purchase_rate: "",
-                              discount_type: "",
-                              discount: "",
+                              // discount_type: "",
+                              // discount: "",
                               hsn_code: "",
                               gst_rate_id: "",
                               batch_no: "",
