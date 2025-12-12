@@ -235,7 +235,7 @@ const CreateEditPurchaseReturn = () => {
               : "Create Purchase Return Bill"}
           </h3>
 
-          <div className="wg-box" style={{ width: "80%" }}>
+          <div className="wg-box" style={{ width: "100%" }}>
             <Formik
               initialValues={initialValues}
               enableReinitialize={true}

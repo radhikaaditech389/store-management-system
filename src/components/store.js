@@ -23,7 +23,7 @@ const Store = () => {
     });
   };
 const handleDeleteConfirm = (id) => {
-    if (window.confirm("Are you sure you want to delete this Purchase Bill?")) {
+    if (window.confirm("Are you sure you want to delete this store?")) {
       handleDelete(id);
     }
   };

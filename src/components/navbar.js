@@ -103,7 +103,7 @@ const Navbar = () => {
                   <li className="menu-item">
                     <Link to="/suppliers" className="menu-item-button">
                       <div className="icon">
-                        <i className="icon-bookmark"></i>
+                        <i className="icon-users"></i>
                       </div>
                       <div className="text">Supplier</div>
                     </Link>
@@ -135,10 +135,13 @@ const Navbar = () => {
                       <div className="text">Purchase Bill</div>
                     </Link>
                   </li>
-                     <li className="menu-item">
-                    <Link to="/purchase-return-bill" className="menu-item-button">
+                  <li className="menu-item">
+                    <Link
+                      to="/purchase-return-bill"
+                      className="menu-item-button"
+                    >
                       <div className="icon">
-                        <i className="icon-users"></i>
+                        <i className="icon-bookmark"></i>
                       </div>
                       <div className="text">Purchase Return Bill</div>
                     </Link>
