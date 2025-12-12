@@ -46,7 +46,7 @@ export default function ProductList({
 
   return (
     <div className="flex-1 p-6 overflow-y-auto bg-gray-50">
-      <div className="flex gap-6 mb-8">
+      <div className="flex gap-6 mb-40">
         <input
           ref={barcodeRef}
           type="text"

@@ -48,7 +48,7 @@ export default function LeftSidebar({
       <div className="flex-1 overflow-y-auto p-6 space-y-8">
         {/* CATEGORIES */}
         <div>
-          <h3 className="text-3xl font-semibold text-gray-700 mb-4">
+          <h3 className="text-3xl font-semibold text-gray-700 mb-20">
             Categories
           </h3>
           <div className="space-y-4">
@@ -71,8 +71,8 @@ export default function LeftSidebar({
         </div>
 
         {/* BRANDS */}
-        <div>
-          <h3 className="text-3xl font-semibold text-gray-700 mb-4">Brands</h3>
+        <div style={{marginTop:"35px"}}>
+          <h3 className="text-3xl font-semibold text-gray-700 mb-20">Brands</h3>
           <div className="space-y-4">
             {brands.map((b) => (
               <button
