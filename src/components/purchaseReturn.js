@@ -43,7 +43,7 @@ const PurchaseReturn = () => {
       sortable: true,
     },
     {
-      name: "Return date",
+      name: "Return Date",
       selector: (row) => row.return_date,
       sortable: true,
     },

@@ -79,7 +79,7 @@ const GstRate = () => {
       width: "100px",
     },
     {
-      name: "rate",
+      name: "Rate",
       selector: (row) => row.rate,
       sortable: true,
       width: "150px",
@@ -88,7 +88,7 @@ const GstRate = () => {
       name: "Description",
       selector: (row) => row.description,
       sortable: true,
-      width: "250px",
+      width: "180px",
     },
     {
       name: "Active",
