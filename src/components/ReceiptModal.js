@@ -2,7 +2,7 @@ import React, { forwardRef } from "react";
 
 const ReceiptModal = forwardRef(
   ({ isOpen, onClose, data, onPrint, cart_total, cart_detail }, ref) => {
-    
+
     if (!isOpen) return null;
 
     const user_data = JSON.parse(localStorage.getItem("user_detail"));
@@ -87,11 +87,11 @@ const styles = {
     padding: "20px",
     borderRadius: "8px",
     width: "395px",
-    height: "45vh",
+    height: "auto",
     boxShadow: "0px 3px 12px rgba(0,0,0,0.2)",
   },
   receiptBox: {
-    padding: "12px",
+    padding: "0px",
   },
   title: {
     textAlign: "center",
