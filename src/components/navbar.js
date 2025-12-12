@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link, useHistory } from "react-router-dom";
 import axios from "axios";
+import defaultLogo from "../assets/images/logo/logo.png";
 
 const BASE_URL = process.env.REACT_APP_API_BASE_URL;
 
@@ -31,7 +32,7 @@ const Navbar = () => {
 
   const logoUrl = store?.logo
     ? `http://127.0.0.1:8000/storage/${store.logo}`
-    : "images/logo/logo.png";
+    : defaultLogo;
 
   return (
     <div className="section-menu-left">
