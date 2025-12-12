@@ -22,7 +22,7 @@ const CreateEditStaff = () => {
     name: "",
     username: "",
     role: "",
-    pin: "1234",
+    pin: "",
     branch_ids: [], // VERY IMPORTANT
   });
 
@@ -36,23 +36,18 @@ const CreateEditStaff = () => {
         name: incomingStaff.name,
         username: incomingStaff.username,
         role: incomingStaff.role,
-        pin: incomingStaff.pin ? incomingStaff.pin : "1234",
+        pin: incomingStaff.pin,
         branch_ids: isEdit ? cleanedBranchIds : [], // EDIT → array, CREATE → empty
       });
     }
   };
   const fetchBranches = async () => {
     try {
-      // await axios.get(`${BASE_URL}/sanctum/csrf-cookie`, {
-      //   withCredentials: true,
-      // });
       const response = await axios.get(`${BASE_URL}/api/branches`, {
         headers: {
           Accept: "application/json",
           Authorization: `Bearer ${user_data.token}`,
-          // "X-XSRF-TOKEN": getCookie("XSRF-TOKEN"),
         },
-        // withCredentials: true,
       });
       setBranches(response.data.data);
     } catch (error) {
@@ -78,13 +73,9 @@ const CreateEditStaff = () => {
   // Submit (Create + Update)
   const handleSubmit = async (values, actions) => {
     try {
-      // await axios.get(`${BASE_URL}/sanctum/csrf-cookie`, {
-      //   withCredentials: true,
-      // });
 
       let url = "";
       let method = "";
-
       if (isEdit) {
         // UPDATE PRODUCT
         url = `${BASE_URL}/api/staff/${id}`;
@@ -102,9 +93,7 @@ const CreateEditStaff = () => {
         headers: {
           Accept: "application/json",
           Authorization: `Bearer ${user_data.token}`,
-          // "X-XSRF-TOKEN": getCookie("XSRF-TOKEN"),
         },
-        // withCredentials: true,
       });
 
       toast.success(
@@ -217,8 +206,8 @@ const CreateEditStaff = () => {
                       </div>
                     </fieldset>
                   </div>
-                  {values.role === "cashier" && (
-                    <fieldset>
+                  {values.role === "cashier" && !isEdit && (
+                    <fieldset className="col-md-5">
                       <div className="body-title">Pin *</div>
                       <div className="body-content mb-15">
                         <Field

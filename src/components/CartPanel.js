@@ -6,6 +6,7 @@ import { Link, useHistory } from "react-router-dom";
 
 export default function CartPanel({ cart, setCart, triggerRefresh }) {
   const [showPayment, setShowPayment] = useState(false);
+  localStorage.setItem("cart_detail",JSON.stringify(cart));
 
   const getPriceWithGST = (item) => {
     const price = parseFloat(item.selling_price);
@@ -21,7 +22,7 @@ export default function CartPanel({ cart, setCart, triggerRefresh }) {
     const { finalPrice } = getPriceWithGST(item);
     return acc + finalPrice * item.qty;
   }, 0);
-
+ localStorage.setItem("cart_total",total);
   const increaseQty = (item) => {
     setCart(cart.map((i) => (i.id === item.id ? { ...i, qty: i.qty + 1 } : i)));
   };
@@ -204,6 +205,7 @@ export default function CartPanel({ cart, setCart, triggerRefresh }) {
           total={total}
           onClose={() => setShowPayment(false)}
           onConfirm={handlePayment}
+          cart_data={cart}
         />
       )}
     </>

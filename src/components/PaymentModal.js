@@ -1,27 +1,24 @@
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useRef, useEffect } from "react";
 // import { QRCodeCanvas } from "qrcode.react";
 import QRCode from "react-qr-code";
+import ReceiptModal from "../components/ReceiptModal";
+import axios from "axios";
 
-export default function PaymentModal({ total, onClose, onConfirm }) {
+export default function PaymentModal({ total, onClose, onConfirm,cart_data }) {
+  // console.log("cart",cart_data);
+  const allIds = cart_data.map(item => item.id);
+// console.log(allIds); 
+  const receiptRef = useRef();
   const [method, setMethod] = useState("cash");
   const [cashGiven, setCashGiven] = useState("");
   const [paymentType, setPaymentType] = useState("cash");
-
+  const [payment, setPayment] = useState([]);
+  const [showReceipt, setShowReceipt] = useState(false);
   const parse = (v) => (parseFloat(v) ? parseFloat(v) : 0);
-
   const cashApplied = Math.min(parse(cashGiven), total);
   const remaining = total - cashApplied;
   const balanceReturn = Math.max(parse(cashGiven) - total, 0);
-
-  // const upiID = "store@upi"; // ← your UPI ID
-  // const upiURL = `upi://pay?pa=${encodeURIComponent(
-  //   upiID
-  // )}&pn=${encodeURIComponent("My Store")}&am=${total}&cu=INR`;
-  // const upiId = "store@upi";
-  // const name = "Your Name";
-  // const amount = 150;
-  // const note = "Payment";
-  // const upiString =`upi://pay?pa=${upiId}&pn=${name}&am=${amount}&tn=${note}&cu=INR`;
+  const user_data = JSON.parse(localStorage.getItem("user_detail"));
   const upiId = "store@upi";
   const name = "Your Name";
   const amount = 250;
@@ -69,8 +66,60 @@ export default function PaymentModal({ total, onClose, onConfirm }) {
 
     onConfirm(payments);
   };
+
   const handleMethod = (type) => {
     setPaymentType(type);
+  };
+
+  const sampleReceipt = {
+    orderId: "ORD1234",
+    customer: "John Doe",
+    date: new Date().toLocaleDateString(),
+    items: [
+      { name: "Paracetamol", qty: 2, price: 20 },
+      { name: "Vicks", qty: 1, price: 50 },
+    ],
+    total: 90,
+  };
+
+  useEffect(() => {
+    handlePrintData();
+  }, []);
+
+  const handlePrintData = async () => {
+    const values = {
+      id: allIds,
+    };
+
+    const response = await axios.post(
+      "http://127.0.0.1:8000/api/sales-bill/print-data",
+      values,
+      {
+        headers: {
+          Accept: "application/json",
+          Authorization: `Bearer ${user_data?.token}`,
+        },
+      }
+    );
+    setPayment(response.data.data);
+  };
+
+  const cart_detail = JSON.parse(localStorage.getItem("cart_detail"));
+  const cart_total = localStorage.getItem("cart_total");
+  // console.log("cart_data12",cart_detail);
+
+  // console.log("payment",payment);
+  const printReceipt = () => {
+    const printContent = receiptRef.current;
+    const win = window.open("", "", "width=300,height=600");
+    win.document.write("<html><head><title>Receipt</title>");
+    win.document.write("</head><body>");
+    win.document.write(printContent.innerHTML);
+    win.document.write("</body></html>");
+    win.document.close();
+    win.focus();
+    win.print();
+    win.close();
   };
 
   return (
@@ -78,92 +127,97 @@ export default function PaymentModal({ total, onClose, onConfirm }) {
       <div className="row bg-white rounded-3xl shadow-2xl w-full cart-max-width p-5">
         {/* LEFT SIDE – METHOD LIST */}
         <div className="col-md-7  flex flex-col gap-4">
-        <div className="col-span-1 flex flex-col gap-4">
-          <h2 className="text-xl font-bold mb-2" style={{ fontSize: "2.5rem" }}>
-            Payment Options
-          </h2>
-          <button
-            onClick={() => handleMethod("cash")}
-            className={`p-5 rounded-2xl text-left transition-all border ${
-              paymentType === "cash"
-                ? "bg-blue-600 text-white shadow-xl scale-105"
-                : "bg-gray-100 hover:bg-gray-200"
-            }`}
-            style={{width:"90%"}}
-          >
-            <div
-              className="text-xl font-semibold text-center mb-5"
-              style={{ fontSize: "25px" }}
+          <div className="col-span-1 flex flex-col gap-4">
+            <h2
+              className="text-xl font-bold mb-2"
+              style={{ fontSize: "2.5rem" }}
             >
-              Cash
-            </div>
-            <div className="text-sm opacity-70 text-center">
-              Take cash from customer
-            </div>
-          </button>
-
-          {/* UPI QR */}
-          <button
-            onClick={() => handleMethod("online")}
-            className={`p-5 rounded-2xl text-center transition-all border ${
-              paymentType === "online"
-                ? "bg-blue-600 text-white shadow-xl scale-105"
-                : "bg-gray-100 hover:bg-gray-200"
-            }`}
-            style={{ marginBottom: "20px",width:"90%"}}
-          >
-            <div
-              className="text-xl font-semibold text-center mb-5"
-              style={{ fontSize: "25px"}}
+              Payment Options
+            </h2>
+            <button
+              onClick={() => handleMethod("cash")}
+              className={`p-5 rounded-2xl text-left transition-all border ${
+                paymentType === "cash"
+                  ? "bg-blue-600 text-white shadow-xl scale-105"
+                  : "bg-gray-100 hover:bg-gray-200"
+              }`}
+              style={{ width: "90%" }}
             >
-              Online
-            </div>
-            <div className="text-sm opacity-70 text-center">Scan Only</div>
-          </button>
-          
-        </div>
+              <div
+                className="text-xl font-semibold text-center mb-5"
+                style={{ fontSize: "25px" }}
+              >
+                Cash
+              </div>
+              <div className="text-sm opacity-70 text-center">
+                Take cash from customer
+              </div>
+            </button>
 
-        {/* MIDDLE AREA */}
-        <div className="col-span-1 space-y-6">
-          <h2 className="text-xl font-bold mb-20" style={{ fontSize: "2.4rem" }}>
-            Enter Amount
-          </h2>
-
-          {method === "cash" && (
-            <div>
-              <input
-                className="payment-cash p-5 text-3xl text-center border rounded-xl shadow mb-20"
-                value={cashGiven}
-                onChange={(e) => setCashGiven(e.target.value)}
-                placeholder="Cash Received"
-              />
-            </div>
-          )}
-
-          {method === "upi" && (
-            <div>
-              {isMobile ? (
-                <button
-                  onClick={handlePayment}
-                  style={{ padding: "10px 20px" }}
-                >
-                  Pay ₹{amount} via UPI
-                </button>
-              ) : (
-                <div style={{ textAlign: "center" }}>
-                  <h3>Scan & Pay</h3>
-                  <QRCode value={upiLink} size={200} />
-                </div>
-              )}
-            </div>
-          )}
-           <div style={{ fontSize: "45px", marginBottom: "10px" }}>
-            <strong>Paid: </strong> ₹{cashApplied.toFixed(2)}
+            {/* UPI QR */}
+            <button
+              onClick={() => handleMethod("online")}
+              className={`p-5 rounded-2xl text-center transition-all border ${
+                paymentType === "online"
+                  ? "bg-blue-600 text-white shadow-xl scale-105"
+                  : "bg-gray-100 hover:bg-gray-200"
+              }`}
+              style={{ marginBottom: "20px", width: "90%" }}
+            >
+              <div
+                className="text-xl font-semibold text-center mb-5"
+                style={{ fontSize: "25px" }}
+              >
+                Online
+              </div>
+              <div className="text-sm opacity-70 text-center">Scan Only</div>
+            </button>
           </div>
-          <div style={{ fontSize: "45px", marginBottom: "20px" }}>
-            <strong>Change: </strong> ₹{balanceReturn.toFixed(2)}
+
+          {/* MIDDLE AREA */}
+          <div className="col-span-1 space-y-6">
+            <h2
+              className="text-xl font-bold mb-20"
+              style={{ fontSize: "2.4rem" }}
+            >
+              Enter Amount
+            </h2>
+
+            {method === "cash" && (
+              <div>
+                <input
+                  className="payment-cash p-5 text-3xl text-center border rounded-xl shadow mb-20"
+                  value={cashGiven}
+                  onChange={(e) => setCashGiven(e.target.value)}
+                  placeholder="Cash Received"
+                />
+              </div>
+            )}
+
+            {method === "upi" && (
+              <div>
+                {isMobile ? (
+                  <button
+                    onClick={handlePayment}
+                    style={{ padding: "10px 20px" }}
+                  >
+                    Pay ₹{amount} via UPI
+                  </button>
+                ) : (
+                  <div style={{ textAlign: "center" }}>
+                    <h3>Scan & Pay</h3>
+                    <QRCode value={upiLink} size={200} />
+                  </div>
+                )}
+              </div>
+            )}
+            <div style={{ fontSize: "45px", marginBottom: "10px" }}>
+              <strong>Paid: </strong> ₹{cashApplied.toFixed(2)}
+            </div>
+            <div style={{ fontSize: "45px", marginBottom: "20px" }}>
+              <strong>Change: </strong> ₹{balanceReturn.toFixed(2)}
+            </div>
           </div>
-        </div>
         </div>
 
         {/* KEYPAD (only cash mode) */}
@@ -197,8 +251,16 @@ export default function PaymentModal({ total, onClose, onConfirm }) {
                 <button
                   onClick={() => keypad("C")}
                   className="col-span-3 p-5 bg-red-500 text-white rounded-xl text-xl shadow hover:bg-red-600"
+                  style={{fontSize:"20px"}}
                 >
                   Clear
+                </button>
+                <button
+                  onClick={() => setShowReceipt(true)}
+                  className="col-span-3 p-5 bg-red-500 text-white rounded-xl text-xl shadow hover:bg-red-600"
+                  style={{ background: "#3F51B5", color: "#fff",fontSize:"20px" }}
+                >
+                  Print Receipt
                 </button>
               </div>
             </div>
@@ -218,7 +280,7 @@ export default function PaymentModal({ total, onClose, onConfirm }) {
             <button
               onClick={onClose}
               className="bg-gray-300 rounded-xl font-semibold"
-              style={{ width: "100%", fontSize: "16px",padding:"14px 30px" }}
+              style={{ width: "100%", fontSize: "16px", padding: "14px 30px" }}
             >
               Cancel
             </button>
@@ -231,12 +293,21 @@ export default function PaymentModal({ total, onClose, onConfirm }) {
                   ? "bg-gray-400 cursor-not-allowed"
                   : "bg-green-600 hover:bg-green-700"
               }`}
-              style={{ width: "100%", fontSize: "16px",padding:"14px 30px" }}
+              style={{ width: "100%", fontSize: "16px", padding: "14px 30px" }}
             >
               Confirm
             </button>
           </div>
         </div>
+        <ReceiptModal
+          isOpen={showReceipt}
+          onClose={() => setShowReceipt(false)}
+          data={sampleReceipt}
+          ref={receiptRef}
+          cart_total={cart_total}
+          cart_detail ={cart_detail}
+          onPrint={printReceipt}
+        />
       </div>
     </div>
   );

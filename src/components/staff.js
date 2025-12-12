@@ -88,13 +88,13 @@ const Staff = () => {
        width:"250px"
     },
     {
-      name: "username",
+      name: "Username",
       selector: (row) => row.username,
       sortable: true,
       width:"250px"
     },
     {
-      name: "role",
+      name: "Role",
       selector: (row) => row.role,
       sortable: true,
       width:"250px"

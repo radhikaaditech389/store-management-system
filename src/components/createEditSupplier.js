@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { useParams, useLocation, useHistory } from "react-router-dom";
+import { useParams, useHistory } from "react-router-dom";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
-import { getCookie } from "../utils/cookies";
 import Layout from "./layout";
 import { toast } from "react-toastify";
 
@@ -28,8 +27,6 @@ const CreateEditSupplier = () => {
     state: "",
   });
 
-  const [categories, setCategories] = useState([]);
-
   // If editing → set initial values
   const loadSupplierData = () => {
     if (incomingSupplier) {
@@ -44,28 +41,8 @@ const CreateEditSupplier = () => {
     }
   };
 
-  //   const fetchCategory = async () => {
-  //     try {
-  //       await axios.get(`${BASE_URL}/sanctum/csrf-cookie`, {
-  //         withCredentials: true,
-  //       });
-  //       const response = await axios.get(`${BASE_URL}/categories`, {
-  //         headers: {
-  //           Accept: "application/json",
-  //           Authorization: `Bearer ${user_data.token}`,
-  //           "X-XSRF-TOKEN": getCookie("XSRF-TOKEN"),
-  //         },
-  //         withCredentials: true,
-  //       });
-  //       setCategories(response.data.categories);
-  //     } catch (error) {
-  //       console.error("Error fetching categories:", error);
-  //     }
-  //   };
-
   useEffect(() => {
     loadSupplierData();
-    // fetchCategory();
   }, []);
 
   // Validation Schema
@@ -80,9 +57,6 @@ const CreateEditSupplier = () => {
   // Submit (Create + Update)
   const handleSubmit = async (values) => {
     try {
-      // await axios.get(`${BASE_URL}/sanctum/csrf-cookie`, {
-      //   withCredentials: true,
-      // });
 
       let url = "";
       let method = "";
@@ -103,9 +77,7 @@ const CreateEditSupplier = () => {
         headers: {
           Accept: "application/json",
           Authorization: `Bearer ${user_data.token}`,
-          // "X-XSRF-TOKEN": getCookie("XSRF-TOKEN"),
         },
-        // withCredentials: true,
       });
       toast.success(isEdit ? "Suppliers Updated!" : "Suppliers Created!");
       history.push("/suppliers");
@@ -131,7 +103,6 @@ const CreateEditSupplier = () => {
             >
               {() => (
                 <Form className="wg-form" >
-                  {/* Name */}
                   <div className="row mb-12">
                   <fieldset className="col-md-6">
                     <div className="body-title">Name *</div>

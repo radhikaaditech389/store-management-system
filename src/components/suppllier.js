@@ -53,12 +53,12 @@ const handleDeleteConfirm = (id) => {
       sortable: true,
     },
     {
-      name: "Gstin",
+      name: "GstIn",
       selector: (row) => row.gstin,
       sortable: true,
     },
     {
-      name: "contact",
+      name: "Contact",
       selector: (row) => row.contact,
       sortable: true,
     },

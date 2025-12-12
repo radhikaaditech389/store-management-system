@@ -66,7 +66,7 @@ const PurchaseBill = () => {
       sortable: true,
     },
     {
-      name: "taxableValue",
+      name: "TaxableValue",
       selector: (row) => row.taxable_value,
       sortable: true,
     },
