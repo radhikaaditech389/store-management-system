@@ -39,7 +39,7 @@ const Branch = () => {
     localStorage.setItem("branch_detail", JSON.stringify(row));
   };
  const handleDeleteConfirm = (id) => {
-    if (window.confirm("Are you sure you want to delete this Brand?")) {
+    if (window.confirm("Are you sure you want to delete this branch?")) {
       handleDelete(id);
     }
   };

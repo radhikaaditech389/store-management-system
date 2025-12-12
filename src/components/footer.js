@@ -3,7 +3,16 @@ import { Link } from "react-router-dom";
 const Footer = () => {
   return (
     <div className="bottom-page">
-      <div className="body-text">2025 Store Management System | Design & Developed by Adi Tech</div>
+      <div className="body-text">
+        © 2025 All rights reserved. | Design & Developed by{" "}
+        <a
+          href="https://adicreations.tech/"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Adi Tech
+        </a>
+      </div>
     </div>
   );
 };

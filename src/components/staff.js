@@ -35,7 +35,7 @@ const Staff = () => {
     localStorage.setItem("staff_detail", JSON.stringify(row));
   };
  const handleDeleteConfirm = (id) => {
-    if (window.confirm("Are you sure you want to delete this Purchase Bill?")) {
+    if (window.confirm("Are you sure you want to delete this staff?")) {
       handleDelete(id);
     }
   };
