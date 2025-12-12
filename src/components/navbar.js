@@ -1,9 +1,37 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link, useHistory } from "react-router-dom";
+import axios from "axios";
+
+const BASE_URL = process.env.REACT_APP_API_BASE_URL;
 
 const Navbar = () => {
   const user_detail = JSON.parse(localStorage.getItem("user_detail"));
   const role = user_detail?.user?.role;
+  const store_id = user_detail?.user?.store_id;
+
+  const [store, setStore] = useState(null);
+
+  const fetchStore = async () => {
+    try {
+      const response = await axios.get(`${BASE_URL}/api/stores/${store_id}`, {
+        headers: {
+          Accept: "application/json",
+          Authorization: `Bearer ${user_detail.token}`,
+        },
+      });
+      setStore(response.data.data);
+    } catch (error) {
+      console.error("Error fetching store details:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchStore();
+  }, [store_id]);
+
+  const logoUrl = store?.logo
+    ? `http://127.0.0.1:8000/storage/${store.logo}`
+    : "images/logo/logo.png";
 
   return (
     <div className="section-menu-left">
@@ -12,10 +40,11 @@ const Navbar = () => {
           <img
             className=""
             id="logo_header"
-            alt=""
-            src="images/logo/logo.png"
-            data-light="images/logo/logo.png"
-            data-dark="images/logo/logo-dark.png"
+            alt="Store Logo"
+            src={logoUrl}
+            // data-light="images/logo/logo.png"
+            // data-dark="images/logo/logo-dark.png"
+            style={{ height: "52px", marginLeft: "20px", objectFit: "contain" }}
           />
         </Link>
         <div className="button-show-hide">

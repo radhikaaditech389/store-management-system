@@ -73,7 +73,7 @@ const handleDeleteConfirm = (id) => {
           <img
             src={`http://localhost:8000/storage/${row.logo}`}
             alt="Store Logo"
-            className="w-2 h-2 rounded-full object-cover mt-2"
+            className="w-40 h-15 object-cover mt-2"
           />
         ) : null,
     },
