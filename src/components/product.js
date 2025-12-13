@@ -59,42 +59,42 @@ const Product = () => {
     },
     {
       name: "Name",
-      selector: (row) => row.name,
+      selector: (row) => row?.name,
       sortable: true,
     },
     {
       name: "Brand Name",
-      selector: (row) => row.brand.name,
+      selector: (row) => row?.brand?.name,
       sortable: true,
     },
     {
       name: "Category Name",
-      selector: (row) => row.category.name,
+      selector: (row) => row?.category?.name,
       sortable: true,
     },
     {
       name: "HSN Code",
-      selector: (row) => row.hsn_code,
+      selector: (row) => row?.hsn_code,
       sortable: true,
     },
     {
       name: "GST",
-      selector: (row) => row.gst_rate.rate,
+      selector: (row) => row?.gst_rate.rate,
       sortable: true,
     },
     {
       name: "MRP",
-      selector: (row) => row.mrp,
+      selector: (row) => row?.mrp,
       sortable: true,
     },
     {
       name: "Selling Price",
-      selector: (row) => row.selling_price,
+      selector: (row) => row?.selling_price,
       sortable: true,
     },
     {
       name: "Cost Price",
-      selector: (row) => row.cost_price,
+      selector: (row) => row?.cost_price,
       sortable: true,
     },
     {
@@ -103,7 +103,7 @@ const Product = () => {
         <div className="list-icon-function">
           <div className="item edit">
             <Link
-              to={`/product/edit/${row.id}`}
+              to={`/product/edit/${row?.id}`}
               onClick={() => handleEdit(row)}
             >
               <i className="icon-edit-3"></i>

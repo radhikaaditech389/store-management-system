@@ -76,7 +76,6 @@ function App() {
           />
           <ProtectedRoute exact path="/store" component={Store} />
           <ProtectedRoute exact path="/stores/view/:id" component={ViewStore} />
-          {/* <ProtectedRoute exact path="/create-store" component={CreateStore} /> */}
           <ProtectedRoute
             exact
             path="/create-store/:id?"

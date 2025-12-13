@@ -7,6 +7,7 @@ import { getCookie } from "../utils/cookies";
 const Home = () => {
   const BASE_URL = process.env.REACT_APP_API_BASE_URL;
   const [categories, setCategories] = useState([]);
+  const [stores, setStores] = useState([]);
   const [brands, setBrands] = useState([]);
   const [branchs, setBranchs] = useState([]);
   const [supplierBill, setSupplierBill] = useState([]);
@@ -18,6 +19,21 @@ const Home = () => {
   const [purchaseReturnBill, setPurchaseReturnBill] = useState([]);
   const user_data = JSON.parse(localStorage.getItem("user_detail"));
   const role = user_data?.user?.role;
+
+    const fetchStore = async () => {
+    try {
+      const response = await axios.get(`${BASE_URL}/api/stores`, {
+        headers: {
+          Accept: "application/json",
+          Authorization: `Bearer ${user_data.token}`,
+        },
+      });
+      // console.log("store_data",response.data);
+      setStores(response.data.data);
+    } catch (error) {
+      console.error("Error fetching categories:", error);
+    }
+  };
 
   const fetchCategory = async () => {
     try {
@@ -150,6 +166,7 @@ const Home = () => {
     }
   };
   useEffect(() => {
+    fetchStore()
     fetchCategory();
     fetchBrand();
     fetchSupplierBill();
@@ -170,6 +187,45 @@ const Home = () => {
           <div className="main-content-wrap">
             <div className="tf-section-4 mb-30">
               {/* <!-- chart-default --> */}
+               {role === "superadmin" && (
+                <>
+                  <div className="wg-chart-default">
+                    <Link
+                      to="/store"
+                      style={{ textDecoration: "none", color: "inherit" }}
+                    >
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center gap14">
+                          <div className="image type-white">
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              width="48"
+                              height="52"
+                              viewBox="0 0 48 52"
+                              fill="none"
+                            >
+                              <path
+                                d="M19.1094 2.12943C22.2034 0.343099 26.0154 0.343099 29.1094 2.12943L42.4921 9.85592C45.5861 11.6423 47.4921 14.9435 47.4921 18.5162V33.9692C47.4921 37.5418 45.5861 40.8431 42.4921 42.6294L29.1094 50.3559C26.0154 52.1423 22.2034 52.1423 19.1094 50.3559L5.72669 42.6294C2.63268 40.8431 0.726688 37.5418 0.726688 33.9692V18.5162C0.726688 14.9435 2.63268 11.6423 5.72669 9.85592L19.1094 2.12943Z"
+                                fill="#22C55E"
+                              />
+                            </svg>
+                            <i className="icon-layers"></i>
+                          </div>
+                          <div>
+                            <div className="body-text mb-2">
+                              Total Store
+                            </div>
+                            <h4>{stores.length}</h4>
+                          </div>
+                        </div>
+                      </div>
+                    </Link>
+                    <div className="wrap-chart">
+                      <div id="line-chart-1"></div>
+                    </div>
+                  </div>
+                  </>
+               )}
               {role === "manager" && (
                 <>
                   <div className="wg-chart-default">

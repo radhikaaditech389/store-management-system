@@ -5,8 +5,12 @@ import { toast } from "react-toastify";
 import { Link, useHistory } from "react-router-dom";
 
 export default function CartPanel({ cart, setCart, triggerRefresh }) {
+  const history = useHistory();
   const [showPayment, setShowPayment] = useState(false);
   localStorage.setItem("cart_detail",JSON.stringify(cart));
+   const user_data = JSON.parse(localStorage.getItem("user_detail"));
+    const role = user_data?.user?.role;
+    console.log("role",role);
 
   const getPriceWithGST = (item) => {
     const price = parseFloat(item.selling_price);
@@ -58,17 +62,37 @@ export default function CartPanel({ cart, setCart, triggerRefresh }) {
     }
   };
 
+   const handleLogout = () => {
+    document.cookie.split(";").forEach((c) => {
+      document.cookie = c
+        .replace(/^ +/, "")
+        .replace(/=.*/, "=;expires=Thu, 01 Jan 1970 00:00:00 UTC;path=/");
+    });
+
+    localStorage.clear();
+    sessionStorage.clear();
+
+    history.push("/cashier_login");
+  };
+
   return (
     <>
       <div className="w-1/3 bg-gray-50 border-l shadow-2xl p-10 flex flex-col">
         <div className="flex items-center justify-between mb-10">
           <h2 className="font-extrabold text-5xl">Cart</h2>
-
+          {role != "cashier" &&
           <Link
             to="/dashboard"
             className="px-8 py-4 text-2xl rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-semibold shadow-md transition"
           >
             Dashboard
+          </Link>}
+          <Link
+            to="#"
+            className="px-8 py-4 text-2xl rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-semibold shadow-md transition"
+             onClick={handleLogout}
+          >
+            Logout
           </Link>
         </div>
 

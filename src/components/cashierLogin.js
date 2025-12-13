@@ -51,9 +51,11 @@ const CashierLogin = () => {
         },
         withCredentials: true,
       });
+      const user_detail = response.data;
+      localStorage.setItem("user_detail", JSON.stringify(user_detail));
       if (response.data) {
-        history.push("/dashboard");
-        toast.success("Cashier Login Successfully");
+        toast.success(user_detail.message || "Login successfull!");
+        history.push("/pos");
       }
     } catch (err) {
       console.error("LOGIN ERROR:", err);
@@ -64,7 +66,7 @@ const CashierLogin = () => {
     <div className="wrap-login-page">
       <div className="flex-grow flex flex-column justify-center gap30">
         <div className="login-box">
-          <h3>Cashier Login to account</h3>
+          <h3>Cashier Login Account</h3>
           <form
             className="form-login flex flex-column gap24"
             onSubmit={handleSubmit}
@@ -94,11 +96,11 @@ const CashierLogin = () => {
                 Register Now{" "}
               </Link>
             </div>
-              <div className="body-text text-center">
+            <div className="body-text text-center">
               Please Login here
               <Link to="/login" className="body-text tf-color">
                 {" "}
-                Login Now{" "}
+                Manager Login Now{" "}
               </Link>
             </div>
           </form>
