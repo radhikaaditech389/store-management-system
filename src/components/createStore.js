@@ -1,6 +1,6 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Layout from "./layout";
-import { Link, useLocation, useHistory } from "react-router-dom";
+import { Link, useLocation, useHistory, useParams } from "react-router-dom";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { Formik, Form, Field, ErrorMessage } from "formik";
@@ -9,11 +9,34 @@ import * as Yup from "yup";
 const CreateStore = () => {
   const location = useLocation();
   const history = useHistory();
-  const editingData = location.state?.storeData || null;
+  const { id } = useParams();
+
+  const isEdit = Boolean(id);
+
+  useEffect(() => {
+    if (isEdit && !editingData) {
+      fetchStore();
+    }
+  }, [id]);
+
+  const [editingData, setEditingData] = useState(
+    location.state?.storeData || null
+  );
+
+  const fetchStore = async () => {
+    const user_data = JSON.parse(localStorage.getItem("user_detail"));
+
+    const res = await axios.get(`${BASE_URL}/api/stores/${id}`, {
+      headers: {
+        Authorization: `Bearer ${user_data?.token}`,
+      },
+    });
+
+    setEditingData(res.data.data);
+  };
 
   const BASE_URL = process.env.REACT_APP_API_BASE_URL;
 
-  // ---------- VALIDATION SCHEMA ----------
   const storeSchema = Yup.object().shape({
     name: Yup.string().required("Store name is required"),
     address: Yup.string().required("Address is required"),
@@ -25,22 +48,22 @@ const CreateStore = () => {
       "Contact person name is required"
     ),
     gstin: Yup.string().required("GSTIN is required"),
-    logo: Yup.mixed().required("Logo is required"),
-    logo: Yup.mixed()
-      .required("Logo is required")
-      .test(
-        "fileType",
-        "The logo must be an image (jpeg, png, jpg)",
-        (value) => {
-          return (
-            value &&
-            ["image/jpeg", "image/png", "image/jpg"].includes(value.type)
-          );
-        }
-      ),
+    logo: Yup.mixed().when([], {
+      is: () => !isEdit,
+      then: () =>
+        Yup.mixed()
+          .required("Logo is required")
+          .test(
+            "fileType",
+            "The logo must be an image (jpeg, png, jpg)",
+            (value) =>
+              value &&
+              ["image/jpeg", "image/png", "image/jpg"].includes(value.type)
+          ),
+      otherwise: () => Yup.mixed().nullable(),
+    }),
   });
 
-  // ---------- INITIAL VALUES ----------
   const initialValues = {
     name: editingData?.name || "",
     address: editingData?.address || "",
@@ -48,17 +71,16 @@ const CreateStore = () => {
     phone: editingData?.phone || "",
     contact_person_name: editingData?.contact_person_name || "",
     gstin: editingData?.gstin || "",
-    logo: editingData?.logo || "",
+    logo: editingData?.logo || null,
     tagline: editingData?.tagline || "",
   };
 
-  // ---------- SUBMIT HANDLER ----------
   const handleSubmit = async (values, { setSubmitting }) => {
     const user_data = JSON.parse(localStorage.getItem("user_detail"));
 
     try {
-      // Prepare FormData
       const formData = new FormData();
+
       formData.append("name", values.name);
       formData.append("address", values.address);
       formData.append("state", values.state);
@@ -67,29 +89,26 @@ const CreateStore = () => {
       formData.append("gstin", values.gstin);
       formData.append("tagline", values.tagline || "");
 
-      if (values.logo) {
-        formData.append("logo", values.logo); // append the file
+      if (values.logo instanceof File) {
+        formData.append("logo", values.logo);
       }
 
       let response;
-      if (editingData) {
-        // UPDATE STORE
+
+      if (isEdit) {
         response = await axios.post(
-          `${BASE_URL}/api/stores/${editingData.id}?_method=PUT`,
+          `${BASE_URL}/api/stores/${id}?_method=PUT`,
           formData,
           {
             headers: {
               Authorization: `Bearer ${user_data?.token}`,
-              "Content-Type": "multipart/form-data",
             },
           }
         );
       } else {
-        // CREATE STORE
         response = await axios.post(`${BASE_URL}/api/stores`, formData, {
           headers: {
             Authorization: `Bearer ${user_data?.token}`,
-            "Content-Type": "multipart/form-data",
           },
         });
       }
@@ -151,7 +170,7 @@ const CreateStore = () => {
                         type="text"
                         name="name"
                         placeholder="Enter store name"
-                        readOnly={!!editingData}
+                        readOnly={isEdit}
                       />
                       <ErrorMessage
                         name="name"
@@ -344,12 +363,15 @@ const CreateStore = () => {
                       />
 
                       {/* Preview */}
-                      {values.logo && (
+                      {values.logo !== null && (
                         <img
                           src={
-                            typeof values.logo === "object"
-                              ? URL.createObjectURL(values.logo) // newly selected file
-                              : `http://localhost:8000/storage/${values.logo}` // existing logo from backend
+                            values.logo instanceof File
+                              ? URL.createObjectURL(values.logo)
+                              : `${process.env.REACT_APP_API_BASE_URL.replace(
+                                  "/api",
+                                  ""
+                                )}/storage/${values.logo}`
                           }
                           alt="Logo Preview"
                           className="object-cover mt-2"

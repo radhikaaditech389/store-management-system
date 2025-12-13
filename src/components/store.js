@@ -17,12 +17,11 @@ const Store = () => {
   const user_data = JSON.parse(localStorage.getItem("user_detail"));
 
   const handleEdit = (row) => {
-    history.push({
-      pathname: "/create-store",
-      state: { storeData: row },
+    history.push(`/create-store/${row.id}`, {
+      storeData: row,
     });
   };
-const handleDeleteConfirm = (id) => {
+  const handleDeleteConfirm = (id) => {
     if (window.confirm("Are you sure you want to delete this store?")) {
       handleDelete(id);
     }
@@ -125,7 +124,10 @@ const handleDeleteConfirm = (id) => {
           <div className="item edit" onClick={() => handleEdit(row)}>
             <i className="icon-edit-3"></i>
           </div>
-          <div className="item trash" onClick={() => handleDeleteConfirm(row.id)}>
+          <div
+            className="item trash"
+            onClick={() => handleDeleteConfirm(row.id)}
+          >
             <i className="icon-trash-2"></i>
           </div>
         </div>

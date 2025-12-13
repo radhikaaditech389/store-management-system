@@ -76,7 +76,12 @@ function App() {
           />
           <ProtectedRoute exact path="/store" component={Store} />
           <ProtectedRoute exact path="/stores/view/:id" component={ViewStore} />
-          <ProtectedRoute exact path="/create-store" component={CreateStore} />
+          {/* <ProtectedRoute exact path="/create-store" component={CreateStore} /> */}
+          <ProtectedRoute
+            exact
+            path="/create-store/:id?"
+            component={CreateStore}
+          />
           <ProtectedRoute exact path="/branch" component={Branch} />
           <ProtectedRoute
             exact
@@ -97,7 +102,7 @@ function App() {
             path="/category/edit/:id"
             component={CreateEditCategory}
           />
-            <ProtectedRoute
+          <ProtectedRoute
             exact
             path="/purchase-return-bill"
             component={PurchaseReturn}
@@ -107,7 +112,7 @@ function App() {
             path="/create-purchase-return-bill"
             component={CreateEditPurchaseReturn}
           />
-            <ProtectedRoute
+          <ProtectedRoute
             exact
             path="/purchase-return-bill/edit/:id"
             component={CreateEditPurchaseReturn}
