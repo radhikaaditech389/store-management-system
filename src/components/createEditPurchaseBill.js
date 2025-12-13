@@ -14,6 +14,7 @@ const CreateEditPurchaseBill = () => {
   const [branches, setBranches] = useState([]);
   const [suppliers, setSupplierBill] = useState([]);
   const [products, setProducts] = useState([]);
+  const [gstRates, setGstRates] = useState([]);
 
   const user_data = JSON.parse(localStorage.getItem("user_detail"));
   const store_purchase_bill = localStorage.getItem("purchase_bills_create");
@@ -131,8 +132,16 @@ const CreateEditPurchaseBill = () => {
       console.error("Error fetching categories:", error);
     }
   };
+  const fetchGstRates = async () => {
+    const response = await axios.get(`${BASE_URL}/api/gst-rates`, {
+      headers: { Authorization: `Bearer ${user_data.token}` },
+    });
+    setGstRates(response.data.gstRates);
+  };
+
   useEffect(() => {
     fetchProduct();
+    fetchGstRates();
   }, []);
 
   // Validation Schema
@@ -184,7 +193,6 @@ const CreateEditPurchaseBill = () => {
 
   const handleSubmit = async (values, actions) => {
     try {
-
       let response;
 
       if (isEdit) {
@@ -223,7 +231,7 @@ const CreateEditPurchaseBill = () => {
             {isEdit ? "Edit Purchase Bill" : "Create Purchase Bill"}
           </h3>
 
-          <div className="wg-box" style={{width:"100%"}}>
+          <div className="wg-box" style={{ width: "100%" }}>
             <Formik
               initialValues={initialValues}
               enableReinitialize={true}
@@ -442,10 +450,15 @@ const CreateEditPurchaseBill = () => {
                                   name={`lines.${index}.gst_rate_id`}
                                 >
                                   <option value="">Select</option>
-                                  <option value="1">5%</option>
-                                  <option value="2">12%</option>
-                                  <option value="3">18%</option>
-                                  <option value="4">28%</option>
+                                  {gstRates.map((element) => {
+                                    return (
+                                      <>
+                                        <option value={element.id} key="1">
+                                          {element.rate}
+                                        </option>
+                                      </>
+                                    );
+                                  })}
                                 </Field>
                                 <ErrorMessage
                                   name={`lines.${index}.gst_rate_id`}
@@ -494,7 +507,7 @@ const CreateEditPurchaseBill = () => {
                         <button
                           type="button"
                           className="mt-12"
-                          style={{marginRight:"12px"}}
+                          style={{ marginRight: "12px" }}
                           onClick={() =>
                             push({
                               product_id: "",
@@ -515,7 +528,9 @@ const CreateEditPurchaseBill = () => {
                       </>
                     )}
                   </FieldArray>
-                  <button type="submit">{isEdit ? "Update Bill":"Save Bill"}</button>
+                  <button type="submit">
+                    {isEdit ? "Update Bill" : "Save Bill"}
+                  </button>
                 </Form>
               )}
             </Formik>
