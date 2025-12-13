@@ -91,7 +91,7 @@ const styles = {
     boxShadow: "0px 3px 12px rgba(0,0,0,0.2)",
   },
   receiptBox: {
-    padding: "0px",
+    padding: "15px",
   },
   title: {
     textAlign: "center",

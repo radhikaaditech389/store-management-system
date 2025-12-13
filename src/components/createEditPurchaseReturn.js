@@ -530,21 +530,6 @@ const CreateEditPurchaseReturn = () => {
 
                               <div className="line-col">
                                 <label style={{ fontSize: "15px" }}>
-                                  HSN Code
-                                </label>
-                                <Field
-                                  type="text"
-                                  name={`lines.${index}.hsn_code`}
-                                />
-                                <ErrorMessage
-                                  name={`lines.${index}.hsn_code`}
-                                  className="error-text"
-                                  component="div"
-                                />
-                              </div>
-
-                              <div className="line-col">
-                                <label style={{ fontSize: "15px" }}>
                                   Purchase Rate
                                 </label>
                                 <Field

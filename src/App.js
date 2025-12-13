@@ -60,7 +60,7 @@ function App() {
         <Switch>
           <Route exact path="/" component={Login} />
           <Route exact path="/register" component={Register} />
-          <Route exact path="/casier_login" component={CashierLogin} />
+          <Route exact path="/cashier_login" component={CashierLogin} />
 
           <ProtectedRoute exact path="/pos" component={POS} />
           <ProtectedRoute exact path="/dashboard" component={Home} />

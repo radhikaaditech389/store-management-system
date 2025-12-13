@@ -38,15 +38,7 @@ const Navbar = () => {
     <div className="section-menu-left">
       <div className="box-logo">
         <Link to="/dashboard" id="site-logo-inner">
-          <img
-            className=""
-            id="logo_header"
-            alt="Store Logo"
-            src={logoUrl}
-            // data-light="images/logo/logo.png"
-            // data-dark="images/logo/logo-dark.png"
-            style={{ height: "52px", marginLeft: "20px", objectFit: "contain" }}
-          />
+          <p className="box-logo-p">Store</p>
         </Link>
         <div className="button-show-hide">
           <i className="icon-menu-left"></i>

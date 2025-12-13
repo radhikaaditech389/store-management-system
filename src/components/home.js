@@ -201,10 +201,6 @@ const Home = () => {
                             <h4>{categories.length}</h4>
                           </div>
                         </div>
-                        <div className="box-icon-trending up">
-                          <i className="icon-trending-up"></i>
-                          <div className="body-title number">1.56%</div>
-                        </div>
                       </div>
                     </Link>
                     <div className="wrap-chart">
@@ -239,10 +235,6 @@ const Home = () => {
                             <div className="body-text mb-2">Total Brands</div>
                             <h4>{brands.length}</h4>
                           </div>
-                        </div>
-                        <div className="box-icon-trending down">
-                          <i className="icon-trending-down"></i>
-                          <div className="body-title number">1.56%</div>
                         </div>
                       </div>
                     </Link>
@@ -281,10 +273,6 @@ const Home = () => {
                             <h4>{supplierBill.length}</h4>
                           </div>
                         </div>
-                        <div className="box-icon-trending">
-                          <i className="icon-bookmark"></i>
-                          <div className="body-title number">0.00%</div>
-                        </div>
                       </div>
                     </Link>
                     <div className="wrap-chart">
@@ -319,10 +307,6 @@ const Home = () => {
                             </div>
                             <h4>{gstRates.length}</h4>
                           </div>
-                        </div>
-                        <div className="box-icon-trending">
-                          <i className="icon-bookmark"></i>
-                          <div className="body-title number">0.00%</div>
                         </div>
                       </div>
                     </Link>
@@ -359,10 +343,6 @@ const Home = () => {
                             <h4>{products.length}</h4>
                           </div>
                         </div>
-                        <div className="box-icon-trending up">
-                          <i className="icon-cast"></i>
-                          <div className="body-title number">1.56%</div>
-                        </div>
                       </div>
                     </Link>
                     <div className="wrap-chart">
@@ -397,10 +377,6 @@ const Home = () => {
                             </div>
                             <h4>{purchaseBills.length}</h4>
                           </div>
-                        </div>
-                        <div className="box-icon-trending up">
-                          <i className="icon-cast"></i>
-                          <div className="body-title number">1.56%</div>
                         </div>
                       </div>
                     </Link>
@@ -437,10 +413,6 @@ const Home = () => {
                             <h4>{saleBills.length}</h4>
                           </div>
                         </div>
-                        <div className="box-icon-trending up">
-                          <i className="icon-cast"></i>
-                          <div className="body-title number">1.56%</div>
-                        </div>
                       </div>
                     </Link>
                     <div className="wrap-chart">
@@ -475,10 +447,6 @@ const Home = () => {
                             </div>
                             <h4>{purchaseReturnBill.length}</h4>
                           </div>
-                        </div>
-                        <div className="box-icon-trending up">
-                          <i className="icon-cast"></i>
-                          <div className="body-title number">1.56%</div>
                         </div>
                       </div>
                     </Link>
@@ -517,10 +485,6 @@ const Home = () => {
                             <h4>{branchs.length}</h4>
                           </div>
                         </div>
-                        <div className="box-icon-trending up">
-                          <i className="icon-cast"></i>
-                          <div className="body-title number">1.56%</div>
-                        </div>
                       </div>
                     </Link>
                     <div className="wrap-chart">
@@ -553,10 +517,6 @@ const Home = () => {
                             <div className="body-text mb-2">Total Staff</div>
                             <h4>{staffs.length}</h4>
                           </div>
-                        </div>
-                        <div className="box-icon-trending up">
-                          <i className="icon-cast"></i>
-                          <div className="body-title number">1.56%</div>
                         </div>
                       </div>
                     </Link>

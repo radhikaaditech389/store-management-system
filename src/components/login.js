@@ -113,6 +113,13 @@ const Login = () => {
                 Register Now{" "}
               </Link>
             </div>
+           <div className="body-text text-center">
+              Please Cashier Login here
+              <Link to="/cashier_login" className="body-text tf-color">
+                {" "}
+               Cashier Login
+              </Link>
+            </div>
           </form>
         </div>
       </div>

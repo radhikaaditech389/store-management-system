@@ -64,7 +64,7 @@ const CashierLogin = () => {
     <div className="wrap-login-page">
       <div className="flex-grow flex flex-column justify-center gap30">
         <div className="login-box">
-          <h3>Login to account</h3>
+          <h3>Cashier Login to account</h3>
           <form
             className="form-login flex flex-column gap24"
             onSubmit={handleSubmit}
@@ -92,6 +92,13 @@ const CashierLogin = () => {
               <Link to="/register" className="body-text tf-color">
                 {" "}
                 Register Now{" "}
+              </Link>
+            </div>
+              <div className="body-text text-center">
+              Please Login here
+              <Link to="/login" className="body-text tf-color">
+                {" "}
+                Login Now{" "}
               </Link>
             </div>
           </form>

@@ -4,10 +4,10 @@ import QRCode from "react-qr-code";
 import ReceiptModal from "../components/ReceiptModal";
 import axios from "axios";
 
-export default function PaymentModal({ total, onClose, onConfirm,cart_data }) {
+export default function PaymentModal({ total, onClose, onConfirm, cart_data }) {
   // console.log("cart",cart_data);
-  const allIds = cart_data.map(item => item.id);
-// console.log(allIds); 
+  const allIds = cart_data.map((item) => item.id);
+  // console.log(allIds);
   const receiptRef = useRef();
   const [method, setMethod] = useState("cash");
   const [cashGiven, setCashGiven] = useState("");
@@ -105,21 +105,57 @@ export default function PaymentModal({ total, onClose, onConfirm,cart_data }) {
   };
 
   const cart_detail = JSON.parse(localStorage.getItem("cart_detail"));
-  const cart_total = localStorage.getItem("cart_total");
-  // console.log("cart_data12",cart_detail);
 
-  // console.log("payment",payment);
+  const cart_total = localStorage.getItem("cart_total");
+
   const printReceipt = () => {
     const printContent = receiptRef.current;
+
     const win = window.open("", "", "width=300,height=600");
-    win.document.write("<html><head><title>Receipt</title>");
-    win.document.write("</head><body>");
-    win.document.write(printContent.innerHTML);
-    win.document.write("</body></html>");
+
+    win.document.write(`
+    <html>
+      <head>
+        <title>Receipt</title>
+           <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+        <style>
+          @page {
+            size: auto;
+            margin: 15mm 10mm 10mm 10mm; /* TOP RIGHT BOTTOM LEFT */
+          }
+
+          body {
+            margin: 0;
+            padding: 0;
+            font-family: "Poppins", sans-serif;
+          }
+
+          .receipt-print {
+            margin-top: 12mm; /* EXTRA TOP SPACE IF REQUIRED */
+          }
+
+          hr {
+            border: none;
+            border-top: 1px dashed #000;
+            margin: 6px 0;
+          }
+        </style>
+      </head>
+      <body>
+        <div class="receipt-print">
+          ${printContent.innerHTML}
+        </div>
+      </body>
+    </html>
+  `);
+
     win.document.close();
     win.focus();
-    win.print();
-    win.close();
+
+    setTimeout(() => {
+      win.print();
+      win.close();
+    }, 500);
   };
 
   return (
@@ -251,14 +287,18 @@ export default function PaymentModal({ total, onClose, onConfirm,cart_data }) {
                 <button
                   onClick={() => keypad("C")}
                   className="col-span-3 p-5 bg-red-500 text-white rounded-xl text-xl shadow hover:bg-red-600"
-                  style={{fontSize:"20px"}}
+                  style={{ fontSize: "20px" }}
                 >
                   Clear
                 </button>
                 <button
                   onClick={() => setShowReceipt(true)}
                   className="col-span-3 p-5 bg-red-500 text-white rounded-xl text-xl shadow hover:bg-red-600"
-                  style={{ background: "#3F51B5", color: "#fff",fontSize:"20px" }}
+                  style={{
+                    background: "#3F51B5",
+                    color: "#fff",
+                    fontSize: "20px",
+                  }}
                 >
                   Print Receipt
                 </button>
@@ -305,7 +345,7 @@ export default function PaymentModal({ total, onClose, onConfirm,cart_data }) {
           data={sampleReceipt}
           ref={receiptRef}
           cart_total={cart_total}
-          cart_detail ={cart_detail}
+          cart_detail={cart_detail}
           onPrint={printReceipt}
         />
       </div>
