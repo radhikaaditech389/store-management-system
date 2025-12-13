@@ -115,12 +115,12 @@ const Store = () => {
       name: "Action",
       cell: (row) => (
         <div className="list-icon-function">
-          <div
+          {/* <div
             className="item eye"
             onClick={() => history.push(`/stores/view/${row.id}`)}
           >
             <i className="icon-eye"></i>
-          </div>
+          </div> */}
           <div className="item edit" onClick={() => handleEdit(row)}>
             <i className="icon-edit-3"></i>
           </div>
