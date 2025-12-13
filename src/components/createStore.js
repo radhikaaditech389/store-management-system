@@ -295,6 +295,7 @@ const CreateStore = () => {
                         type="text"
                         name="phone"
                         placeholder="Enter phone number"
+                        maxLength={10}
                       />
                       <ErrorMessage
                         name="phone"
