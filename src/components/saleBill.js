@@ -85,6 +85,11 @@ const SaleBill = () => {
       selector: (row) => row.bill_status,
       sortable: true,
     },
+    {
+      name: "Created At",
+      selector: (row) => row.created_at,
+      sortable: true,
+    },
   ];
 
   const fetchSaleBill = async () => {
@@ -109,6 +114,7 @@ const SaleBill = () => {
     const searchText = search.toLowerCase();
 
     const result = saleBills.filter((item) => {
+      const formattedDate = new Date(item.created_at).toLocaleDateString('en-CA');
       const searchable = `
       ${item.id}
       ${item.store?.name}
@@ -125,6 +131,7 @@ const SaleBill = () => {
       ${item.balance_return}
       ${item.payment_status}
       ${item.bill_status}
+       ${formattedDate}
     `.toLowerCase();
 
       return searchable.includes(searchText);

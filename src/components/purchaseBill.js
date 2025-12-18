@@ -12,6 +12,7 @@ const PurchaseBill = () => {
   const [search, setSearch] = useState("");
   const [purchaseBill, setPurchaseBill] = useState([]);
   const [filteredData, setFilteredData] = useState(products);
+  console.log("filter-data",filteredData);
 
   const user_data = JSON.parse(localStorage.getItem("user_detail"));
   const handleCreatePurchaseBills = () => {
@@ -98,6 +99,11 @@ const PurchaseBill = () => {
     {
       name: "Total Amount",
       selector: (row) => row.total_amount,
+      sortable: true,
+    },
+    {
+      name: "Expiry Date",
+      selector: (row) => row.lines[0].expiry_date,
       sortable: true,
     },
     {
