@@ -6,11 +6,11 @@ const Footer = () => {
       <div className="body-text">
         © 2025 All rights reserved. | Design & Developed by{" "}
         <a
-          href="https://adicreations.tech/"
+          href="https://theaditech.in/"
           target="_blank"
           rel="noopener noreferrer"
         >
-          Adi Tech
+          The Adi Tech
         </a>
       </div>
     </div>
