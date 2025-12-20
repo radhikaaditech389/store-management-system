@@ -15,9 +15,18 @@ const CreateEditPurchaseBill = () => {
   const [suppliers, setSupplierBill] = useState([]);
   const [products, setProducts] = useState([]);
   const [gstRates, setGstRates] = useState([]);
+  const [supplierId, setSupplierId] = useState("");
+  const [productId, setProductId] = useState("");
+  const [showModal, setShowModal] = useState(false);
+  const [showProductModal, setShowProductModal] = useState(false);
+  const [newSupplier, setNewSupplier] = useState("");
+  const [newProduct, setNewProduct] = useState("");
+  const [error, setError] = useState("");
 
   const user_data = JSON.parse(localStorage.getItem("user_detail"));
+
   const store_purchase_bill = localStorage.getItem("purchase_bills_create");
+
   const incomingBill = store_purchase_bill
     ? JSON.parse(store_purchase_bill)
     : null;
@@ -44,6 +53,7 @@ const CreateEditPurchaseBill = () => {
       },
     ],
   });
+
   useEffect(() => {
     if (incomingBill) {
       setInitialValues({
@@ -69,69 +79,49 @@ const CreateEditPurchaseBill = () => {
       });
     }
   }, []);
+
   const fetchBranch = async () => {
     try {
-      // await axios.get(`${BASE_URL}/sanctum/csrf-cookie`, {
-      //   withCredentials: true,
-      // });
       const response = await axios.get(`${BASE_URL}/api/manager/branches`, {
         headers: {
           Accept: "application/json",
           Authorization: `Bearer ${user_data.token}`,
-          // "X-XSRF-TOKEN": getCookie("XSRF-TOKEN"),
         },
-        // withCredentials: true,
       });
-
       setBranches(response.data.branches);
     } catch (error) {
       console.error("Error fetching categories:", error);
     }
   };
-  useEffect(() => {
-    fetchBranch();
-  }, []);
 
   const fetchSupplierBill = async () => {
     try {
-      // await axios.get(`${BASE_URL}/sanctum/csrf-cookie`, {
-      //   withCredentials: true,
-      // });
       const response = await axios.get(`${BASE_URL}/api/suppliers`, {
         headers: {
           Accept: "application/json",
           Authorization: `Bearer ${user_data.token}`,
-          // "X-XSRF-TOKEN": getCookie("XSRF-TOKEN"),
         },
-        // withCredentials: true,
       });
       setSupplierBill(response.data.suppliers);
     } catch (error) {
       console.error("Error fetching categories:", error);
     }
   };
-  useEffect(() => {
-    fetchSupplierBill();
-  }, []);
 
   const fetchProduct = async () => {
     try {
-      // await axios.get(`${BASE_URL}/sanctum/csrf-cookie`, {
-      //   withCredentials: true,
-      // });
       const response = await axios.get(`${BASE_URL}/api/products`, {
         headers: {
           Accept: "application/json",
           Authorization: `Bearer ${user_data.token}`,
-          // "X-XSRF-TOKEN": getCookie("XSRF-TOKEN"),
         },
-        // withCredentials: true,
       });
       setProducts(response.data.products);
     } catch (error) {
       console.error("Error fetching categories:", error);
     }
   };
+
   const fetchGstRates = async () => {
     const response = await axios.get(`${BASE_URL}/api/gst-rates`, {
       headers: { Authorization: `Bearer ${user_data.token}` },
@@ -140,8 +130,16 @@ const CreateEditPurchaseBill = () => {
   };
 
   useEffect(() => {
+     fetchSupplierBill();
+     fetchBranch();
     fetchProduct();
     fetchGstRates();
+  }, []);
+
+  useEffect(() => {
+    const handler = (e) => e.key === "Escape" && setShowModal(false);
+    window.addEventListener("keydown", handler);
+    return () => window.removeEventListener("keydown", handler);
   }, []);
 
   // Validation Schema
@@ -223,6 +221,66 @@ const CreateEditPurchaseBill = () => {
     }
   };
 
+  const saveSupplier = async (e) => {
+    e.preventDefault();
+    if (newSupplier.trim().length < 3) {
+      setError("Supplier name must be at least 3 characters.");
+      return;
+    }
+    // Clear error if valid
+    setError("");
+
+    const supplier = {
+      id: Date.now(),
+      name: newSupplier.trim(),
+    };
+    let url = `${BASE_URL}/api/suppliers`;
+    let method = "post";
+    const response = await axios({
+      method,
+      url,
+      data: supplier,
+      headers: {
+        Accept: "application/json",
+        Authorization: `Bearer ${user_data.token}`,
+      },
+    });
+    toast.success("Suppliers Created!");
+    setSupplierId(supplier.id);
+    setNewSupplier("");
+    setShowModal(false);
+    fetchSupplierBill();
+  };
+
+  const saveProduct = async (e) => {
+    e.preventDefault();
+    if (newProduct.trim().length < 3) {
+      setError("Product name must be at least 3 characters.");
+      return;
+    }
+    setError("");
+    const product = {
+      id: Date.now(),
+      name: newProduct.trim(),
+    };
+    let url = `${BASE_URL}/api/products`;
+    let method = "post";
+    const response = await axios({
+      method,
+      url,
+      data: product,
+      headers: {
+        Accept: "application/json",
+        Authorization: `Bearer ${user_data.token}`,
+      },
+    });
+    toast.success("Products Created!");
+    setNewProduct("");
+    setProductId(product.id);
+    setShowProductModal(false);
+    fetchProduct();
+  };
+
   return (
     <Layout>
       <div className="main-content-inner">
@@ -262,13 +320,34 @@ const CreateEditPurchaseBill = () => {
 
                       <div className="mb-20 col-md-6">
                         <label className="mb-8 purchase-label">Supplier</label>
-                        <Field as="select" name="supplier_id" className="mb-6">
-                          <option value="">Select Supplier</option>
-                          {suppliers.map((s) => (
-                            <option value={s.id} key={s.id}>
-                              {s.name}
-                            </option>
-                          ))}
+                        <Field name="supplier_id" as="select" className="mb-6">
+                          {({ field }) => (
+                            <select
+                              {...field}
+                              value={supplierId}
+                              onChange={(e) => {
+                                field.onChange(e);
+
+                                const value = e.target.value;
+                                if (value === "add_new") {
+                                  setShowModal(true);
+                                }
+                                setSupplierId(value);
+                              }}
+                            >
+                              <option value="">Select Supplier</option>
+                              {suppliers.map((s) => (
+                                <option key={s.id} value={s.id}>
+                                  {s.name}
+                                </option>
+                              ))}
+                              {!newSupplier && (
+                                <option value="add_new">
+                                  + Add New Supplier
+                                </option>
+                              )}
+                            </select>
+                          )}
                         </Field>
                         <ErrorMessage
                           name="supplier_id"
@@ -334,15 +413,37 @@ const CreateEditPurchaseBill = () => {
                                   Product
                                 </label>
                                 <Field
-                                  as="select"
                                   name={`lines.${index}.product_id`}
+                                  as="select"
+                                  className="mb-6"
                                 >
-                                  <option value="">Select Product</option>
-                                  {products.map((p) => (
-                                    <option value={p.id} key={p.id}>
-                                      {p.name}
-                                    </option>
-                                  ))}
+                                  {({ field }) => (
+                                    <select
+                                      {...field}
+                                      value={productId}
+                                      onChange={(e) => {
+                                        field.onChange(e);
+
+                                        const value = e.target.value;
+                                        if (value === "add_new") {
+                                          setShowProductModal(true);
+                                        }
+                                        setProductId(value);
+                                      }}
+                                    >
+                                      <option value="">Select Product</option>
+                                      {products.map((p) => (
+                                        <option key={p.id} value={p.id}>
+                                          {p.name}
+                                        </option>
+                                      ))}
+                                      {!newProduct && (
+                                        <option value="add_new">
+                                          + Add New Product
+                                        </option>
+                                      )}
+                                    </select>
+                                  )}
                                 </Field>
                                 <ErrorMessage
                                   name={`lines.${index}.product_id`}
@@ -535,6 +636,101 @@ const CreateEditPurchaseBill = () => {
               )}
             </Formik>
           </div>
+          {showModal && (
+            <div className="modal-overlay" onClick={() => setShowModal(false)}>
+              <div className="modal-card" onClick={(e) => e.stopPropagation()}>
+                {/* Header */}
+                <div className="modal-header">
+                  <h5>Add New Supplier</h5>
+                </div>
+
+                {/* Body */}
+                <div className="modal-body">
+                  <input
+                    type="text"
+                    className={`form-control model-form-control ${
+                      error ? "is-invalid" : ""
+                    }`}
+                    placeholder="Supplier Name"
+                    value={newSupplier}
+                    onChange={(e) => {
+                      setNewSupplier(e.target.value);
+                      if (error) setError("");
+                    }}
+                  />
+
+                  {error && <div className="invalid-feedback">{error}</div>}
+                </div>
+
+                {/* Footer */}
+                <div className="modal-footer">
+                  <button
+                    className="btn btn-secondary cancel-btn"
+                    onClick={() => setShowModal(false)}
+                  >
+                    Cancel
+                  </button>
+
+                  <button
+                    className="btn btn-primary save-btn"
+                    disabled={!newSupplier.trim()}
+                    onClick={(e) => saveSupplier(e)}
+                  >
+                    Save
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
+          {showProductModal && (
+            <div
+              className="modal-overlay"
+              onClick={() => setShowProductModal(false)}
+            >
+              <div className="modal-card" onClick={(e) => e.stopPropagation()}>
+                {/* Header */}
+                <div className="modal-header">
+                  <h5>Add New Product</h5>
+                </div>
+
+                {/* Body */}
+                <div className="modal-body">
+                  <input
+                    type="text"
+                    className={`form-control model-form-control ${
+                      error ? "is-invalid" : ""
+                    }`}
+                    placeholder="Product Name"
+                    value={newProduct}
+                    onChange={(e) => {
+                      setNewProduct(e.target.value);
+                      if (error) setError("");
+                    }}
+                  />
+
+                  {error && <div className="invalid-feedback">{error}</div>}
+                </div>
+
+                {/* Footer */}
+                <div className="modal-footer">
+                  <button
+                    className="btn btn-secondary cancel-btn"
+                    onClick={() => setShowProductModal(false)}
+                  >
+                    Cancel
+                  </button>
+
+                  <button
+                    className="btn btn-primary save-btn"
+                    disabled={!newProduct.trim()}
+                    onClick={(e) => saveProduct(e)}
+                  >
+                    Save
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </Layout>

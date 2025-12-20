@@ -79,7 +79,7 @@ const Product = () => {
     },
     {
       name: "GST",
-      selector: (row) => row?.gst_rate.rate,
+      selector: (row) => row?.gst_rate?.rate,
       sortable: true,
     },
     {
@@ -130,12 +130,13 @@ const Product = () => {
       console.error("Error fetching categories:", error);
     }
   };
+  
   useEffect(() => {
     fetchProduct();
   }, []);
+
   useEffect(() => {
     const text = search.toLowerCase();
-
     const result = products.filter((item) => {
       const searchString = `
       ${item.id}
@@ -153,7 +154,6 @@ const Product = () => {
 
       return searchString.includes(text);
     });
-
     setFilteredData(result);
   }, [search, products]);
 

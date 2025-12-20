@@ -21,6 +21,14 @@ const CreateEditProduct = () => {
   const [brands, setBrands] = useState([]);
   const [categories, setCategories] = useState([]);
   const [gstRates, setGstRates] = useState([]);
+  const [categoryId, setCategoryId] = useState("");
+  const [showCategoryModal, setShowCategoryModal] = useState(false);
+  const [newCategory, setNewCategory] = useState("");
+    const [brandId, setBrandId] = useState("");
+  const [showBrandModel, setShowBrandModel] = useState(false);
+  const [newBrand, setNewBrand] = useState("");
+  const [error, setError] = useState("");
+  // const [newProduct, setNewProduct] = useState("");
 
   const [initialValues, setInitialValues] = useState({
     sku: "",
@@ -82,15 +90,15 @@ const CreateEditProduct = () => {
 
   // Validation Schema
   const validationSchema = Yup.object({
-    sku: Yup.string().required("SKU is required"),
+    // sku: Yup.string().required("SKU is required"),
     name: Yup.string().required("Product Name is required"),
-    brand_id: Yup.string().required("Brand is required"),
-    category_id: Yup.string().required("Category is required"),
-    hsn_code: Yup.string().required("HSN Code is required"),
-    gst_rate_id: Yup.string().required("GST Rate required"),
-    mrp: Yup.number().required("MRP required"),
-    selling_price: Yup.number().required("Selling price required"),
-    cost_price: Yup.number().required("Cost price required"),
+    // brand_id: Yup.string().required("Brand is required"),
+    // category_id: Yup.string().required("Category is required"),
+    // hsn_code: Yup.string().required("HSN Code is required"),
+    // gst_rate_id: Yup.string().required("GST Rate required"),
+    // mrp: Yup.number().required("MRP required"),
+    // selling_price: Yup.number().required("Selling price required"),
+    // cost_price: Yup.number().required("Cost price required"),
   });
 
   // Submit (Create + Update)
@@ -123,6 +131,64 @@ const CreateEditProduct = () => {
     } catch (error) {
       console.error("Error saving product:", error);
     }
+  };
+
+  const saveCategory = async (e) => {
+    e.preventDefault();
+    if (newCategory.trim().length < 3) {
+      setError("Category name must be at least 3 characters.");
+      return;
+    }
+    setError("");
+    const category = {
+      id: Date.now(),
+      name: newCategory.trim(),
+    };
+    let url = `${BASE_URL}/api/categories`;
+    let method = "post";
+    const response = await axios({
+      method,
+      url,
+      data: category,
+      headers: {
+        Accept: "application/json",
+        Authorization: `Bearer ${user_data.token}`,
+      },
+    });
+    toast.success("Category Created!");
+    setNewCategory("");
+    setCategoryId(category.id);
+    setShowCategoryModal(false);
+    fetchCategories();
+  };
+
+  const saveBrand = async (e) => {
+    e.preventDefault();
+    if (newBrand.trim().length < 3) {
+      setError("Category name must be at least 3 characters.");
+      return;
+    }
+    setError("");
+    const brand = {
+      id: Date.now(),
+      name: newBrand.trim(),
+    };
+    let url = `${BASE_URL}/api/brands`;
+    let method = "post";
+    const response = await axios({
+      method,
+      url,
+      data: brand,
+      headers: {
+        Accept: "application/json",
+        Authorization: `Bearer ${user_data.token}`,
+      },
+    });
+    toast.success("Brand Created!");
+    setNewBrand("");
+    setBrandId(brand.id);
+    setShowBrandModel(false);
+    fetchBrands();
   };
 
   return (
@@ -174,38 +240,81 @@ const CreateEditProduct = () => {
                     <fieldset className="col-md-6 mb-15">
                       <div className="body-title">Brand *</div>
                       <div className="body-content">
-                        <Field as="select" name="brand_id" className="mb-5">
-                          <option value="">Select Brand</option>
-                          {brands.map((b) => (
+                        <Field name="brand_id" as="select" className="mb-6">
+                          {({ field }) => (
+                            <select
+                              {...field}
+                              value={brandId}
+                              onChange={(e) => {
+                                field.onChange(e);
+
+                                const value = e.target.value;
+                                if (value === "add_new") {
+                                  setShowBrandModel(true);
+                                }
+                                setBrandId(value);
+                              }}
+                            >
+                              <option value="">Select Brand</option>
+                              {brands.map((b) => (
                             <option value={b.id} key={b.id}>
                               {b.name}
                             </option>
                           ))}
+                              {!newBrand && (
+                                <option value="add_new">
+                                  + Add New Brand
+                                </option>
+                              )}
+                            </select>
+                          )}
                         </Field>
                         <ErrorMessage
                           name="brand_id"
-                          component="div"
                           className="error-text"
+                          component="div"
                         />
                       </div>
+
                     </fieldset>
 
                     {/* Category */}
                     <fieldset className="col-md-6">
                       <div className="body-title">Category *</div>
                       <div className="body-content">
-                        <Field as="select" name="category_id" className="mb-5">
-                          <option value="">Select Category</option>
-                          {categories.map((c) => (
-                            <option value={c.id} key={c.id}>
-                              {c.name}
-                            </option>
-                          ))}
+                        <Field name="category_id" as="select" className="mb-6">
+                          {({ field }) => (
+                            <select
+                              {...field}
+                              value={categoryId}
+                              onChange={(e) => {
+                                field.onChange(e);
+
+                                const value = e.target.value;
+                                if (value === "add_new") {
+                                  setShowCategoryModal(true);
+                                }
+                                setCategoryId(value);
+                              }}
+                            >
+                              <option value="">Select Category</option>
+                              {categories.map((c) => (
+                                <option value={c.id} key={c.id}>
+                                  {c.name}
+                                </option>
+                              ))}
+                              {!newCategory && (
+                                <option value="add_new">
+                                  + Add New Category
+                                </option>
+                              )}
+                            </select>
+                          )}
                         </Field>
                         <ErrorMessage
                           name="category_id"
-                          component="div"
                           className="error-text"
+                          component="div"
                         />
                       </div>
                     </fieldset>
@@ -296,6 +405,105 @@ const CreateEditProduct = () => {
               )}
             </Formik>
           </div>
+          {showCategoryModal && (
+            <div
+              className="modal-overlay"
+              onClick={() => setShowCategoryModal(false)}
+            >
+              <div className="modal-card" onClick={(e) => e.stopPropagation()}>
+                {/* Header */}
+                <div className="modal-header">
+                  <h5>Add New Category</h5>
+                </div>
+
+                {/* Body */}
+                <div className="modal-body">
+                  <input
+                    type="text"
+                    className={`form-control model-form-control ${
+                      error ? "is-invalid" : ""
+                    }`}
+                    placeholder="Category Name"
+                    value={newCategory}
+                    onChange={(e) => {
+                      setNewCategory(e.target.value);
+                      if (error) setError("");
+                    }}
+                  />
+
+                  {error && <div className="invalid-feedback">{error}</div>}
+                </div>
+
+                {/* Footer */}
+                <div className="modal-footer">
+                  <button
+                    className="btn btn-secondary cancel-btn"
+                    onClick={() => setShowCategoryModal(false)}
+                  >
+                    Cancel
+                  </button>
+
+                  <button
+                    className="btn btn-primary save-btn"
+                    disabled={!newCategory.trim()}
+                    onClick={(e) => saveCategory(e)}
+                  >
+                    Save
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
+
+            {showBrandModel && (
+            <div
+              className="modal-overlay"
+              onClick={() => setShowBrandModel(false)}
+            >
+              <div className="modal-card" onClick={(e) => e.stopPropagation()}>
+                {/* Header */}
+                <div className="modal-header">
+                  <h5>Add New Brand</h5>
+                </div>
+
+                {/* Body */}
+                <div className="modal-body">
+                  <input
+                    type="text"
+                    className={`form-control model-form-control ${
+                      error ? "is-invalid" : ""
+                    }`}
+                    placeholder="Brand Name"
+                    value={newBrand}
+                    onChange={(e) => {
+                      setNewBrand(e.target.value);
+                      if (error) setError("");
+                    }}
+                  />
+
+                  {error && <div className="invalid-feedback">{error}</div>}
+                </div>
+
+                {/* Footer */}
+                <div className="modal-footer">
+                  <button
+                    className="btn btn-secondary cancel-btn"
+                    onClick={() => setShowBrandModel(false)}
+                  >
+                    Cancel
+                  </button>
+
+                  <button
+                    className="btn btn-primary save-btn"
+                    disabled={!newBrand.trim()}
+                    onClick={(e) => saveBrand(e)}
+                  >
+                    Save
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </Layout>

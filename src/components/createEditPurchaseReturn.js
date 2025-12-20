@@ -42,10 +42,6 @@ const CreateEditPurchaseReturn = () => {
         rate: "",
         gst_rate_id: "",
         hsn_code: "",
-        // taxable_value: "",
-        // cgst: "",
-        // sgst: "",
-        // igst: "",
       },
     ],
   });
@@ -101,6 +97,7 @@ const CreateEditPurchaseReturn = () => {
       console.error("Error fetching categories:", error);
     }
   };
+  
   const fetchBranch = async () => {
     try {
       const response = await axios.get(`${BASE_URL}/api/manager/branches`, {
