@@ -67,6 +67,8 @@ const CreateEditProduct = () => {
   // If editing → set initial values
   const loadProductData = () => {
     if (incomingProduct) {
+       setBrandId(incomingProduct.brand_id);
+       setCategoryId(incomingProduct.category_id);
       setInitialValues({
         sku: incomingProduct.sku,
         name: incomingProduct.name,

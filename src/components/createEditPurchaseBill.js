@@ -17,6 +17,7 @@ const CreateEditPurchaseBill = () => {
   const [gstRates, setGstRates] = useState([]);
   const [supplierId, setSupplierId] = useState("");
   const [productId, setProductId] = useState("");
+
   const [showModal, setShowModal] = useState(false);
   const [showProductModal, setShowProductModal] = useState(false);
   const [newSupplier, setNewSupplier] = useState("");
@@ -24,9 +25,7 @@ const CreateEditPurchaseBill = () => {
   const [error, setError] = useState("");
 
   const user_data = JSON.parse(localStorage.getItem("user_detail"));
-
   const store_purchase_bill = localStorage.getItem("purchase_bills_create");
-
   const incomingBill = store_purchase_bill
     ? JSON.parse(store_purchase_bill)
     : null;
@@ -53,9 +52,9 @@ const CreateEditPurchaseBill = () => {
       },
     ],
   });
-
   useEffect(() => {
     if (incomingBill) {
+       setSupplierId(incomingBill.supplier_id?.toString() || "");
       setInitialValues({
         branch_id: incomingBill.branch_id?.toString() || "",
         supplier_id: incomingBill.supplier_id?.toString() || "",
@@ -79,20 +78,28 @@ const CreateEditPurchaseBill = () => {
       });
     }
   }, []);
-
   const fetchBranch = async () => {
     try {
+      // await axios.get(`${BASE_URL}/sanctum/csrf-cookie`, {
+      //   withCredentials: true,
+      // });
       const response = await axios.get(`${BASE_URL}/api/manager/branches`, {
         headers: {
           Accept: "application/json",
           Authorization: `Bearer ${user_data.token}`,
+          // "X-XSRF-TOKEN": getCookie("XSRF-TOKEN"),
         },
+        // withCredentials: true,
       });
+
       setBranches(response.data.branches);
     } catch (error) {
       console.error("Error fetching categories:", error);
     }
   };
+  useEffect(() => {
+    fetchBranch();
+  }, []);
 
   const fetchSupplierBill = async () => {
     try {
@@ -107,6 +114,9 @@ const CreateEditPurchaseBill = () => {
       console.error("Error fetching categories:", error);
     }
   };
+  useEffect(() => {
+    fetchSupplierBill();
+  }, []);
 
   const fetchProduct = async () => {
     try {
@@ -130,8 +140,6 @@ const CreateEditPurchaseBill = () => {
   };
 
   useEffect(() => {
-     fetchSupplierBill();
-     fetchBranch();
     fetchProduct();
     fetchGstRates();
   }, []);
@@ -423,7 +431,6 @@ const CreateEditPurchaseBill = () => {
                                       value={productId}
                                       onChange={(e) => {
                                         field.onChange(e);
-
                                         const value = e.target.value;
                                         if (value === "add_new") {
                                           setShowProductModal(true);

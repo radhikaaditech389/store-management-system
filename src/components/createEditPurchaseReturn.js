@@ -17,6 +17,16 @@ const CreateEditPurchaseReturn = () => {
   const [purchaseBills, setPurchaseBills] = useState([]);
   const [purchaseLines, setPurchaseLines] = useState([]);
   const [gstRates, setGstRates] = useState([]);
+  const [supplierId, setSupplierId] = useState("");
+   const [productId, setProductId] = useState("");
+  const [purchaseBillId, setPurchaseBillId] = useState("");
+  const [showModal, setShowModal] = useState(false);
+  const [showPurchaseModal, setShowPurchaseModal] = useState(false);
+  const [newSupplier, setNewSupplier] = useState("");
+  const [newPurchaseBill, setNewPurchaseBill] = useState("");
+  const [showProductModal, setShowProductModal] = useState(false);
+    const [newProduct, setNewProduct] = useState("");
+  const [error, setError] = useState("");
 
   const user_data = JSON.parse(localStorage.getItem("user_detail"));
   const store_purchase_return_bill = localStorage.getItem(
@@ -97,7 +107,7 @@ const CreateEditPurchaseReturn = () => {
       console.error("Error fetching categories:", error);
     }
   };
-  
+
   const fetchBranch = async () => {
     try {
       const response = await axios.get(`${BASE_URL}/api/manager/branches`, {
@@ -167,7 +177,9 @@ const CreateEditPurchaseReturn = () => {
       .min(1, "At least one product is required")
       .of(
         Yup.object().shape({
-           purchase_line_id: Yup.string().required("Purchase Line Id is required"),
+          purchase_line_id: Yup.string().required(
+            "Purchase Line Id is required"
+          ),
           product_id: Yup.string().required("Product is required"),
           qty: Yup.number()
             .typeError("Quantity must be a number")
@@ -182,10 +194,10 @@ const CreateEditPurchaseReturn = () => {
             .required("rate required")
             .min(0, "Rate cannot be negative"),
           hsn_code: Yup.string().required(),
-            taxable_value: Yup.string().required(),
+          taxable_value: Yup.string().required(),
           cgst: Yup.string().required(),
           sgst: Yup.date().required(),
-           igst: Yup.date().required(),
+          igst: Yup.date().required(),
         })
       ),
   });
@@ -222,6 +234,97 @@ const CreateEditPurchaseReturn = () => {
     }
   };
 
+  const saveSupplier = async (e) => {
+    e.preventDefault();
+    if (newSupplier.trim().length < 3) {
+      setError("Supplier name must be at least 3 characters.");
+      return;
+    }
+    // Clear error if valid
+    setError("");
+
+    const supplier = {
+      id: Date.now(),
+      name: newSupplier.trim(),
+    };
+    let url = `${BASE_URL}/api/suppliers`;
+    let method = "post";
+    const response = await axios({
+      method,
+      url,
+      data: supplier,
+      headers: {
+        Accept: "application/json",
+        Authorization: `Bearer ${user_data.token}`,
+      },
+    });
+    toast.success("Suppliers Created!");
+    setSupplierId(supplier.id);
+    setNewSupplier("");
+    setShowModal(false);
+    fetchSupplierBill();
+  };
+
+  const savePurchaseBill = async (e) => {
+    e.preventDefault();
+    if (newPurchaseBill.trim().length < 3) {
+      setError("Purchase Bill must be at least 3 characters.");
+      return;
+    }
+    // Clear error if valid
+    setError("");
+
+    const purchase_bill = {
+      id: Date.now(),
+      name: newPurchaseBill.trim(),
+    };
+    let url = `${BASE_URL}/api/purchase-bill`;
+    let method = "post";
+    const response = await axios({
+      method,
+      url,
+      data: purchase_bill,
+      headers: {
+        Accept: "application/json",
+        Authorization: `Bearer ${user_data.token}`,
+      },
+    });
+    toast.success("Purchase Bill Created!");
+    setPurchaseBillId(purchase_bill.id);
+    setNewPurchaseBill("");
+    setShowModal(false);
+    fetchPurchaseBill();
+  };
+
+  const saveProduct = async (e) => {
+    e.preventDefault();
+    if (newProduct.trim().length < 3) {
+      setError("Product name must be at least 3 characters.");
+      return;
+    }
+    setError("");
+    const product = {
+      id: Date.now(),
+      name: newProduct.trim(),
+    };
+    let url = `${BASE_URL}/api/products`;
+    let method = "post";
+    const response = await axios({
+      method,
+      url,
+      data: product,
+      headers: {
+        Accept: "application/json",
+        Authorization: `Bearer ${user_data.token}`,
+      },
+    });
+    toast.success("Products Created!");
+    setNewProduct("");
+    setProductId(product.id);
+    setShowProductModal(false);
+    fetchProduct();
+  };
+
   return (
     <Layout>
       <div className="main-content-inner">
@@ -236,7 +339,7 @@ const CreateEditPurchaseReturn = () => {
             <Formik
               initialValues={initialValues}
               enableReinitialize={true}
-                validationSchema={validationSchema}
+              validationSchema={validationSchema}
               onSubmit={(values, actions) => handleSubmit(values, actions)}
             >
               {({ values }) => (
@@ -248,7 +351,7 @@ const CreateEditPurchaseReturn = () => {
                         <label className="mb-8 purchase-label">
                           Purchase Bill No
                         </label>
-                        <Field
+                         <Field
                           as="select"
                           name="purchase_bill_id"
                           className="mb-6"
@@ -283,7 +386,7 @@ const CreateEditPurchaseReturn = () => {
                         />
                       </div>
 
-                      <div className="mb-20 col-md-6">
+                      {/* <div className="mb-20 col-md-6">
                         <label className="mb-8 purchase-label">Supplier</label>
                         <Field as="select" name="supplier_id" className="mb-6">
                           <option value="">Select Supplier</option>
@@ -292,6 +395,43 @@ const CreateEditPurchaseReturn = () => {
                               {s.name}
                             </option>
                           ))}
+                        </Field>
+                        <ErrorMessage
+                          name="supplier_id"
+                          className="error-text"
+                          component="div"
+                        />
+                      </div> */}
+                      <div className="mb-20 col-md-6">
+                        <label className="mb-8 purchase-label">Supplier</label>
+                        <Field name="supplier_id" as="select" className="mb-6">
+                          {({ field }) => (
+                            <select
+                              {...field}
+                              value={supplierId}
+                              onChange={(e) => {
+                                field.onChange(e);
+
+                                const value = e.target.value;
+                                if (value === "add_new") {
+                                  setShowModal(true);
+                                }
+                                setSupplierId(value);
+                              }}
+                            >
+                              <option value="">Select Supplier</option>
+                              {suppliers.map((s) => (
+                                <option key={s.id} value={s.id}>
+                                  {s.name}
+                                </option>
+                              ))}
+                              {!newSupplier && (
+                                <option value="add_new">
+                                  + Add New Supplier
+                                </option>
+                              )}
+                            </select>
+                          )}
                         </Field>
                         <ErrorMessage
                           name="supplier_id"
@@ -413,7 +553,7 @@ const CreateEditPurchaseReturn = () => {
                                   component="div"
                                 />
                               </div>
-                              <div className="line-col">
+                              {/* <div className="line-col">
                                 <label
                                   className="mb-8 mt-12"
                                   style={{
@@ -433,6 +573,54 @@ const CreateEditPurchaseReturn = () => {
                                       {p.name}
                                     </option>
                                   ))}
+                                </Field>
+                                <ErrorMessage
+                                  name={`lines.${index}.product_id`}
+                                  className="error-text"
+                                  component="div"
+                                />
+                              </div> */}
+                              <div className="line-col">
+                                <label
+                                  className="mb-8 mt-12"
+                                  style={{
+                                    fontSize: "15px",
+                                    marginTop: "12px",
+                                  }}
+                                >
+                                  Product
+                                </label>
+                                <Field
+                                  name={`lines.${index}.product_id`}
+                                  as="select"
+                                  className="mb-6"
+                                >
+                                  {({ field }) => (
+                                    <select
+                                      {...field}
+                                      value={productId}
+                                      onChange={(e) => {
+                                        field.onChange(e);
+                                        const value = e.target.value;
+                                        if (value === "add_new") {
+                                          setShowProductModal(true);
+                                        }
+                                        setProductId(value);
+                                      }}
+                                    >
+                                      <option value="">Select Product</option>
+                                      {products.map((p) => (
+                                        <option key={p.id} value={p.id}>
+                                          {p.name}
+                                        </option>
+                                      ))}
+                                      {!newProduct && (
+                                        <option value="add_new">
+                                          + Add New Product
+                                        </option>
+                                      )}
+                                    </select>
+                                  )}
                                 </Field>
                                 <ErrorMessage
                                   name={`lines.${index}.product_id`}
@@ -661,6 +849,150 @@ const CreateEditPurchaseReturn = () => {
             </Formik>
           </div>
         </div>
+        {showModal && (
+          <div className="modal-overlay" onClick={() => setShowModal(false)}>
+            <div className="modal-card" onClick={(e) => e.stopPropagation()}>
+              {/* Header */}
+              <div className="modal-header">
+                <h5>Add New Supplier</h5>
+              </div>
+
+              {/* Body */}
+              <div className="modal-body">
+                <input
+                  type="text"
+                  className={`form-control model-form-control ${
+                    error ? "is-invalid" : ""
+                  }`}
+                  placeholder="Supplier Name"
+                  value={newSupplier}
+                  onChange={(e) => {
+                    setNewSupplier(e.target.value);
+                    if (error) setError("");
+                  }}
+                />
+
+                {error && <div className="invalid-feedback">{error}</div>}
+              </div>
+
+              {/* Footer */}
+              <div className="modal-footer">
+                <button
+                  className="btn btn-secondary cancel-btn"
+                  onClick={() => setShowModal(false)}
+                >
+                  Cancel
+                </button>
+
+                <button
+                  className="btn btn-primary save-btn"
+                  disabled={!newSupplier.trim()}
+                  onClick={(e) => saveSupplier(e)}
+                >
+                  Save
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+        {showPurchaseModal && (
+          <div
+            className="modal-overlay"
+            onClick={() => setShowPurchaseModal(false)}
+          >
+            <div className="modal-card" onClick={(e) => e.stopPropagation()}>
+              {/* Header */}
+              <div className="modal-header">
+                <h5>Add New Purchase Modal</h5>
+              </div>
+
+              {/* Body */}
+              <div className="modal-body">
+                <input
+                  type="text"
+                  className={`form-control model-form-control ${
+                    error ? "is-invalid" : ""
+                  }`}
+                  placeholder="Purchase Bill Name"
+                  value={newPurchaseBill}
+                  onChange={(e) => {
+                    setNewPurchaseBill(e.target.value);
+                    if (error) setError("");
+                  }}
+                />
+
+                {error && <div className="invalid-feedback">{error}</div>}
+              </div>
+
+              {/* Footer */}
+              <div className="modal-footer">
+                <button
+                  className="btn btn-secondary cancel-btn"
+                  onClick={() => setShowPurchaseModal(false)}
+                >
+                  Cancel
+                </button>
+
+                <button
+                  className="btn btn-primary save-btn"
+                  disabled={!newPurchaseBill.trim()}
+                  onClick={(e) => savePurchaseBill(e)}
+                >
+                  Save
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+        {showProductModal && (
+            <div
+              className="modal-overlay"
+              onClick={() => setShowProductModal(false)}
+            >
+              <div className="modal-card" onClick={(e) => e.stopPropagation()}>
+                {/* Header */}
+                <div className="modal-header">
+                  <h5>Add New Product</h5>
+                </div>
+
+                {/* Body */}
+                <div className="modal-body">
+                  <input
+                    type="text"
+                    className={`form-control model-form-control ${
+                      error ? "is-invalid" : ""
+                    }`}
+                    placeholder="Product Name"
+                    value={newProduct}
+                    onChange={(e) => {
+                      setNewProduct(e.target.value);
+                      if (error) setError("");
+                    }}
+                  />
+
+                  {error && <div className="invalid-feedback">{error}</div>}
+                </div>
+
+                {/* Footer */}
+                <div className="modal-footer">
+                  <button
+                    className="btn btn-secondary cancel-btn"
+                    onClick={() => setShowProductModal(false)}
+                  >
+                    Cancel
+                  </button>
+
+                  <button
+                    className="btn btn-primary save-btn"
+                    disabled={!newProduct.trim()}
+                    onClick={(e) => saveProduct(e)}
+                  >
+                    Save
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
       </div>
     </Layout>
   );
