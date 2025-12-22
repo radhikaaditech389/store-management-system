@@ -2,7 +2,8 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import Layout from "./layout";
 import axios from "axios";
-import { getCookie } from "../utils/cookies";
+import ProfitLossWidget from "./ProfitLossWidget";
+import TopSellingProducts from "./topSellingProducts";
 
 const Home = () => {
   const BASE_URL = process.env.REACT_APP_API_BASE_URL;
@@ -20,7 +21,7 @@ const Home = () => {
   const user_data = JSON.parse(localStorage.getItem("user_detail"));
   const role = user_data?.user?.role;
 
-    const fetchStore = async () => {
+  const fetchStore = async () => {
     try {
       const response = await axios.get(`${BASE_URL}/api/stores`, {
         headers: {
@@ -166,7 +167,7 @@ const Home = () => {
     }
   };
   useEffect(() => {
-    fetchStore()
+    fetchStore();
     fetchCategory();
     fetchBrand();
     fetchSupplierBill();
@@ -187,7 +188,7 @@ const Home = () => {
           <div className="main-content-wrap">
             <div className="tf-section-4 mb-30">
               {/* <!-- chart-default --> */}
-               {role === "superadmin" && (
+              {role === "superadmin" && (
                 <>
                   <div className="wg-chart-default">
                     <Link
@@ -212,9 +213,7 @@ const Home = () => {
                             <i className="icon-layers"></i>
                           </div>
                           <div>
-                            <div className="body-text mb-2">
-                              Total Store
-                            </div>
+                            <div className="body-text mb-2">Total Store</div>
                             <h4>{stores.length}</h4>
                           </div>
                         </div>
@@ -224,8 +223,8 @@ const Home = () => {
                       <div id="line-chart-1"></div>
                     </div>
                   </div>
-                  </>
-               )}
+                </>
+              )}
               {role === "manager" && (
                 <>
                   <div className="wg-chart-default">
@@ -584,6 +583,23 @@ const Home = () => {
               )}
               {/* <!-- /chart-default --> */}
             </div>
+          </div>
+          <div className="flex flex-col md:flex-row gap-6">
+            {(role === "admin" || role === "manager") && (
+              <div className="flex-1">
+                <ProfitLossWidget role={role} user={user_data} />
+              </div>
+            )}
+
+            {(role === "admin" || role === "manager") && (
+              <div className="flex-1">
+                <TopSellingProducts
+                  role={role}
+                  user={user_data}
+                  filters={{ branch_id: "ALL" }}
+                />
+              </div>
+            )}
           </div>
         </div>
       </Layout>
