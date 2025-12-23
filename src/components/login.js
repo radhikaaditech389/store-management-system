@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { useHistory } from "react-router-dom";
 import { toast } from "react-toastify";
-import { getCookie } from "../utils/cookies";
 import axios from "axios";
 
 const BASE_URL = process.env.REACT_APP_API_BASE_URL;

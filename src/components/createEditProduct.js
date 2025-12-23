@@ -28,7 +28,6 @@ const CreateEditProduct = () => {
   const [showBrandModel, setShowBrandModel] = useState(false);
   const [newBrand, setNewBrand] = useState("");
   const [error, setError] = useState("");
-  // const [newProduct, setNewProduct] = useState("");
 
   const [initialValues, setInitialValues] = useState({
     sku: "",
