@@ -80,18 +80,12 @@ const CreateEditPurchaseBill = () => {
   }, []);
   const fetchBranch = async () => {
     try {
-      // await axios.get(`${BASE_URL}/sanctum/csrf-cookie`, {
-      //   withCredentials: true,
-      // });
       const response = await axios.get(`${BASE_URL}/api/manager/branches`, {
         headers: {
           Accept: "application/json",
           Authorization: `Bearer ${user_data.token}`,
-          // "X-XSRF-TOKEN": getCookie("XSRF-TOKEN"),
         },
-        // withCredentials: true,
       });
-
       setBranches(response.data.branches);
     } catch (error) {
       console.error("Error fetching categories:", error);
