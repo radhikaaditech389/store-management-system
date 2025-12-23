@@ -38,7 +38,7 @@ const Navbar = () => {
     <div className="section-menu-left">
       <div className="box-logo">
         <Link to="/dashboard" id="site-logo-inner">
-           <img
+          <img
             className=""
             id="logo_header"
             alt="Store Logo"

@@ -501,12 +501,15 @@ const Header = () => {
                 aria-expanded="false"
                 onClick={toggleMenu}
               >
-                <span className="header-user wg-user">
+                <span className="header-user wg-user flex items-center justify-end gap-3 mr-10">
                   <span className="image">
                     <img src="images/avatar/user-1.png" alt="" />
                   </span>
-                  <span className="flex flex-column">
-                    <span className="body-title mb-2">{user_data?.user?.name}</span>
+
+                  <span className="flex flex-col items-end text-left">
+                    <span className="body-title mb-1">
+                      {user_data?.user?.name}
+                    </span>
                     <span className="text-tiny">{user_data?.user?.role}</span>
                   </span>
                 </span>
