@@ -10,7 +10,6 @@ export default function CartPanel({ cart, setCart, triggerRefresh }) {
   localStorage.setItem("cart_detail", JSON.stringify(cart));
   const user_data = JSON.parse(localStorage.getItem("user_detail"));
   const role = user_data?.user?.role;
-  console.log("role", role);
 
   const getPriceWithGST = (item) => {
     const price = parseFloat(item.selling_price);
