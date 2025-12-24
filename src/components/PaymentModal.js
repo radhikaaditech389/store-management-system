@@ -92,7 +92,7 @@ export default function PaymentModal({ total, onClose, onConfirm, cart_data }) {
     };
 
     const response = await axios.post(
-      "http://127.0.0.1:8000/api/sales-bill/print-data",
+      "https://loyality-backend.theaditech.in/api/sales-bill/print-data",
       values,
       {
         headers: {
