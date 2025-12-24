@@ -65,8 +65,8 @@ const TopSellingProducts = ({ role, user = {}, filters = {} }) => {
       name: "Product",
       cell: (row) => (
         <div>
-          <div className="font-semibold text-2xl">{row.product?.name}</div>
-          <div className="text-gray-400 text-2xl">SKU: {row.product?.sku}</div>
+          <div className="font-semibold text-2xl mb-6 mt-6">{row.product?.name}</div>
+          <div className="text-gray-400 text-2xl mb-6">SKU: {row.product?.sku}</div>
         </div>
       ),
       grow: 2,
