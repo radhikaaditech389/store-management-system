@@ -5,7 +5,7 @@ import ReceiptModal from "../components/ReceiptModal";
 import axios from "axios";
 
 export default function PaymentModal({ total, onClose, onConfirm, cart_data }) {
-  // console.log("cart",cart_data);
+  // console.log("cart",total);
   const allIds = cart_data.map((item) => item.id);
   // console.log(allIds);
   const receiptRef = useRef();
@@ -45,7 +45,7 @@ export default function PaymentModal({ total, onClose, onConfirm, cart_data }) {
   const handleConfirm = () => {
     let payments = [];
 
-    if (method === "upi") {
+    if (paymentType === "upi") {
       payments.push({
         method: "upi",
         amount: total,
@@ -55,10 +55,18 @@ export default function PaymentModal({ total, onClose, onConfirm, cart_data }) {
       });
     }
 
-    if (method === "cash") {
+    if (paymentType === "cash") {
       payments.push({
         method: "cash",
         amount: cashApplied,
+        cash_received: parse(cashGiven),
+        balance_return: balanceReturn,
+      });
+    }
+    if (paymentType === "online") {
+      payments.push({
+        method: "online",
+        amount: total,
         cash_received: parse(cashGiven),
         balance_return: balanceReturn,
       });
@@ -212,22 +220,25 @@ export default function PaymentModal({ total, onClose, onConfirm, cart_data }) {
 
           {/* MIDDLE AREA */}
           <div className="col-span-1 space-y-6">
-            <h2
-              className="text-xl font-bold mb-20"
-              style={{ fontSize: "2.4rem" }}
-            >
-              Enter Amount
-            </h2>
+            {paymentType === "cash" && (
+              <>
+                <h2
+                  className="text-xl font-bold mb-20"
+                  style={{ fontSize: "2.4rem" }}
+                >
+                  Enter Amount
+                </h2>
 
-            {method === "cash" && (
-              <div>
-                <input
-                  className="payment-cash p-5 text-3xl text-center border rounded-xl shadow mb-20"
-                  value={cashGiven}
-                  onChange={(e) => setCashGiven(e.target.value)}
-                  placeholder="Cash Received"
-                />
-              </div>
+                <div>
+                  <input
+                    type="number"
+                    className="payment-cash p-5 text-3xl text-center border rounded-xl shadow mb-20"
+                    value={cashGiven}
+                    onChange={(e) => setCashGiven(Number(e.target.value))}
+                    placeholder="Cash Received"
+                  />
+                </div>
+              </>
             )}
 
             {method === "upi" && (
@@ -248,64 +259,70 @@ export default function PaymentModal({ total, onClose, onConfirm, cart_data }) {
               </div>
             )}
             <div style={{ fontSize: "45px", marginBottom: "10px" }}>
-              <strong>Paid: </strong> ₹{cashApplied.toFixed(2)}
+              <strong>Paid: </strong> ₹
+              {paymentType === "online" ? total : cashApplied.toFixed(2)}
             </div>
-            <div style={{ fontSize: "45px", marginBottom: "20px" }}>
-              <strong>Change: </strong> ₹{balanceReturn.toFixed(2)}
-            </div>
+            {paymentType !== "online" && (
+              <div style={{ fontSize: "45px", marginBottom: "20px" }}>
+                <strong>Change: </strong> ₹{balanceReturn.toFixed(2)}
+              </div>
+            )}
           </div>
         </div>
 
         {/* KEYPAD (only cash mode) */}
-        {method === "cash" && (
-          <>
-            <div className="col-md-5">
-              <div className="grid grid-cols-3 gap-3">
-                {[
-                  "1",
-                  "2",
-                  "3",
-                  "4",
-                  "5",
-                  "6",
-                  "7",
-                  "8",
-                  "9",
-                  ".",
-                  "0",
-                  "⌫",
-                ].map((k) => (
-                  <button
-                    key={k}
-                    className="p-5 bg-gray-100 rounded-xl text-2xl font-bold hover:bg-gray-200 shadow"
-                    onClick={() => keypad(k)}
-                  >
-                    {k}
-                  </button>
-                ))}
+        <>
+          <div className="col-md-5">
+            <div className="grid grid-cols-3 gap-3">
+              {paymentType === "cash" && (
+                <>
+                  {[
+                    "1",
+                    "2",
+                    "3",
+                    "4",
+                    "5",
+                    "6",
+                    "7",
+                    "8",
+                    "9",
+                    ".",
+                    "0",
+                    "⌫",
+                  ].map((k) => (
+                    <button
+                      key={k}
+                      className="p-5 bg-gray-100 rounded-xl text-2xl font-bold hover:bg-gray-200 shadow"
+                      onClick={() => keypad(k)}
+                    >
+                      {k}
+                    </button>
+                  ))}
 
-                <button
-                  onClick={() => keypad("C")}
-                  className="col-span-3 p-5 bg-red-500 text-white rounded-xl text-xl shadow hover:bg-red-600"
-                  style={{ fontSize: "20px" }}
-                >
-                  Clear
-                </button>
-                <button
-                  onClick={() => setShowReceipt(true)}
-                  className="col-span-3 p-5 bg-red-500 text-white rounded-xl text-xl shadow hover:bg-red-600"
-                  style={{
-                    background: "#3F51B5",
-                    color: "#fff",
-                    fontSize: "20px",
-                  }}
-                >
-                  Print Receipt
-                </button>
-              </div>
+                  <button
+                    onClick={() => keypad("C")}
+                    className="col-span-3 p-5 bg-red-500 text-white rounded-xl text-xl shadow hover:bg-red-600"
+                    style={{ fontSize: "20px" }}
+                  >
+                    Clear
+                  </button>
+                </>
+              )}
+
+              <button
+                onClick={() => setShowReceipt(true)}
+                className="col-span-3 p-5 text-white rounded-xl text-xl shadow"
+                style={{
+                  background: "#3F51B5",
+                  fontSize: "20px",
+                   marginTop: paymentType === "online" ? "40px" : "0px",
+                }}
+              >
+                Print Receipt
+              </button>
             </div>
-          </>
-        )}
+          </div>
+        </>
 
         {/* SUMMARY + ACTION BUTTONS */}
         <div className="col-span-3 flex justify-between items-center mt-6">
@@ -326,10 +343,10 @@ export default function PaymentModal({ total, onClose, onConfirm, cart_data }) {
             </button>
 
             <button
-              disabled={method === "cash" && remaining > 0}
+              disabled={paymentType === "cash" && remaining > 0}
               onClick={handleConfirm}
               className={`rounded-xl text-white font-bold ${
-                method === "cash" && remaining > 0
+                paymentType === "cash" && remaining > 0
                   ? "bg-gray-400 cursor-not-allowed"
                   : "bg-green-600 hover:bg-green-700"
               }`}
