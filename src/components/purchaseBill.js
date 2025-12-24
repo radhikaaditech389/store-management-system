@@ -5,6 +5,7 @@ import axios from "axios";
 import Layout from "./layout";
 import { getCookie } from "../utils/cookies";
 import { toast } from "react-toastify";
+
 const PurchaseBill = () => {
   const BASE_URL = process.env.REACT_APP_API_BASE_URL;
   const history = useHistory();
@@ -12,39 +13,44 @@ const PurchaseBill = () => {
   const [search, setSearch] = useState("");
   const [purchaseBill, setPurchaseBill] = useState([]);
   const [filteredData, setFilteredData] = useState(products);
-  console.log("filter-data",filteredData);
+  console.log("filter-data", filteredData);
 
   const user_data = JSON.parse(localStorage.getItem("user_detail"));
+
   const handleCreatePurchaseBills = () => {
     localStorage.setItem("purchase_bills_create", null);
   };
+
   const handleEdit = (row) => {
     localStorage.setItem("purchase_bills_create", JSON.stringify(row));
   };
- const handleDeleteConfirm = (id) => {
-    if (window.confirm("Are you sure you want to delete this Purchase Bill?")) {
-      handleDelete(id);
-    }
-  };
-  const handleDelete = async (id) => {
-    const response = await axios.delete(`${BASE_URL}/api/purchase-bill/${id}`, {
-      headers: {
-        accept: "application/json",
-        Authorization: `Bearer ${user_data.token}`,
-      },
-    });
-    if (response) {
-      history.push("/purchase-bill");
-      toast.success("Purchase Bill Deleted!");
-      fetchPurchaseBill();
-    }
-  };
+
+  // const handleDeleteConfirm = (id) => {
+  //   if (window.confirm("Are you sure you want to delete this Purchase Bill?")) {
+  //     handleDelete(id);
+  //   }
+  // };
+
+  // const handleDelete = async (id) => {
+  //   const response = await axios.delete(`${BASE_URL}/api/purchase-bill/${id}`, {
+  //     headers: {
+  //       accept: "application/json",
+  //       Authorization: `Bearer ${user_data.token}`,
+  //     },
+  //   });
+  //   if (response) {
+  //     history.push("/purchase-bill");
+  //     toast.success("Purchase Bill Deleted!");
+  //     fetchPurchaseBill();
+  //   }
+  // };
+
   const columns = [
     {
       name: "Id",
       selector: (row) => row.id,
       sortable: true,
-       width:"100px"
+      width: "100px",
     },
     {
       name: "Branch Name",
@@ -118,9 +124,9 @@ const PurchaseBill = () => {
               <i className="icon-edit-3"></i>
             </Link>
           </div>
-          <div className="item trash" onClick={() => handleDeleteConfirm(row.id)}>
+          {/* <div className="item trash" onClick={() => handleDeleteConfirm(row.id)}>
             <i className="icon-trash-2"></i>
-          </div>
+          </div> */}
         </div>
       ),
     },

@@ -35,6 +35,7 @@ import CreateEditSupplier from "./components/createEditSupplier";
 import CreateEditGstRates from "./components/createEditGstRate";
 import PurchaseReturn from "./components/purchaseReturn";
 import CreateEditPurchaseReturn from "./components/createEditPurchaseReturn";
+import StockExpiryAlertsPage from "./components/ExpiryAlertModal";
 
 function App() {
   return (
@@ -171,6 +172,10 @@ function App() {
           <ProtectedRoute
             path="/gst-rates/edit/:id"
             component={CreateEditGstRates}
+          />
+          <ProtectedRoute
+            path="/stock-expiry-alerts"
+            component={StockExpiryAlertsPage}
           />
           <Route path="*" component={Login} />
         </Switch>
