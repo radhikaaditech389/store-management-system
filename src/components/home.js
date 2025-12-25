@@ -4,6 +4,7 @@ import Layout from "./layout";
 import axios from "axios";
 import ProfitLossWidget from "./ProfitLossWidget";
 import TopSellingProducts from "./topSellingProducts";
+import LowStockAlert from "./lowStockAlert";
 
 const Home = () => {
   const BASE_URL = process.env.REACT_APP_API_BASE_URL;
@@ -584,22 +585,26 @@ const Home = () => {
               {/* <!-- /chart-default --> */}
             </div>
           </div>
-          <div className="flex flex-col md:flex-row gap-6">
-            {(role === "admin" || role === "manager") && (
-              <div className="flex-1">
-                <ProfitLossWidget role={role} user={user_data} />
-              </div>
-            )}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            {/* LEFT SIDE */}
+            <div className="flex flex-col gap-6">
+              <ProfitLossWidget role={role} user={user_data} />
 
-            {(role === "admin" || role === "manager") && (
-              <div className="flex-1">
-                <TopSellingProducts
-                  role={role}
-                  user={user_data}
-                  filters={{ branch_id: "ALL" }}
-                />
-              </div>
-            )}
+              <LowStockAlert
+                role={role}
+                user={user_data}
+                filters={{ branch_id: "ALL" }}
+              />
+            </div>
+
+            {/* RIGHT SIDE */}
+            <div className="flex flex-col gap-6">
+              <TopSellingProducts
+                role={role}
+                user={user_data}
+                filters={{ branch_id: "ALL" }}
+              />
+            </div>
           </div>
         </div>
       </Layout>

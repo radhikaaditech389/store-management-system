@@ -100,7 +100,7 @@ export default function PaymentModal({ total, onClose, onConfirm, cart_data }) {
     };
 
     const response = await axios.post(
-      "https://loyality-backend.theaditech.in/api/sales-bill/print-data",
+      "http://127.0.0.1:8000/api/sales-bill/print-data",
       values,
       {
         headers: {
@@ -315,7 +315,7 @@ export default function PaymentModal({ total, onClose, onConfirm, cart_data }) {
                 style={{
                   background: "#3F51B5",
                   fontSize: "20px",
-                   marginTop: paymentType === "online" ? "40px" : "0px",
+                  marginTop: paymentType === "online" ? "40px" : "0px",
                 }}
               >
                 Print Receipt

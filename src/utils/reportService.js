@@ -32,3 +32,12 @@ export const topSellingProducts = async (params = {}) => {
 
   return response.data;
 };
+
+export const fetchLowStockProducts = async (params = {}) => {
+  const response = await axios.get(`${BASE_URL}/api/stock-alerts`, {
+    headers: getAuthHeader(),
+    params: params,
+  });
+
+  return response.data;
+};
