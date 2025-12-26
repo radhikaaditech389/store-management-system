@@ -6623,7 +6623,7 @@ select.h40 {
     padding-left: 15px !important;
   }
   .layout-wrap .section-menu-left {
-    left: -100%;
+    left: 0;
   }
   .layout-wrap .section-menu-left .button-show-hide {
     transform: rotate(180deg);

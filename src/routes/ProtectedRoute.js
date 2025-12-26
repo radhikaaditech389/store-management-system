@@ -10,12 +10,10 @@ const ProtectedRoute = ({ component: Component, ...rest }) => {
   if (!token) {
     return <Redirect to="/" />;
   }
-
-  // Redirect cashier away from admin pages
   if (role === "cashier" && rest.path !== "/pos") {
     return <Redirect to="/pos" />;
   }
-  
+
   return (
     <Route
       {...rest}

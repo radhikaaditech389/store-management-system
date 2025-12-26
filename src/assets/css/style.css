@@ -7150,6 +7150,59 @@ form.form-style-1 > * {
   font-size: 13px;
   margin-top: 4px;
 }
+
+/* ===== Sidebar base ===== */
+.section-menu-left {
+  width: 260px;
+  background: #fff;
+  height: 100vh;
+  position: fixed;
+  left: 0;
+  top: 0;
+  z-index: 1001;
+  transition: transform 0.3s ease;
+}
+
+/* ===== Mobile behavior ===== */
+@media (max-width: 768px) {
+  .section-menu-left {
+    transform: translateX(-100%);
+  }
+
+  .section-menu-left.open {
+    transform: translateX(0);
+  }
+
+  .mobile-menu-btn {
+    position: fixed;
+    top: 15px;
+    left: 15px;
+    z-index: 1100;
+    background: none;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+  }
+
+  .sidebar-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.4);
+    z-index: 1000;
+  }
+
+  .button-show-hide {
+    cursor: pointer;
+  }
+}
+
+/* ===== Desktop ===== */
+@media (min-width: 769px) {
+  .mobile-menu-btn {
+    display: none;
+  }
+}
+
 @media (max-width: 1900px) {
   .all-gallery-wrap .left .wrap-gallery-item {
     grid-template-columns: repeat(3, 1fr);
@@ -7275,7 +7328,7 @@ form.form-style-1 > * {
     padding-left: 15px !important;
   }
   .layout-wrap .section-menu-left {
-    left: -100%;
+    left: 0;
   }
   .layout-wrap .section-menu-left .button-show-hide {
     transform: rotate(180deg);
@@ -7302,7 +7355,7 @@ form.form-style-1 > * {
     .header-dashboard
     .wrap
     .button-show-hide {
-    display: block;
+    display: none;
   }
   .layout-wrap .section-content-right .header-dashboard .wrap .form-search {
     display: none;
