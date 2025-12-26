@@ -97,19 +97,23 @@ const Category = () => {
   ];
 
   useEffect(() => {
-    const searchText = search.toLowerCase();
+  const searchText = (search || "").toLowerCase();
 
-    const result = categories.filter((item) => {
-      return (
-        item.store.name.toLowerCase().includes(searchText) ||
-        item.name.toLowerCase().includes(searchText) ||
-        item.description.toLowerCase().includes(searchText) ||
-        item.parent?.name?.toLowerCase().includes(searchText)
-      );
-    });
+  const result = categories.filter(item =>
+    [
+      item.store?.name,
+      item.name,
+      item.description,
+      item.parent?.name
+    ]
+      .join(" ")
+      .toLowerCase()
+      .includes(searchText)
+  );
 
-    setFilteredData(result);
-  }, [search, categories]);
+  setFilteredData(result);
+}, [search, categories]);
+
 
   const handleCreateCategory = () => {
     localStorage.setItem("category_detail", null);

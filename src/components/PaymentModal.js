@@ -10,7 +10,7 @@ export default function PaymentModal({ total, onClose, onConfirm, cart_data }) {
   // console.log(allIds);
   const receiptRef = useRef();
   const [method, setMethod] = useState("cash");
-  const [cashGiven, setCashGiven] = useState("");
+  const [cashGiven, setCashGiven] = useState(null);
   const [paymentType, setPaymentType] = useState("cash");
   const [payment, setPayment] = useState([]);
   const [showReceipt, setShowReceipt] = useState(false);
@@ -100,7 +100,7 @@ export default function PaymentModal({ total, onClose, onConfirm, cart_data }) {
     };
 
     const response = await axios.post(
-      "http://127.0.0.1:8000/api/sales-bill/print-data",
+      "https://loyality-backend.theaditech.in/api/sales-bill/print-data",
       values,
       {
         headers: {
@@ -230,12 +230,23 @@ export default function PaymentModal({ total, onClose, onConfirm, cart_data }) {
                 </h2>
 
                 <div>
-                  <input
+                  {/* <input
                     type="number"
                     className="payment-cash p-5 text-3xl text-center border rounded-xl shadow mb-20"
                     value={cashGiven}
                     onChange={(e) => setCashGiven(Number(e.target.value))}
                     placeholder="Cash Received"
+                  /> */}
+                  <input
+                    type="number"
+                    className="payment-cash p-5 text-3xl text-center border rounded-xl shadow mb-20"
+                    placeholder="Cash Received"
+                    value={cashGiven ?? ""}
+                    onChange={(e) =>
+                      setCashGiven(
+                        e.target.value === "" ? null : Number(e.target.value)
+                      )
+                    }
                   />
                 </div>
               </>

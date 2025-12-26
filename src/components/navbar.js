@@ -31,7 +31,7 @@ const Navbar = () => {
   }, [store_id]);
 
   const logoUrl = store?.logo
-    ? `http://127.0.0.1:8000/storage/${store.logo}`
+    ? `https://loyality-backend.theaditech.in/storage/${store.logo}`
     : defaultLogo;
 
   return (
