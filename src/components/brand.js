@@ -138,7 +138,7 @@ const Brand = () => {
             </ul>
           </div>
           {/* <!-- all-user --> */}
-          <div className="wg-box" style={{ width: "80%" }}>
+          <div className="wg-box brand-box" style={{ width: "80%" }}>
             <div className="flex items-center justify-between gap10 flex-wrap">
               <div className="wg-filter flex-grow"></div>
               <Link
