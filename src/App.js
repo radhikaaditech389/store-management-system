@@ -5,7 +5,12 @@ import "../src/assets/font/fonts.css";
 import "../src/assets/icon/style.css";
 import Home from "./components/home";
 import Register from "./components/register";
-import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  Redirect,
+} from "react-router-dom";
 import Login from "./components/login";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -27,6 +32,7 @@ import GstRate from "./components/gstRate";
 import Staff from "./components/staff";
 import CreateEditStaff from "./components/createEditStaff";
 import ProtectedRoute from "./routes/ProtectedRoute";
+import PublicRoute from "./routes/PublicRoute";
 import CreateEditPurchaseBill from "./components/createEditPurchaseBill";
 import SaleBill from "./components/saleBill";
 import CreateEditSaleBill from "./components/createEditSaleBill";
@@ -36,6 +42,11 @@ import CreateEditGstRates from "./components/createEditGstRate";
 import PurchaseReturn from "./components/purchaseReturn";
 import CreateEditPurchaseReturn from "./components/createEditPurchaseReturn";
 import StockExpiryAlertsPage from "./components/ExpiryAlertModal";
+const isAuthenticated = () => {
+  const storedData = localStorage.getItem("user_detail");
+  const userDetail = storedData ? JSON.parse(storedData) : null;
+  return !!userDetail?.token;
+};
 
 function App() {
   return (
@@ -59,10 +70,31 @@ function App() {
 
       <Router>
         <Switch>
-          <Route exact path="/" component={Login} />
-          <Route exact path="/register" component={Register} />
-          <Route exact path="/cashier_login" component={CashierLogin} />
+          {/* <Route
+            exact
+            path="/"
+            render={() =>
+              isAuthenticated() ? <Redirect to="/dashboard" /> : <Login />
+            }
+          />
+          <Route
+            exact
+            path="/register"
+            render={() =>
+              isAuthenticated() ? <Redirect to="/dashboard" /> : <Register />
+            }
+          />
+          <Route
+            exact
+            path="/cashier_login"
+            render={() =>
+              isAuthenticated() ? <Redirect to="/pos" /> : <CashierLogin />
+            }
+          /> */}
 
+          <PublicRoute exact path="/" component={Login} />
+          <PublicRoute exact path="/register" component={Register} />
+          <PublicRoute exact path="/cashier_login" component={CashierLogin} />
           <ProtectedRoute exact path="/pos" component={POS} />
           <ProtectedRoute exact path="/dashboard" component={Home} />
           <ProtectedRoute exact path="/product" component={Product} />
