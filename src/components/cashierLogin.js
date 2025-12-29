@@ -4,7 +4,6 @@ import { useHistory } from "react-router-dom";
 import { toast } from "react-toastify";
 import axios from "axios";
 import { getCookie } from "../utils/cookies";
-axios.defaults.baseURL = "https://loyality-backend.theaditech.in";
 axios.defaults.withCredentials = true;
 
 const CashierLogin = () => {

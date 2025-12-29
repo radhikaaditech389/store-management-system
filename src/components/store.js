@@ -70,7 +70,7 @@ const Store = () => {
       cell: (row) =>
         row.logo ? (
           <img
-            src={`https://loyality-backend.theaditech.in/storage/${row.logo}`}
+            src={`${BASE_URL}/storage/${row.logo}`}
             alt="Store Logo"
             className="w-40 h-15 object-cover mt-2"
           />

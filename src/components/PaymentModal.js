@@ -1,19 +1,11 @@
-import React, { useState, useMemo, useRef, useEffect } from "react";
-// import { QRCodeCanvas } from "qrcode.react";
+import React, { useState } from "react";
 import QRCode from "react-qr-code";
-import ReceiptModal from "../components/ReceiptModal";
-import axios from "axios";
 
 export default function PaymentModal({ total, onClose, onConfirm, cart_data }) {
-  // console.log("cart",total);
-  const allIds = cart_data.map((item) => item.id);
-  // console.log(allIds);
-  const receiptRef = useRef();
   const [method, setMethod] = useState("cash");
   const [cashGiven, setCashGiven] = useState(null);
   const [paymentType, setPaymentType] = useState("cash");
-  const [payment, setPayment] = useState([]);
-  const [showReceipt, setShowReceipt] = useState(false);
+
   const parse = (v) => (parseFloat(v) ? parseFloat(v) : 0);
   const cashApplied = Math.min(parse(cashGiven), total);
   const remaining = total - cashApplied;
@@ -77,93 +69,6 @@ export default function PaymentModal({ total, onClose, onConfirm, cart_data }) {
 
   const handleMethod = (type) => {
     setPaymentType(type);
-  };
-
-  const sampleReceipt = {
-    orderId: "ORD1234",
-    customer: "John Doe",
-    date: new Date().toLocaleDateString(),
-    items: [
-      { name: "Paracetamol", qty: 2, price: 20 },
-      { name: "Vicks", qty: 1, price: 50 },
-    ],
-    total: 90,
-  };
-
-  useEffect(() => {
-    handlePrintData();
-  }, []);
-
-  const handlePrintData = async () => {
-    const values = {
-      id: allIds,
-    };
-
-    const response = await axios.post(
-      "https://loyality-backend.theaditech.in/api/sales-bill/print-data",
-      values,
-      {
-        headers: {
-          Accept: "application/json",
-          Authorization: `Bearer ${user_data?.token}`,
-        },
-      }
-    );
-    setPayment(response.data.data);
-  };
-
-  const cart_detail = JSON.parse(localStorage.getItem("cart_detail"));
-
-  const cart_total = localStorage.getItem("cart_total");
-
-  const printReceipt = () => {
-    const printContent = receiptRef.current;
-
-    const win = window.open("", "", "width=300,height=600");
-
-    win.document.write(`
-    <html>
-      <head>
-        <title>Receipt</title>
-           <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
-        <style>
-          @page {
-            size: auto;
-            margin: 15mm 10mm 10mm 10mm; /* TOP RIGHT BOTTOM LEFT */
-          }
-
-          body {
-            margin: 0;
-            padding: 0;
-            font-family: "Poppins", sans-serif;
-          }
-
-          .receipt-print {
-            margin-top: 12mm; /* EXTRA TOP SPACE IF REQUIRED */
-          }
-
-          hr {
-            border: none;
-            border-top: 1px dashed #000;
-            margin: 6px 0;
-          }
-        </style>
-      </head>
-      <body>
-        <div class="receipt-print">
-          ${printContent.innerHTML}
-        </div>
-      </body>
-    </html>
-  `);
-
-    win.document.close();
-    win.focus();
-
-    setTimeout(() => {
-      win.print();
-      win.close();
-    }, 500);
   };
 
   return (
@@ -320,7 +225,7 @@ export default function PaymentModal({ total, onClose, onConfirm, cart_data }) {
                 </>
               )}
 
-              <button
+              {/* <button
                 onClick={() => setShowReceipt(true)}
                 className="col-span-3 p-5 text-white rounded-xl text-xl shadow"
                 style={{
@@ -330,7 +235,7 @@ export default function PaymentModal({ total, onClose, onConfirm, cart_data }) {
                 }}
               >
                 Print Receipt
-              </button>
+              </button> */}
             </div>
           </div>
         </>
@@ -367,15 +272,6 @@ export default function PaymentModal({ total, onClose, onConfirm, cart_data }) {
             </button>
           </div>
         </div>
-        <ReceiptModal
-          isOpen={showReceipt}
-          onClose={() => setShowReceipt(false)}
-          data={sampleReceipt}
-          ref={receiptRef}
-          cart_total={cart_total}
-          cart_detail={cart_detail}
-          onPrint={printReceipt}
-        />
       </div>
     </div>
   );

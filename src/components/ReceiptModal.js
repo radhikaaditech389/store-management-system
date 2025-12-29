@@ -1,54 +1,105 @@
 import React, { forwardRef } from "react";
 
 const ReceiptModal = forwardRef(
-  ({ isOpen, onClose, data, onPrint, cart_total, cart_detail }, ref) => {
+  ({ isOpen, onClose, data = {}, onPrint }, ref) => {
+    if (!isOpen || !data?.data?.length) return null;
 
-    if (!isOpen) return null;
-
-    const user_data = JSON.parse(localStorage.getItem("user_detail"));
+    // Get the first bill object from data
+    const billData = data.data[0] || {};
+    const { store, branch, bill, items = [], barcode, footer } = billData;
 
     return (
       <div style={styles.overlay}>
         <div style={styles.modal}>
-          {/* Receipt Content */}
           <div ref={ref} style={styles.receiptBox}>
-            <h2 style={styles.title}>Receipt</h2>
+            {/* Store Header */}
+            <h2 style={styles.storeName}>{store?.name || "Store Name"}</h2>
+            <div style={styles.branchName}>{branch?.name || store?.name}</div>
+            <div style={styles.address}>{branch?.address || store?.state}</div>
+            <div style={styles.phone}>Phone: {store?.phone}</div>
 
+            <hr style={styles.separator} />
+
+            {/* Bill Info */}
             <div style={styles.row}>
-              <strong>Order ID:</strong> {data.orderId}
+              <span>Bill No:</span>
+              <span>{bill?.number || "-"}</span>
+            </div>
+            <div style={styles.row}>
+              <span>Date:</span>
+              <span>{bill?.date || new Date().toLocaleString()}</span>
+            </div>
+            <div style={styles.row}>
+              <span>Cashier:</span>
+              <span>{bill?.cashier || "N/A"}</span>
             </div>
 
-            <div style={styles.row}>
-              <strong>Customer:</strong> {user_data.user.name}
-            </div>
+            <hr style={styles.separator} />
 
-            <div style={styles.row}>
-              <strong>Date:</strong> {data.date}
-            </div>
-
-            <hr />
-
-            <h4>Items</h4>
-            {cart_detail.map((item, i) => {
-              const price = parseFloat(item.selling_price); // per item price
-              const gst = parseFloat(item.gst_rate?.rate || 0); // GST %
-              const gstAmount = (price * gst) / 100; // GST value
-              const finalPrice = price + gstAmount; // Price + GST
-
-              return (
-                <div key={i} style={styles.row}>
-                  <span style={styles.row}>{item.name}</span>
-                  <span>
-                    {item.qty} × ₹{finalPrice.toFixed(2)}
-                  </span>
+            {/* Items */}
+            <h4 style={styles.sectionTitle}>Items</h4>
+            <div>
+              {items.length > 0 ? (
+                items.map((item, i) => (
+                  <div key={i} style={styles.itemRow}>
+                    <span style={styles.itemName}>{item.name}</span>
+                    <span style={styles.itemQty}>
+                      {item.qty} × ₹{parseFloat(item.selling).toFixed(2)}
+                    </span>
+                    <span style={styles.itemAmount}>
+                      ₹{parseFloat(item.amount).toFixed(2)}
+                    </span>
+                  </div>
+                ))
+              ) : (
+                <div
+                  style={{
+                    textAlign: "center",
+                    color: "#999",
+                    margin: "10px 0",
+                  }}
+                >
+                  No items found
                 </div>
-              );
-            })}
+              )}
+            </div>
 
-            <hr />
+            <hr style={styles.separator} />
 
-            <div style={styles.cart_row}>
-              <strong style={styles.cart_row}>Total:</strong> ₹{cart_total}
+            {/* Totals */}
+            <div style={styles.summaryRow}>
+              <span>Subtotal:</span>
+              <span>₹{parseFloat(bill?.subtotal || 0).toFixed(2)}</span>
+            </div>
+            <div style={styles.summaryRow}>
+              <span>Total GST:</span>
+              <span>₹{parseFloat(bill?.total_gst || 0).toFixed(2)}</span>
+            </div>
+            <div style={styles.summaryRow}>
+              <span>Total Saved:</span>
+              <span>₹{parseFloat(bill?.total_saved || 0).toFixed(2)}</span>
+            </div>
+            <div
+              style={{
+                ...styles.summaryRow,
+                fontWeight: "bold",
+                fontSize: "18px",
+              }}
+            >
+              <span>Total:</span>
+              <span>₹{parseFloat(bill?.total_amount || 0).toFixed(2)}</span>
+            </div>
+
+            {/* Barcode */}
+            {barcode && (
+              <div style={{ textAlign: "center", margin: "20px 40px" }}>
+                <img src={barcode} alt="barcode" style={{ height: 60 }} />
+              </div>
+            )}
+
+            {/* Footer */}
+            <div style={styles.footer}>
+              {footer || "Thank You! Visit Again"}
             </div>
           </div>
 
@@ -86,30 +137,76 @@ const styles = {
     background: "#fff",
     padding: "20px",
     borderRadius: "8px",
-    width: "395px",
-    height: "auto",
+    width: "400px",
+    maxHeight: "90vh",
+    overflowY: "auto",
     boxShadow: "0px 3px 12px rgba(0,0,0,0.2)",
   },
   receiptBox: {
     padding: "15px",
+    fontFamily: "'Courier New', Courier, monospace",
+    fontSize: "14px",
+    color: "#333",
   },
-  title: {
+  storeName: {
     textAlign: "center",
+    fontWeight: "bold",
+    fontSize: "22px",
+  },
+  branchName: {
+    textAlign: "center",
+    fontSize: "16px",
+  },
+  address: {
+    textAlign: "center",
+    fontSize: "14px",
+  },
+  phone: {
+    textAlign: "center",
+    fontSize: "14px",
     marginBottom: "10px",
-    fontSize: "34px",
-    marginTop: "-22px",
+  },
+  separator: {
+    border: "none",
+    borderTop: "1px dashed #333",
+    margin: "5px 0",
   },
   row: {
     display: "flex",
     justifyContent: "space-between",
-   margin: "5px 0px",
-    fontSize: "16px",
+    margin: "3px 0",
   },
-  cart_row: {
+  sectionTitle: {
+    fontSize: "16px",
+    margin: "5px 0",
+    fontWeight: "bold",
+  },
+  itemRow: {
     display: "flex",
     justifyContent: "space-between",
-    margin: "5px 0",
-    fontSize: "22px",
+    margin: "3px 0",
+  },
+  itemName: {
+    flex: 2,
+  },
+  itemQty: {
+    flex: 1,
+    textAlign: "center",
+  },
+  itemAmount: {
+    flex: 1,
+    textAlign: "right",
+  },
+  summaryRow: {
+    display: "flex",
+    justifyContent: "space-between",
+    margin: "3px 0",
+  },
+  footer: {
+    textAlign: "center",
+    marginTop: "15px",
+    fontSize: "14px",
+    fontWeight: "bold",
   },
   actions: {
     marginTop: "15px",
@@ -123,7 +220,7 @@ const styles = {
     border: "none",
     borderRadius: "5px",
     cursor: "pointer",
-    fontSize: "15px"
+    fontSize: "15px",
   },
   closeBtn: {
     padding: "12px 24px",
@@ -132,6 +229,6 @@ const styles = {
     border: "none",
     borderRadius: "5px",
     cursor: "pointer",
-    fontSize: "15px"
+    fontSize: "15px",
   },
 };

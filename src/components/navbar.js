@@ -6,7 +6,7 @@ import defaultLogo from "../assets/images/logo/logo.png";
 const BASE_URL = process.env.REACT_APP_API_BASE_URL;
 
 const Navbar = () => {
-   const [isOpen, setIsOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
   const user_detail = JSON.parse(localStorage.getItem("user_detail"));
 
   const role = user_detail?.user?.role;
@@ -32,11 +32,9 @@ const Navbar = () => {
     fetchStore();
   }, [store_id]);
 
-  const logoUrl = store?.logo
-    ? `https://loyality-backend.theaditech.in/storage/${store.logo}`
-    : defaultLogo;
+  const logoUrl = store?.logo ? `${BASE_URL}/storage/${store.logo}` : null;
 
-     const closeSidebar = () => {
+  const closeSidebar = () => {
     if (window.innerWidth <= 768) {
       setIsOpen(false);
     }
@@ -45,10 +43,7 @@ const Navbar = () => {
   return (
     <>
       {/* Mobile Menu Button */}
-      <button
-        className="mobile-menu-btn"
-        onClick={() => setIsOpen(!isOpen)}
-      >
+      <button className="mobile-menu-btn" onClick={() => setIsOpen(!isOpen)}>
         <i className="icon-menu-left"></i>
       </button>
 
@@ -56,31 +51,29 @@ const Navbar = () => {
       <div className={`section-menu-left ${isOpen ? "open" : ""}`}>
         <div className="box-logo">
           <Link to="/dashboard" id="site-logo-inner" onClick={closeSidebar}>
-            <img
-              id="logo_header"
-              alt="Store Logo"
-              src={logoUrl}
-              style={{
-                height: "52px",
-                marginLeft: "20px",
-                objectFit: "contain",
-              }}
-            />
+            {logoUrl && (
+              <img
+                id="logo_header"
+                alt="Store Logo"
+                src={logoUrl}
+                style={{
+                  height: "52px",
+                  marginLeft: "20px",
+                  objectFit: "contain",
+                }}
+              />
+            )}
             {/* close */}
           </Link>
 
           {/* Close button (mobile) */}
-          <div
-            className="button-show-hide"
-            onClick={() => setIsOpen(false)}
-          >
+          <div className="button-show-hide" onClick={() => setIsOpen(false)}>
             <i className="icon-menu-left"></i>
           </div>
         </div>
 
         <div className="section-menu-left-wrap">
           <div className="center">
-
             {/* MAIN HOME */}
             <div className="center-item">
               <div className="center-heading">Main Home</div>
@@ -104,10 +97,13 @@ const Navbar = () => {
             <div className="center-item">
               <div className="center-heading">All Page</div>
               <ul className="menu-list">
-
                 {role === "superadmin" && (
                   <li className="menu-item">
-                    <Link to="/store" className="menu-item-button" onClick={closeSidebar}>
+                    <Link
+                      to="/store"
+                      className="menu-item-button"
+                      onClick={closeSidebar}
+                    >
                       <div className="icon">
                         <i className="icon-briefcase"></i>
                       </div>
@@ -119,7 +115,11 @@ const Navbar = () => {
                 {role === "admin" && (
                   <>
                     <li className="menu-item">
-                      <Link to="/branch" className="menu-item-button" onClick={closeSidebar}>
+                      <Link
+                        to="/branch"
+                        className="menu-item-button"
+                        onClick={closeSidebar}
+                      >
                         <div className="icon">
                           <i className="icon-clipboard"></i>
                         </div>
@@ -128,7 +128,11 @@ const Navbar = () => {
                     </li>
 
                     <li className="menu-item">
-                      <Link to="/staff" className="menu-item-button" onClick={closeSidebar}>
+                      <Link
+                        to="/staff"
+                        className="menu-item-button"
+                        onClick={closeSidebar}
+                      >
                         <div className="icon">
                           <i className="icon-edit"></i>
                         </div>
@@ -141,7 +145,11 @@ const Navbar = () => {
                 {role === "manager" && (
                   <>
                     <li className="menu-item">
-                      <Link to="/category" className="menu-item-button" onClick={closeSidebar}>
+                      <Link
+                        to="/category"
+                        className="menu-item-button"
+                        onClick={closeSidebar}
+                      >
                         <div className="icon">
                           <i className="icon-layers"></i>
                         </div>
@@ -150,7 +158,11 @@ const Navbar = () => {
                     </li>
 
                     <li className="menu-item">
-                      <Link to="/brand" className="menu-item-button" onClick={closeSidebar}>
+                      <Link
+                        to="/brand"
+                        className="menu-item-button"
+                        onClick={closeSidebar}
+                      >
                         <div className="icon">
                           <i className="icon-book"></i>
                         </div>
@@ -159,7 +171,11 @@ const Navbar = () => {
                     </li>
 
                     <li className="menu-item">
-                      <Link to="/suppliers" className="menu-item-button" onClick={closeSidebar}>
+                      <Link
+                        to="/suppliers"
+                        className="menu-item-button"
+                        onClick={closeSidebar}
+                      >
                         <div className="icon">
                           <i className="icon-users"></i>
                         </div>
@@ -168,7 +184,11 @@ const Navbar = () => {
                     </li>
 
                     <li className="menu-item">
-                      <Link to="/gst-rates" className="menu-item-button" onClick={closeSidebar}>
+                      <Link
+                        to="/gst-rates"
+                        className="menu-item-button"
+                        onClick={closeSidebar}
+                      >
                         <div className="icon">
                           <i className="icon-folder"></i>
                         </div>
@@ -177,7 +197,11 @@ const Navbar = () => {
                     </li>
 
                     <li className="menu-item">
-                      <Link to="/product" className="menu-item-button" onClick={closeSidebar}>
+                      <Link
+                        to="/product"
+                        className="menu-item-button"
+                        onClick={closeSidebar}
+                      >
                         <div className="icon">
                           <i className="icon-cast"></i>
                         </div>
@@ -186,7 +210,11 @@ const Navbar = () => {
                     </li>
 
                     <li className="menu-item">
-                      <Link to="/purchase-bill" className="menu-item-button" onClick={closeSidebar}>
+                      <Link
+                        to="/purchase-bill"
+                        className="menu-item-button"
+                        onClick={closeSidebar}
+                      >
                         <div className="icon">
                           <i className="icon-bookmark"></i>
                         </div>
@@ -195,7 +223,11 @@ const Navbar = () => {
                     </li>
 
                     <li className="menu-item">
-                      <Link to="/purchase-return-bill" className="menu-item-button" onClick={closeSidebar}>
+                      <Link
+                        to="/purchase-return-bill"
+                        className="menu-item-button"
+                        onClick={closeSidebar}
+                      >
                         <div className="icon">
                           <i className="icon-bookmark"></i>
                         </div>
@@ -204,7 +236,11 @@ const Navbar = () => {
                     </li>
 
                     <li className="menu-item">
-                      <Link to="/sale-bill" className="menu-item-button" onClick={closeSidebar}>
+                      <Link
+                        to="/sale-bill"
+                        className="menu-item-button"
+                        onClick={closeSidebar}
+                      >
                         <div className="icon">
                           <i className="icon-box"></i>
                         </div>
@@ -213,7 +249,11 @@ const Navbar = () => {
                     </li>
 
                     <li className="menu-item">
-                      <Link to="/pos" className="menu-item-button" onClick={closeSidebar}>
+                      <Link
+                        to="/pos"
+                        className="menu-item-button"
+                        onClick={closeSidebar}
+                      >
                         <div className="icon">
                           <i className="icon-shopping-cart"></i>
                         </div>
@@ -224,7 +264,6 @@ const Navbar = () => {
                 )}
               </ul>
             </div>
-
           </div>
         </div>
       </div>

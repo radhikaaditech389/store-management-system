@@ -585,27 +585,29 @@ const Home = () => {
               {/* <!-- /chart-default --> */}
             </div>
           </div>
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            {/* LEFT SIDE */}
-            <div className="flex flex-col gap-6">
-              <ProfitLossWidget role={role} user={user_data} />
+          {["admin", "manager"].includes(role) && (
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              {/* LEFT SIDE */}
+              <div className="flex flex-col gap-6">
+                <ProfitLossWidget role={role} user={user_data} />
 
-              <LowStockAlert
-                role={role}
-                user={user_data}
-                filters={{ branch_id: "ALL" }}
-              />
-            </div>
+                <LowStockAlert
+                  role={role}
+                  user={user_data}
+                  filters={{ branch_id: "ALL" }}
+                />
+              </div>
 
-            {/* RIGHT SIDE */}
-            <div className="flex flex-col gap-6">
-              <TopSellingProducts
-                role={role}
-                user={user_data}
-                filters={{ branch_id: "ALL" }}
-              />
+              {/* RIGHT SIDE */}
+              <div className="flex flex-col gap-6">
+                <TopSellingProducts
+                  role={role}
+                  user={user_data}
+                  filters={{ branch_id: "ALL" }}
+                />
+              </div>
             </div>
-          </div>
+          )}
         </div>
       </Layout>
     </>
