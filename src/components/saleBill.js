@@ -1,14 +1,28 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import DataTable from "react-data-table-component";
 import { Link } from "react-router-dom";
 import axios from "axios";
 import Layout from "./layout";
-import { getCookie } from "../utils/cookies";
+import ReceiptModal from "./ReceiptModal";
+
+const getAuthHeader = () => {
+  const user_detail = localStorage.getItem("user_detail");
+  const user = user_detail ? JSON.parse(user_detail) : null;
+  const token = user?.token;
+
+  return token
+    ? { "Content-Type": "application/json", Authorization: `Bearer ${token}` }
+    : {};
+};
 
 const SaleBill = () => {
   const BASE_URL = process.env.REACT_APP_API_BASE_URL;
   const [search, setSearch] = useState("");
   const [saleBills, setSaleBills] = useState([]);
+
+  const [showReceipt, setShowReceipt] = useState(false);
+  const [printData, setPrintData] = useState(null);
+  const receiptRef = useRef();
 
   const [filteredData, setFilteredData] = useState(saleBills);
   const user_data = JSON.parse(localStorage.getItem("user_detail"));
@@ -18,7 +32,7 @@ const SaleBill = () => {
       name: "Id",
       selector: (row) => row.id,
       sortable: true,
-      width:"100px"
+      width: "100px",
     },
     {
       name: "Branch Name",
@@ -90,7 +104,41 @@ const SaleBill = () => {
       selector: (row) => row.created_at,
       sortable: true,
     },
+    {
+      name: "Action",
+      button: true,
+      cell: (row) => (
+        <button
+          onClick={() => handlePrint(row.id)}
+          className="px-3 py-1 text-2xl bg-blue-600 text-white rounded hover:bg-blue-700"
+        >
+          Print
+        </button>
+      ),
+    },
   ];
+
+  const handlePrint = async (billId) => {
+    try {
+      const res = await axios.post(
+        `${BASE_URL}/api/sales-bill/print-data`,
+        { id: [billId] },
+        { headers: getAuthHeader() }
+      );
+
+      if (res.data?.status && res.data?.data?.length > 0) {
+        setPrintData({
+          data: res.data.data,
+        });
+        setShowReceipt(true);
+      } else {
+        alert("No print data found");
+      }
+    } catch (error) {
+      console.error("Print failed:", error);
+      alert("Unable to print bill");
+    }
+  };
 
   const fetchSaleBill = async () => {
     try {
@@ -114,7 +162,9 @@ const SaleBill = () => {
     const searchText = search.toLowerCase();
 
     const result = saleBills.filter((item) => {
-      const formattedDate = new Date(item.created_at).toLocaleDateString('en-CA');
+      const formattedDate = new Date(item.created_at).toLocaleDateString(
+        "en-CA"
+      );
       const searchable = `
       ${item.id}
       ${item.store?.name}
@@ -139,6 +189,56 @@ const SaleBill = () => {
 
     setFilteredData(result);
   }, [search, saleBills]);
+
+  const printReceipt = () => {
+    const printContent = receiptRef.current;
+
+    const win = window.open("", "", "width=800,height=600");
+
+    win.document.write(`
+    <html>
+      <head>
+        <title>Receipt</title>
+           <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+        <style>
+          @page {
+            size: auto;
+            margin: 15mm 10mm 10mm 10mm; /* TOP RIGHT BOTTOM LEFT */
+          }
+
+          body {
+            margin: 0;
+            padding: 0;
+            font-family: "Poppins", sans-serif;
+          }
+
+          .receipt-print {
+            margin-top: 12mm; /* EXTRA TOP SPACE IF REQUIRED */
+          }
+
+          hr {
+            border: none;
+            border-top: 1px dashed #000;
+            margin: 6px 0;
+          }
+        </style>
+      </head>
+      <body>
+        <div class="receipt-print">
+          ${printContent.innerHTML}
+        </div>
+      </body>
+    </html>
+  `);
+
+    win.document.close();
+    win.focus();
+
+    setTimeout(() => {
+      win.print();
+      win.close();
+    }, 500);
+  };
 
   return (
     <Layout>
@@ -200,6 +300,16 @@ const SaleBill = () => {
         </div>
         {/* <!-- /main-content-wrap --> */}
       </div>
+
+      {showReceipt && printData && (
+        <ReceiptModal
+          ref={receiptRef}
+          isOpen={showReceipt}
+          data={printData}
+          onClose={() => setShowReceipt(false)}
+          onPrint={printReceipt}
+        />
+      )}
     </Layout>
   );
 };
