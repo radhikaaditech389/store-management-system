@@ -1991,7 +1991,7 @@ a:focus {
   color: #ff5200;
 }
 .brand-box {
-  width: 80%!important;
+  width: 80% !important;
 }
 .wg-order-detail {
   display: -webkit-box;
@@ -7166,8 +7166,11 @@ form.form-style-1 > * {
 
 /* ===== Mobile behavior ===== */
 @media (max-width: 768px) {
+  .selling-product {
+    margin-top: 10px !important;
+  }
   .brand-box {
-    width: 100%!important;
+    width: 100% !important;
   }
   .section-menu-left {
     transform: translateX(-100%);
@@ -7209,7 +7212,7 @@ form.form-style-1 > * {
 
 @media (max-width: 1900px) {
   .brand-box {
-    width:  100%!important;
+    width: 100% !important;
   }
   .all-gallery-wrap .left .wrap-gallery-item {
     grid-template-columns: repeat(3, 1fr);

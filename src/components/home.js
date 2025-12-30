@@ -599,7 +599,7 @@ const Home = () => {
               </div>
 
               {/* RIGHT SIDE */}
-              <div className="flex flex-col gap-6">
+              <div className="flex flex-col gap-6 selling-product">
                 <TopSellingProducts
                   role={role}
                   user={user_data}

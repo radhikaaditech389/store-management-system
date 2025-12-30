@@ -90,7 +90,7 @@ const ProfitLossReport = ({ role, user }) => {
   };
 
   return (
-    <div className="bg-gray-50 rounded-3xl shadow-2xl p-6 max-w-6xl mx-auto">
+    <div className="bg-gray-50 rounded-3xl shadow-2xl p-6 max-w-7xl mw-auto" style={{width:"100%"}}>
       {/* Header & Filters */}
       <h2 className="text-4xl font-extrabold text-gray-800 mb-8">
         Profit & Loss Dashboard
