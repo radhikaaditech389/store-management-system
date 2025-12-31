@@ -6,6 +6,7 @@ import defaultLogo from "../assets/images/logo/logo.png";
 const BASE_URL = process.env.REACT_APP_API_BASE_URL;
 
 const Navbar = () => {
+  const history = useHistory();
   const [isOpen, setIsOpen] = useState(false);
   const user_detail = JSON.parse(localStorage.getItem("user_detail"));
 
@@ -38,6 +39,18 @@ const Navbar = () => {
     if (window.innerWidth <= 768) {
       setIsOpen(false);
     }
+  };
+
+  const handleLogout = () => {
+    document.cookie.split(";").forEach((c) => {
+      document.cookie = c
+        .replace(/^ +/, "")
+        .replace(/=.*/, "=;expires=Thu, 01 Jan 1970 00:00:00 UTC;path=/");
+    });
+    localStorage.clear();
+    sessionStorage.clear();
+
+    history.push("/");
   };
 
   return (
@@ -260,6 +273,20 @@ const Navbar = () => {
                         <div className="text">POS</div>
                       </Link>
                     </li>
+                    {isOpen && (
+                      <li className="menu-item">
+                        <Link
+                          to="#"
+                          className="menu-item-button"
+                          onClick={handleLogout}
+                        >
+                          <div className="icon">
+                            <i className="icon-box"></i>
+                          </div>
+                          <div className="text">Logout</div>
+                        </Link>
+                      </li>
+                    )}
                   </>
                 )}
               </ul>

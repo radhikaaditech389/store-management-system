@@ -48,10 +48,6 @@ const CreateEditSupplier = () => {
   // Validation Schema
   const validationSchema = Yup.object({
     name: Yup.string().required("Name is required"),
-    // gstin: Yup.string().required("GstIn is required"),
-    // contact: Yup.string().required("contact is required"),
-    // address: Yup.string().required("address is required"),
-    // state: Yup.string().required("state is required"),
   });
 
   // Submit (Create + Update)
