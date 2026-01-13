@@ -151,7 +151,7 @@ const ProfitLossReport = ({ role, user }) => {
       ) : data ? (
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
           {/* Sales Card */}
-          <div className="bg-white rounded-2xl p-5 shadow hover:shadow-xl transition flex flex-col items-center">
+          <div className="bg-white rounded-2xl p-5 shadow hover:shadow-xl transition flex flex-col items-center mb-10">
             <p className="text-gray-400 text-2xl">Sales</p>
             <h4 className="text-4xl font-bold text-indigo-600 mb-2">
               ₹ {data.sales}
@@ -159,7 +159,7 @@ const ProfitLossReport = ({ role, user }) => {
           </div>
 
           {/* COGS Card */}
-          <div className="bg-white rounded-2xl p-5 shadow hover:shadow-xl transition flex flex-col items-center">
+          <div className="bg-white rounded-2xl p-5 shadow hover:shadow-xl transition flex flex-col items-center mb-10">
             <p className="text-gray-400 text-2xl">COGS</p>
             <h4 className="text-4xl font-bold text-yellow-600 mb-2">
               ₹ {data.cogs}
@@ -168,7 +168,7 @@ const ProfitLossReport = ({ role, user }) => {
 
           {/* Profit Card */}
           <div
-            className={`rounded-2xl p-5 shadow hover:shadow-xl transition flex flex-col items-center ${
+            className={`rounded-2xl p-5 shadow hover:shadow-xl transition flex flex-col items-center mb-10 ${
               data.status === "profit" ? "bg-green-50" : "bg-red-50"
             }`}
           >
@@ -184,7 +184,7 @@ const ProfitLossReport = ({ role, user }) => {
 
           {/* Status Card */}
           <div
-            className={`rounded-2xl p-5 shadow hover:shadow-xl transition flex flex-col items-center ${
+            className={`rounded-2xl p-5 shadow hover:shadow-xl transition flex flex-col items-center mb-10 ${
               data.status === "profit" ? "bg-green-100" : "bg-red-100"
             }`}
           >
