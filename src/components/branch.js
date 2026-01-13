@@ -38,7 +38,7 @@ const Branch = () => {
   const handleEdit = (row) => {
     localStorage.setItem("branch_detail", JSON.stringify(row));
   };
- const handleDeleteConfirm = (id) => {
+  const handleDeleteConfirm = (id) => {
     if (window.confirm("Are you sure you want to delete this branch?")) {
       handleDelete(id);
     }
@@ -52,57 +52,57 @@ const Branch = () => {
     });
     if (response) {
       history.push("/branch");
-       toast.success("Branch Deleted");
+      toast.success("Branch Deleted");
       fetchBranch();
     }
   };
 
   useEffect(() => {
-  const s = search.toLowerCase();
+    const s = search.toLowerCase();
 
-  const result = branches.filter((item) => {
-    return (
-      item.id.toString().includes(s) ||
-      item.name?.toLowerCase().includes(s) ||
-      item.address?.toLowerCase().includes(s) ||
-      item.state?.toLowerCase().includes(s) ||
-      item.phone?.toString().includes(s)
-    );
-  });
+    const result = branches.filter((item) => {
+      return (
+        item.id.toString().includes(s) ||
+        item.name?.toLowerCase().includes(s) ||
+        item.address?.toLowerCase().includes(s) ||
+        item.state?.toLowerCase().includes(s) ||
+        item.phone?.toString().includes(s)
+      );
+    });
 
-  setFilteredData(result);
-}, [search, branches]);
+    setFilteredData(result);
+  }, [search, branches]);
 
   const columns = [
     {
       name: "Id",
       selector: (row) => row.id,
       sortable: true,
-      width:"100px"
+      width: "100px",
     },
     {
       name: "Name",
       selector: (row) => row.name,
       sortable: true,
-       width:"200px"
+      width: "200px",
     },
     {
       name: "Address",
       selector: (row) => row.address,
       sortable: true,
-       width:"300px"
+      width: "300px",
     },
     {
       name: "State",
       selector: (row) => row.state,
       sortable: true,
-       width:"200px"
+      width: "200px",
     },
     {
       name: "Phone",
       selector: (row) => row.phone,
       sortable: true,
-       width:"200px"
+      width: "200px",
     },
     {
       name: "Action",
@@ -113,7 +113,10 @@ const Branch = () => {
               <i className="icon-edit-3"></i>
             </Link>
           </div>
-          <div className="item trash"  onClick={() => handleDeleteConfirm(row.id)}>
+          <div
+            className="item trash"
+            onClick={() => handleDeleteConfirm(row.id)}
+          >
             <i className="icon-trash-2"></i>
           </div>
         </div>
@@ -152,8 +155,29 @@ const Branch = () => {
           </div>
           {/* <!-- all-user --> */}
           <div className="wg-box wg-content">
-            <div className="flex items-center justify-between gap10 flex-wrap">
-              <div className="wg-filter flex-grow"></div>
+            <div className="flex items-center justify-between gap10 flex-wrap mb-3">
+              <div className="wg-filter flex-grow">
+                <form
+                  className="form-search"
+                  onSubmit={(e) => e.preventDefault()}
+                >
+                  <fieldset className="name">
+                    <input
+                      type="text"
+                      placeholder="Search branches..."
+                      value={search}
+                      onChange={(e) => setSearch(e.target.value)}
+                      aria-required="true"
+                    />
+                  </fieldset>
+                  <div className="button-submit">
+                    <button type="submit">
+                      <i className="icon-search"></i>
+                    </button>
+                  </div>
+                </form>
+              </div>
+
               <Link
                 className="tf-button style-1 w208"
                 to="/create-branch"
@@ -162,13 +186,6 @@ const Branch = () => {
                 <i className="icon-plus"></i>Add new
               </Link>
             </div>
-            <input
-              type="text"
-              placeholder="Search..."
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              className="search-input"
-            />
             <DataTable
               columns={columns}
               data={filteredData}

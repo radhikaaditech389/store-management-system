@@ -1,6 +1,6 @@
-import React, { useState, useEffect} from "react";
+import React, { useState, useEffect } from "react";
 import Layout from "./layout";
-import { Link,useHistory} from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import DataTable from "react-data-table-component";
 import axios from "axios";
 import { toast } from "react-toastify";
@@ -9,7 +9,7 @@ import { toast } from "react-toastify";
 const BASE_URL = process.env.REACT_APP_API_BASE_URL;
 
 const GstRate = () => {
-  const history = useHistory()
+  const history = useHistory();
   const [search, setSearch] = useState("");
   const [gstRates, setGstRates] = useState([]);
   const [filteredData, setFilteredData] = useState(gstRates);
@@ -49,7 +49,7 @@ const GstRate = () => {
   const handleCreateGstRates = () => {
     localStorage.setItem("gst_rate_detail", null);
   };
-    const handleEdit = (row) => {
+  const handleEdit = (row) => {
     localStorage.setItem("gst_rate_detail", JSON.stringify(row));
   };
 
@@ -58,7 +58,7 @@ const GstRate = () => {
       handleDelete(id);
     }
   };
- const handleDelete = async (id) => {
+  const handleDelete = async (id) => {
     const response = await axios.delete(`${BASE_URL}/api/gst-rates/${id}`, {
       headers: {
         accept: "application/json",
@@ -95,27 +95,28 @@ const GstRate = () => {
       selector: (row) => row.active,
       sortable: true,
     },
-        {
-          name: "Action",
-          cell: (row) => (
-            <div className="list-icon-function">
-              <div className="item edit">
-                <Link
-                  to={`/gst-rates/edit/${row.id}`}
-                  onClick={() => handleEdit(row)}
-                >
-                  <i className="icon-edit-3"></i>
-                </Link>
-              </div>
-              <div className="item trash" onClick={() => handleDeleteConfirm(row.id)}>
-                <i className="icon-trash-2"></i>
-              </div>
-            </div>
-          ),
-        },
+    {
+      name: "Action",
+      cell: (row) => (
+        <div className="list-icon-function">
+          <div className="item edit">
+            <Link
+              to={`/gst-rates/edit/${row.id}`}
+              onClick={() => handleEdit(row)}
+            >
+              <i className="icon-edit-3"></i>
+            </Link>
+          </div>
+          <div
+            className="item trash"
+            onClick={() => handleDeleteConfirm(row.id)}
+          >
+            <i className="icon-trash-2"></i>
+          </div>
+        </div>
+      ),
+    },
   ];
-
- 
 
   return (
     <Layout>
@@ -149,7 +150,27 @@ const GstRate = () => {
           {/* <!-- all-user --> */}
           <div className="wg-box wg-gst-content" style={{ width: "60%" }}>
             <div className="flex items-center justify-between gap10 flex-wrap">
-              <div className="wg-filter flex-grow"></div>
+              <div className="wg-filter flex-grow">
+                <form
+                  className="form-search"
+                  onSubmit={(e) => e.preventDefault()}
+                >
+                  <fieldset className="name">
+                    <input
+                      type="text"
+                      placeholder="Search gst rate..."
+                      value={search}
+                      onChange={(e) => setSearch(e.target.value)}
+                      aria-required="true"
+                    />
+                  </fieldset>
+                  <div className="button-submit">
+                    <button type="submit">
+                      <i className="icon-search"></i>
+                    </button>
+                  </div>
+                </form>
+              </div>
               <Link
                 className="tf-button style-1 w208"
                 to="/create-gst-rates"
@@ -158,13 +179,7 @@ const GstRate = () => {
                 <i className="icon-plus"></i>Add new
               </Link>
             </div>
-            <input
-              type="text"
-              placeholder="Search..."
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              className="search-input"
-            />
+
             <DataTable
               columns={columns}
               data={filteredData}

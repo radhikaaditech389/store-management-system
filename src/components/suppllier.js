@@ -21,7 +21,7 @@ const SupplierBill = () => {
   const handleEdit = (row) => {
     localStorage.setItem("supplier_detail", JSON.stringify(row));
   };
-const handleDeleteConfirm = (id) => {
+  const handleDeleteConfirm = (id) => {
     if (window.confirm("Are you sure you want to delete this Supplier?")) {
       handleDelete(id);
     }
@@ -45,7 +45,7 @@ const handleDeleteConfirm = (id) => {
       name: "Id",
       selector: (row) => row.id,
       sortable: true,
-       width: "100px",   
+      width: "100px",
     },
     {
       name: "Name",
@@ -84,7 +84,10 @@ const handleDeleteConfirm = (id) => {
               <i className="icon-edit-3"></i>
             </Link>
           </div>
-          <div className="item trash" onClick={() => handleDeleteConfirm(row.id)}>
+          <div
+            className="item trash"
+            onClick={() => handleDeleteConfirm(row.id)}
+          >
             <i className="icon-trash-2"></i>
           </div>
         </div>
@@ -162,8 +165,29 @@ const handleDeleteConfirm = (id) => {
           </div>
           {/* <!-- all-user --> */}
           <div className="wg-box">
-            <div className="flex items-center justify-between gap10 flex-wrap">
-              <div className="wg-filter flex-grow"></div>
+            <div className="flex items-center justify-between gap10 flex-wrap mb-3">
+              <div className="wg-filter flex-grow">
+                <form
+                  className="form-search"
+                  onSubmit={(e) => e.preventDefault()}
+                >
+                  <fieldset className="name">
+                    <input
+                      type="text"
+                      placeholder="Search suppliers..."
+                      value={search}
+                      onChange={(e) => setSearch(e.target.value)}
+                      aria-required="true"
+                    />
+                  </fieldset>
+                  <div className="button-submit">
+                    <button type="submit">
+                      <i className="icon-search"></i>
+                    </button>
+                  </div>
+                </form>
+              </div>
+
               <Link
                 className="tf-button style-1 w208"
                 to="/create-suppliers"
@@ -172,13 +196,7 @@ const handleDeleteConfirm = (id) => {
                 <i className="icon-plus"></i>Add new
               </Link>
             </div>
-            <input
-              type="text"
-              placeholder="Search..."
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              className="search-input"
-            />
+
             <DataTable
               columns={columns}
               data={filteredData}

@@ -21,7 +21,7 @@ const Product = () => {
       handleDelete(id);
     }
   };
- 
+
   const handleCreateProduct = () => {
     localStorage.setItem("product_detail", null);
   };
@@ -45,7 +45,7 @@ const Product = () => {
       name: "Id",
       selector: (row) => row.id,
       sortable: true,
-      width:"100px"
+      width: "100px",
     },
     {
       name: "SKU",
@@ -109,7 +109,10 @@ const Product = () => {
               <i className="icon-edit-3"></i>
             </Link>
           </div>
-          <div className="item trash" onClick={() => handleDeleteConfirm(row.id)}>
+          <div
+            className="item trash"
+            onClick={() => handleDeleteConfirm(row.id)}
+          >
             <i className="icon-trash-2"></i>
           </div>
         </div>
@@ -130,7 +133,7 @@ const Product = () => {
       console.error("Error fetching categories:", error);
     }
   };
-  
+
   useEffect(() => {
     fetchProduct();
   }, []);
@@ -189,7 +192,27 @@ const Product = () => {
           {/* <!-- all-user --> */}
           <div className="wg-box">
             <div className="flex items-center justify-between gap10 flex-wrap">
-              <div className="wg-filter flex-grow"></div>
+              <div className="wg-filter flex-grow">
+                <form
+                  className="form-search"
+                  onSubmit={(e) => e.preventDefault()}
+                >
+                  <fieldset className="name">
+                    <input
+                      type="text"
+                      placeholder="Search products..."
+                      value={search}
+                      onChange={(e) => setSearch(e.target.value)}
+                      aria-required="true"
+                    />
+                  </fieldset>
+                  <div className="button-submit">
+                    <button type="submit">
+                      <i className="icon-search"></i>
+                    </button>
+                  </div>
+                </form>
+              </div>
               <Link
                 className="tf-button style-1 w208"
                 to="/create-product"
@@ -198,13 +221,7 @@ const Product = () => {
                 <i className="icon-plus"></i>Add new
               </Link>
             </div>
-            <input
-              type="text"
-              placeholder="Search..."
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              className="search-input"
-            />
+
             <DataTable
               columns={columns}
               data={filteredData}
