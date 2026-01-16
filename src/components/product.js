@@ -4,6 +4,7 @@ import { Link, useHistory } from "react-router-dom";
 import axios from "axios";
 import Layout from "./layout";
 import { toast } from "react-toastify";
+import BarcodePrintModal from "./BarcodePrintModal";
 
 const Product = () => {
   const BASE_URL = process.env.REACT_APP_API_BASE_URL;
@@ -11,6 +12,10 @@ const Product = () => {
   const [products, setProducts] = useState([]);
   const [search, setSearch] = useState("");
   const [filteredData, setFilteredData] = useState(products);
+
+  const [selectedProduct, setSelectedProduct] = useState(null);
+  const [printProduct, setPrintProduct] = useState(null);
+
   const user_data = JSON.parse(localStorage.getItem("user_detail"));
 
   const handleEdit = (row) => {
@@ -38,6 +43,10 @@ const Product = () => {
       toast.success("Product Deleted");
       fetchProduct();
     }
+  };
+
+  const handlePrintBarcode = (row) => {
+    setSelectedProduct(row);
   };
 
   const columns = [
@@ -101,6 +110,7 @@ const Product = () => {
       name: "Action",
       cell: (row) => (
         <div className="list-icon-function">
+          {/* Edit */}
           <div className="item edit">
             <Link
               to={`/product/edit/${row?.id}`}
@@ -109,11 +119,22 @@ const Product = () => {
               <i className="icon-edit-3"></i>
             </Link>
           </div>
+
+          {/* Delete */}
           <div
             className="item trash"
             onClick={() => handleDeleteConfirm(row.id)}
           >
             <i className="icon-trash-2"></i>
+          </div>
+
+          {/* Print Barcode */}
+          <div
+            className="item print"
+            onClick={() => handlePrintBarcode(row)}
+            title="Print Barcode"
+          >
+            <i className="icon-printer"></i>
           </div>
         </div>
       ),
@@ -244,6 +265,13 @@ const Product = () => {
         </div>
         {/* <!-- /main-content-wrap --> */}
       </div>
+
+      {selectedProduct && (
+        <BarcodePrintModal
+          product={selectedProduct} // Use 'product', NOT 'productId'
+          onClose={() => setSelectedProduct(null)}
+        />
+      )}
     </Layout>
   );
 };
