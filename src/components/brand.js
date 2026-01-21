@@ -139,8 +139,29 @@ const Brand = () => {
           </div>
           {/* <!-- all-user --> */}
           <div className="wg-box brand-box" style={{ width: "80%" }}>
-            <div className="flex items-center justify-between gap10 flex-wrap">
-              <div className="wg-filter flex-grow"></div>
+            <div className="flex items-center justify-between gap10 flex-wrap mb-3">
+              <div className="wg-filter flex-grow">
+                <form
+                  className="form-search"
+                  onSubmit={(e) => e.preventDefault()}
+                >
+                  <fieldset className="name">
+                    <input
+                      type="text"
+                      placeholder="Search brands..."
+                      value={search}
+                      onChange={(e) => setSearch(e.target.value)}
+                      aria-required="true"
+                    />
+                  </fieldset>
+                  <div className="button-submit">
+                    <button type="submit">
+                      <i className="icon-search"></i>
+                    </button>
+                  </div>
+                </form>
+              </div>
+
               <Link
                 className="tf-button style-1 w208"
                 to="/create-brand"
@@ -149,13 +170,7 @@ const Brand = () => {
                 <i className="icon-plus"></i>Add new
               </Link>
             </div>
-            <input
-              type="text"
-              placeholder="Search..."
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              className="search-input"
-            />
+
             <DataTable
               columns={columns}
               data={filteredData}

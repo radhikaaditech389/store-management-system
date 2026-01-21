@@ -3,7 +3,6 @@ import Layout from "./layout";
 import { Link, useHistory } from "react-router-dom";
 import DataTable from "react-data-table-component";
 import axios from "axios";
-import { getCookie } from "../utils/cookies";
 import { toast } from "react-toastify";
 
 const Staff = () => {
@@ -34,7 +33,7 @@ const Staff = () => {
   const handleEdit = (row) => {
     localStorage.setItem("staff_detail", JSON.stringify(row));
   };
- const handleDeleteConfirm = (id) => {
+  const handleDeleteConfirm = (id) => {
     if (window.confirm("Are you sure you want to delete this staff?")) {
       handleDelete(id);
     }
@@ -79,25 +78,25 @@ const Staff = () => {
       name: "Id",
       selector: (row) => row.id,
       sortable: true,
-      width:"150px"
+      width: "150px",
     },
     {
       name: "Name",
       selector: (row) => row.name,
       sortable: true,
-       width:"250px"
+      width: "250px",
     },
     {
       name: "Username",
       selector: (row) => row.username,
       sortable: true,
-      width:"250px"
+      width: "250px",
     },
     {
       name: "Role",
       selector: (row) => row.role,
       sortable: true,
-      width:"250px"
+      width: "250px",
     },
     {
       name: "Action",
@@ -108,7 +107,10 @@ const Staff = () => {
               <i className="icon-edit-3"></i>
             </Link>
           </div>
-          <div className="item trash" onClick={() => handleDeleteConfirm(row.id)}>
+          <div
+            className="item trash"
+            onClick={() => handleDeleteConfirm(row.id)}
+          >
             <i className="icon-trash-2"></i>
           </div>
         </div>
@@ -147,8 +149,29 @@ const Staff = () => {
           </div>
           {/* <!-- all-user --> */}
           <div className="wg-box wg-content">
-            <div className="flex items-center justify-between gap10 flex-wrap">
-              <div className="wg-filter flex-grow"></div>
+            <div className="flex items-center justify-between gap10 flex-wrap mb-3">
+              <div className="wg-filter flex-grow">
+                <form
+                  className="form-search"
+                  onSubmit={(e) => e.preventDefault()}
+                >
+                  <fieldset className="name">
+                    <input
+                      type="text"
+                      placeholder="Search staff..."
+                      value={search}
+                      onChange={(e) => setSearch(e.target.value)}
+                      aria-required="true"
+                    />
+                  </fieldset>
+                  <div className="button-submit">
+                    <button type="submit">
+                      <i className="icon-search"></i>
+                    </button>
+                  </div>
+                </form>
+              </div>
+
               <Link
                 className="tf-button style-1 w208"
                 to="/create-staff"
@@ -157,13 +180,7 @@ const Staff = () => {
                 <i className="icon-plus"></i>Add new
               </Link>
             </div>
-            <input
-              type="text"
-              placeholder="Search..."
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              className="search-input"
-            />
+
             <DataTable
               columns={columns}
               data={filteredData}

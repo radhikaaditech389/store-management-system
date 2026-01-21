@@ -4,6 +4,7 @@ import { Link, useHistory } from "react-router-dom";
 import axios from "axios";
 import Layout from "./layout";
 import { toast } from "react-toastify";
+import BarcodePrintModal from "./BarcodePrintModal";
 
 const Product = () => {
   const BASE_URL = process.env.REACT_APP_API_BASE_URL;
@@ -11,6 +12,10 @@ const Product = () => {
   const [products, setProducts] = useState([]);
   const [search, setSearch] = useState("");
   const [filteredData, setFilteredData] = useState(products);
+
+  const [selectedProduct, setSelectedProduct] = useState(null);
+  const [printProduct, setPrintProduct] = useState(null);
+
   const user_data = JSON.parse(localStorage.getItem("user_detail"));
 
   const handleEdit = (row) => {
@@ -21,7 +26,7 @@ const Product = () => {
       handleDelete(id);
     }
   };
- 
+
   const handleCreateProduct = () => {
     localStorage.setItem("product_detail", null);
   };
@@ -40,12 +45,16 @@ const Product = () => {
     }
   };
 
+  const handlePrintBarcode = (row) => {
+    setSelectedProduct(row);
+  };
+
   const columns = [
     {
       name: "Id",
       selector: (row) => row.id,
       sortable: true,
-      width:"100px"
+      width: "100px",
     },
     {
       name: "SKU",
@@ -101,6 +110,7 @@ const Product = () => {
       name: "Action",
       cell: (row) => (
         <div className="list-icon-function">
+          {/* Edit */}
           <div className="item edit">
             <Link
               to={`/product/edit/${row?.id}`}
@@ -109,8 +119,22 @@ const Product = () => {
               <i className="icon-edit-3"></i>
             </Link>
           </div>
-          <div className="item trash" onClick={() => handleDeleteConfirm(row.id)}>
+
+          {/* Delete */}
+          <div
+            className="item trash"
+            onClick={() => handleDeleteConfirm(row.id)}
+          >
             <i className="icon-trash-2"></i>
+          </div>
+
+          {/* Print Barcode */}
+          <div
+            className="item print"
+            onClick={() => handlePrintBarcode(row)}
+            title="Print Barcode"
+          >
+            <i className="icon-printer"></i>
           </div>
         </div>
       ),
@@ -130,7 +154,7 @@ const Product = () => {
       console.error("Error fetching categories:", error);
     }
   };
-  
+
   useEffect(() => {
     fetchProduct();
   }, []);
@@ -189,7 +213,27 @@ const Product = () => {
           {/* <!-- all-user --> */}
           <div className="wg-box">
             <div className="flex items-center justify-between gap10 flex-wrap">
-              <div className="wg-filter flex-grow"></div>
+              <div className="wg-filter flex-grow">
+                <form
+                  className="form-search"
+                  onSubmit={(e) => e.preventDefault()}
+                >
+                  <fieldset className="name">
+                    <input
+                      type="text"
+                      placeholder="Search products..."
+                      value={search}
+                      onChange={(e) => setSearch(e.target.value)}
+                      aria-required="true"
+                    />
+                  </fieldset>
+                  <div className="button-submit">
+                    <button type="submit">
+                      <i className="icon-search"></i>
+                    </button>
+                  </div>
+                </form>
+              </div>
               <Link
                 className="tf-button style-1 w208"
                 to="/create-product"
@@ -198,13 +242,7 @@ const Product = () => {
                 <i className="icon-plus"></i>Add new
               </Link>
             </div>
-            <input
-              type="text"
-              placeholder="Search..."
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              className="search-input"
-            />
+
             <DataTable
               columns={columns}
               data={filteredData}
@@ -227,6 +265,13 @@ const Product = () => {
         </div>
         {/* <!-- /main-content-wrap --> */}
       </div>
+
+      {selectedProduct && (
+        <BarcodePrintModal
+          product={selectedProduct} // Use 'product', NOT 'productId'
+          onClose={() => setSelectedProduct(null)}
+        />
+      )}
     </Layout>
   );
 };

@@ -25,9 +25,9 @@ const PurchaseReturn = () => {
       name: "Id",
       selector: (row) => row.id,
       sortable: true,
-       width:"100px"
+      width: "100px",
     },
-     {
+    {
       name: "Purchase Bill No",
       selector: (row) => row?.purchase_bill?.bill_no,
       sortable: true,
@@ -131,8 +131,29 @@ const PurchaseReturn = () => {
           </div>
           {/* <!-- all-user --> */}
           <div className="wg-box">
-            <div className="flex items-center justify-between gap10 flex-wrap">
-              <div className="wg-filter flex-grow"></div>
+            <div className="flex items-center justify-between gap10 flex-wrap mb-3">
+              <div className="wg-filter flex-grow">
+                <form
+                  className="form-search"
+                  onSubmit={(e) => e.preventDefault()}
+                >
+                  <fieldset className="name">
+                    <input
+                      type="text"
+                      placeholder="Search purchase return bills..."
+                      value={search}
+                      onChange={(e) => setSearch(e.target.value)}
+                      aria-required="true"
+                    />
+                  </fieldset>
+                  <div className="button-submit">
+                    <button type="submit">
+                      <i className="icon-search"></i>
+                    </button>
+                  </div>
+                </form>
+              </div>
+
               <Link
                 className="tf-button style-1 w208"
                 to="/create-purchase-return-bill"
@@ -141,18 +162,7 @@ const PurchaseReturn = () => {
                 <i className="icon-plus"></i>Add new
               </Link>
             </div>
-            <input
-              type="text"
-              placeholder="Search..."
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              className="search-input"
-              style={{
-                marginBottom: "10px",
-                padding: "8px",
-                width: "250px",
-              }}
-            />
+
             <DataTable
               columns={columns}
               data={filteredData}

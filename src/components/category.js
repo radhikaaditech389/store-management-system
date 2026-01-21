@@ -3,7 +3,6 @@ import Layout from "./layout";
 import { Link, useHistory } from "react-router-dom";
 import DataTable from "react-data-table-component";
 import axios from "axios";
-import { getCookie } from "../utils/cookies";
 import { toast } from "react-toastify";
 
 const Category = () => {
@@ -56,25 +55,25 @@ const Category = () => {
       name: "Id",
       selector: (row) => row.id,
       sortable: true,
-       width: "100px",   
+      width: "100px",
     },
     {
       name: "Name",
       selector: (row) => row.name,
       sortable: true,
-       width: "250px",
+      width: "250px",
     },
     {
       name: "Description",
       selector: (row) => row.description,
       sortable: true,
-       width: "400px",
+      width: "400px",
     },
     {
       name: "Parent Category",
       selector: (row) => row?.parent?.name,
       sortable: true,
-       width: "300px",
+      width: "300px",
     },
     {
       name: "Action",
@@ -88,7 +87,10 @@ const Category = () => {
               <i className="icon-edit-3"></i>
             </Link>
           </div>
-          <div className="item trash" onClick={() => handleDeleteConfirm(row.id)}>
+          <div
+            className="item trash"
+            onClick={() => handleDeleteConfirm(row.id)}
+          >
             <i className="icon-trash-2"></i>
           </div>
         </div>
@@ -97,23 +99,17 @@ const Category = () => {
   ];
 
   useEffect(() => {
-  const searchText = (search || "").toLowerCase();
+    const searchText = (search || "").toLowerCase();
 
-  const result = categories.filter(item =>
-    [
-      item.store?.name,
-      item.name,
-      item.description,
-      item.parent?.name
-    ]
-      .join(" ")
-      .toLowerCase()
-      .includes(searchText)
-  );
+    const result = categories.filter((item) =>
+      [item.store?.name, item.name, item.description, item.parent?.name]
+        .join(" ")
+        .toLowerCase()
+        .includes(searchText)
+    );
 
-  setFilteredData(result);
-}, [search, categories]);
-
+    setFilteredData(result);
+  }, [search, categories]);
 
   const handleCreateCategory = () => {
     localStorage.setItem("category_detail", null);
@@ -123,10 +119,10 @@ const Category = () => {
   };
 
   const handleDeleteConfirm = (id) => {
-  if (window.confirm("Are you sure you want to delete this category?")) {
-    handleDelete(id);
-  }
-};
+    if (window.confirm("Are you sure you want to delete this category?")) {
+      handleDelete(id);
+    }
+  };
   return (
     <Layout>
       <div className="main-content-inner">
@@ -158,8 +154,29 @@ const Category = () => {
           </div>
           {/* <!-- all-user --> */}
           <div className="wg-box wg-content">
-            <div className="flex items-center justify-between gap10 flex-wrap">
-              <div className="wg-filter flex-grow"></div>
+            <div className="flex items-center justify-between gap10 flex-wrap mb-3">
+              <div className="wg-filter flex-grow">
+                <form
+                  className="form-search"
+                  onSubmit={(e) => e.preventDefault()}
+                >
+                  <fieldset className="name">
+                    <input
+                      type="text"
+                      placeholder="Search categories..."
+                      value={search}
+                      onChange={(e) => setSearch(e.target.value)}
+                      aria-required="true"
+                    />
+                  </fieldset>
+                  <div className="button-submit">
+                    <button type="submit">
+                      <i className="icon-search"></i>
+                    </button>
+                  </div>
+                </form>
+              </div>
+
               <Link
                 className="tf-button style-1 w208"
                 to="/create-category"
@@ -168,13 +185,7 @@ const Category = () => {
                 <i className="icon-plus"></i>Add new
               </Link>
             </div>
-            <input
-              type="text"
-              placeholder="Search..."
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              className="search-input"
-            />
+
             <DataTable
               columns={columns}
               data={filteredData}
