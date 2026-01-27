@@ -24,6 +24,8 @@ export default function PaymentModal({ total, onClose, onConfirm, cart_data }) {
     window.location.href = upiLink;
   };
 
+  const amountStyle = { fontSize: "45px", marginBottom: "10px" };
+
   const keypad = (k) => {
     setCashGiven((prev) => {
       prev = prev || "";
@@ -55,6 +57,7 @@ export default function PaymentModal({ total, onClose, onConfirm, cart_data }) {
         balance_return: balanceReturn,
       });
     }
+
     if (paymentType === "online") {
       payments.push({
         method: "online",
@@ -62,6 +65,24 @@ export default function PaymentModal({ total, onClose, onConfirm, cart_data }) {
         cash_received: parse(cashGiven),
         balance_return: balanceReturn,
       });
+    }
+
+    // SPLIT PAYMENT
+    if (paymentType === "split") {
+      if (cashApplied > 0) {
+        payments.push({
+          method: "cash",
+          amount: cashApplied,
+        });
+      }
+
+      if (remaining > 0) {
+        payments.push({
+          method: "online",
+          amount: remaining,
+          transaction_id: "",
+        });
+      }
     }
 
     onConfirm(payments);
@@ -121,11 +142,31 @@ export default function PaymentModal({ total, onClose, onConfirm, cart_data }) {
               </div>
               <div className="text-sm opacity-70 text-center">Scan Only</div>
             </button>
+
+            <button
+              onClick={() => handleMethod("split")}
+              className={`p-5 rounded-2xl text-center transition-all border ${
+                paymentType === "split"
+                  ? "bg-blue-600 text-white shadow-xl scale-105"
+                  : "bg-gray-100 hover:bg-gray-200"
+              }`}
+              style={{ width: "90%" }}
+            >
+              <div
+                className="text-xl font-semibold text-center mb-5"
+                style={{ fontSize: "25px" }}
+              >
+                Split Payment
+              </div>
+              <div className="text-sm opacity-70 text-center">
+                Cash + Online
+              </div>
+            </button>
           </div>
 
           {/* MIDDLE AREA */}
           <div className="col-span-1 space-y-6">
-            {paymentType === "cash" && (
+            {(paymentType === "cash" || paymentType === "split") && (
               <>
                 <h2
                   className="text-xl font-bold mb-20"
@@ -149,7 +190,7 @@ export default function PaymentModal({ total, onClose, onConfirm, cart_data }) {
                     value={cashGiven ?? ""}
                     onChange={(e) =>
                       setCashGiven(
-                        e.target.value === "" ? null : Number(e.target.value)
+                        e.target.value === "" ? null : Number(e.target.value),
                       )
                     }
                   />
@@ -174,12 +215,26 @@ export default function PaymentModal({ total, onClose, onConfirm, cart_data }) {
                 )}
               </div>
             )}
-            <div style={{ fontSize: "45px", marginBottom: "10px" }}>
+            <div style={amountStyle}>
               <strong>Paid: </strong> ₹
-              {paymentType === "online" ? total : cashApplied.toFixed(2)}
+              {paymentType === "online" || paymentType === "split"
+                ? total.toFixed(2)
+                : cashApplied.toFixed(2)}
             </div>
-            {paymentType !== "online" && (
-              <div style={{ fontSize: "45px", marginBottom: "20px" }}>
+
+            {paymentType === "split" && (
+              <>
+                <div style={amountStyle}>
+                  <strong>Cash: </strong> ₹{cashApplied.toFixed(2)}
+                </div>
+                <div style={amountStyle}>
+                  <strong>Online: </strong> ₹{(total - cashApplied).toFixed(2)}
+                </div>
+              </>
+            )}
+
+            {paymentType === "cash" && balanceReturn > 0 && (
+              <div style={{ ...amountStyle, marginBottom: "20px" }}>
                 <strong>Change: </strong> ₹{balanceReturn.toFixed(2)}
               </div>
             )}
@@ -190,7 +245,7 @@ export default function PaymentModal({ total, onClose, onConfirm, cart_data }) {
         <>
           <div className="col-md-5">
             <div className="grid grid-cols-3 gap-3">
-              {paymentType === "cash" && (
+              {["cash", "split"].includes(paymentType) && (
                 <>
                   {[
                     "1",
@@ -259,7 +314,10 @@ export default function PaymentModal({ total, onClose, onConfirm, cart_data }) {
             </button>
 
             <button
-              disabled={paymentType === "cash" && remaining > 0}
+              disabled={
+                (paymentType === "cash" && remaining > 0) ||
+                (paymentType === "split" && cashApplied <= 0)
+              }
               onClick={handleConfirm}
               className={`rounded-xl text-white font-bold ${
                 paymentType === "cash" && remaining > 0

@@ -21,19 +21,20 @@ export default function ProductList({
   const [barcode, setBarcode] = useState("");
   const barcodeRef = useRef();
 
-  useEffect(() => {
-    fetchProducts();
-  }, [selectedCategory, selectedBrand, search]);
-
   const fetchProducts = async () => {
-    setLoading(true);
-    const res = await getProducts({
-      category_id: selectedCategory,
-      brand_id: selectedBrand,
-      search: search,
-    });
-    setProducts(res.data.products || []);
-    setLoading(false);
+    try {
+      setLoading(true);
+      const res = await getProducts({
+        category_id: selectedCategory,
+        brand_id: selectedBrand,
+        search,
+      });
+      setProducts(res.data.products || []);
+    } catch (e) {
+      console.error("Failed to load products");
+    } finally {
+      setLoading(false);
+    }
   };
 
   useEffect(() => {
@@ -44,6 +45,10 @@ export default function ProductList({
     barcodeRef.current?.focus();
   }, []);
 
+  useEffect(() => {
+    barcodeRef.current?.focus();
+  }, [barcode]);
+
   return (
     <div className="flex-1 p-6 overflow-y-auto bg-gray-50">
       <div className="flex gap-6 mb-40">
@@ -53,17 +58,17 @@ export default function ProductList({
           placeholder="Scan barcode..."
           className="border p-5 text-2xl w-96 rounded-2xl shadow-lg focus:outline-none focus:ring-4 focus:ring-blue-400 mb-12"
           value={barcode}
-          onChange={async (e) => {
-            const value = e.target.value;
-            setBarcode(value);
-
-            if (value.length >= 8) {
+          onChange={(e) => setBarcode(e.target.value)}
+          onKeyDown={async (e) => {
+            if (e.key === "Enter" && barcode.trim() !== "") {
               try {
-                const res = await scanBarcode(value);
+                const res = await scanBarcode(barcode.trim());
                 addToCart(res.data.data);
-                setBarcode("");
               } catch (err) {
-                console.log("Product not found for barcode:", value);
+                alert("Product not found!");
+                console.log("Product not found:", barcode);
+              } finally {
+                setBarcode("");
               }
             }
           }}
