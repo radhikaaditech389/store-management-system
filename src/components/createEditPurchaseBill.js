@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { useParams, useLocation, useHistory } from "react-router-dom";
+import { useParams, useHistory } from "react-router-dom";
 import { Formik, Form, Field, ErrorMessage, FieldArray } from "formik";
 import * as Yup from "yup";
-import { getCookie } from "../utils/cookies";
 import Layout from "./layout";
 import { toast } from "react-toastify";
 
@@ -16,7 +15,7 @@ const CreateEditPurchaseBill = () => {
   const [products, setProducts] = useState([]);
   const [gstRates, setGstRates] = useState([]);
   const [supplierId, setSupplierId] = useState("");
-  const [productId, setProductId] = useState("");
+  const [barcode, setBarcode] = useState("");
 
   const [showModal, setShowModal] = useState(false);
   const [showProductModal, setShowProductModal] = useState(false);
@@ -54,7 +53,7 @@ const CreateEditPurchaseBill = () => {
   });
   useEffect(() => {
     if (incomingBill) {
-       setSupplierId(incomingBill.supplier_id?.toString() || "");
+      setSupplierId(incomingBill.supplier_id?.toString() || "");
       setInitialValues({
         branch_id: incomingBill.branch_id?.toString() || "",
         supplier_id: incomingBill.supplier_id?.toString() || "",
@@ -173,21 +172,21 @@ const CreateEditPurchaseBill = () => {
             .required("Purchase rate required")
             .min(0, "Rate cannot be negative"),
 
-          discount_type: Yup.string().required(),
+          discount_type: Yup.string().nullable(),
 
           discount: Yup.number()
             .nullable()
             .typeError("Discount must be a number")
             .min(0, "Discount cannot be negative"),
 
-          hsn_code: Yup.string().required(),
+          hsn_code: Yup.string().required("HSN is required"),
 
           gst_rate_id: Yup.string().required("GST rate required"),
 
-          batch_no: Yup.string().required(),
+          batch_no: Yup.string().required("Batch no. is required"),
 
-          expiry_date: Yup.date().required(),
-        })
+          expiry_date: Yup.date().required("Expiry date is required"),
+        }),
       ),
   });
 
@@ -197,16 +196,20 @@ const CreateEditPurchaseBill = () => {
 
       if (isEdit) {
         // UPDATE
-        response = await axios.put(`/api/purchase-bill/${id}`, values, {
-          headers: {
-            Accept: "application/json",
-            Authorization: `Bearer ${user_data.token}`,
+        response = await axios.put(
+          `${BASE_URL}/api/purchase-bill/${id}`,
+          values,
+          {
+            headers: {
+              Accept: "application/json",
+              Authorization: `Bearer ${user_data.token}`,
+            },
           },
-        });
+        );
         toast.success("Purchase Bill Updated!");
       } else {
         // CREATE
-        response = await axios.post("/api/purchase-bill", values, {
+        response = await axios.post(`${BASE_URL}/api/purchase-bill`, values, {
           headers: {
             Accept: "application/json",
             Authorization: `Bearer ${user_data.token}`,
@@ -278,9 +281,80 @@ const CreateEditPurchaseBill = () => {
     });
     toast.success("Products Created!");
     setNewProduct("");
-    setProductId(product.id);
     setShowProductModal(false);
     fetchProduct();
+  };
+
+  const handleBarcodeScan = async (barcode, values, push, setFieldValue) => {
+    if (!barcode) return;
+
+    try {
+      const response = await axios.post(
+        `${BASE_URL}/api/sales/scan`,
+        { barcode },
+        {
+          headers: {
+            Authorization: `Bearer ${user_data.token}`,
+          },
+        },
+      );
+
+      // If API returns status: false
+      if (!response.data.status) {
+        toast.error(response.data.message || "Product not found");
+        return;
+      }
+
+      const product = response.data.data;
+      const inventory = product.inventories?.[0] || {};
+
+      // Check if product already exists in lines
+      const existingIndex = values.lines.findIndex(
+        (l) => l.product_id == product.id && l.batch_no === inventory.batch_no,
+      );
+
+      if (existingIndex !== -1) {
+        setFieldValue(
+          `lines.${existingIndex}.qty`,
+          Number(values.lines[existingIndex].qty || 0) + 1,
+        );
+        setBarcode("");
+        return;
+      }
+
+      // Find first empty line
+      const emptyIndex = values.lines.findIndex((l) => !l.product_id);
+
+      const lineData = {
+        product_id: product.id.toString(),
+        qty: 1,
+        free_qty: 0,
+        purchase_rate: product.cost_price,
+        discount_type: "",
+        discount: "",
+        hsn_code: product.hsn_code,
+        gst_rate_id: product.gst_rate_id?.toString(),
+        batch_no: inventory.batch_no || "",
+        expiry_date: inventory.expiry_date || "",
+      };
+
+      if (emptyIndex !== -1) {
+        Object.entries(lineData).forEach(([key, value]) => {
+          setFieldValue(`lines.${emptyIndex}.${key}`, value);
+        });
+      } else {
+        push(lineData);
+      }
+
+      setBarcode("");
+    } catch (error) {
+      if (error.response && error.response.status === 404) {
+        toast.error("Product not found");
+      } else {
+        toast.error(error.response?.data?.message || "Something went wrong");
+      }
+      setBarcode("");
+    }
   };
 
   return (
@@ -298,21 +372,23 @@ const CreateEditPurchaseBill = () => {
               validationSchema={validationSchema}
               onSubmit={(values, actions) => handleSubmit(values, actions)}
             >
-              {({ values }) => (
+              {({ values, setFieldValue }) => (
                 <Form>
                   {/* ---------------- Basic Form Fields ---------------- */}
                   <div className="container">
                     <div className="row mb-20">
                       <div className="mb-20 col-md-6">
                         <label className="mb-8 purchase-label">Branch</label>
+
                         <Field as="select" name="branch_id" className="mb-6">
                           <option value="">Select Branch</option>
                           {branches?.map((b) => (
-                            <option value={b.id} key={b.id}>
+                            <option key={b.id} value={b.id}>
                               {b.name}
                             </option>
                           ))}
                         </Field>
+
                         <ErrorMessage
                           name="branch_id"
                           className="error-text"
@@ -363,7 +439,12 @@ const CreateEditPurchaseBill = () => {
                   <div className="row mb-20">
                     <div className="mb-20 col-md-6">
                       <label className="mb-8 purchase-label">Bill No</label>
-                      <Field type="text" name="bill_no" className="mb-6" />
+                      <Field
+                        type="text"
+                        name="bill_no"
+                        className="mb-6"
+                        placeholder="Enter bill no"
+                      />
                       <ErrorMessage
                         name="bill_no"
                         className="error-text"
@@ -392,6 +473,26 @@ const CreateEditPurchaseBill = () => {
                   <FieldArray name="lines">
                     {({ push, remove }) => (
                       <>
+                        {/* BARCODE INPUT */}
+                        <input
+                          className="mb-4"
+                          type="text"
+                          value={barcode}
+                          onChange={(e) => setBarcode(e.target.value)}
+                          onKeyDown={(e) => {
+                            if (e.key === "Enter") {
+                              e.preventDefault();
+                              handleBarcodeScan(
+                                barcode,
+                                values,
+                                push,
+                                setFieldValue,
+                              );
+                            }
+                          }}
+                          placeholder="Scan barcode"
+                        />
+
                         {values?.lines?.map((line, index) => (
                           <div
                             key={index}
@@ -415,35 +516,33 @@ const CreateEditPurchaseBill = () => {
                                   Product
                                 </label>
                                 <Field
-                                  name={`lines.${index}.product_id`}
                                   as="select"
-                                  className="mb-6"
+                                  name={`lines.${index}.product_id`}
+                                  onChange={(e) => {
+                                    const value = e.target.value;
+
+                                    if (value === "add_new") {
+                                      setShowProductModal(true);
+                                    } else {
+                                      setFieldValue(
+                                        `lines.${index}.product_id`,
+                                        value,
+                                      );
+                                    }
+                                  }}
                                 >
-                                  {({ field }) => (
-                                    <select
-                                      {...field}
-                                      value={productId}
-                                      onChange={(e) => {
-                                        field.onChange(e);
-                                        const value = e.target.value;
-                                        if (value === "add_new") {
-                                          setShowProductModal(true);
-                                        }
-                                        setProductId(value);
-                                      }}
-                                    >
-                                      <option value="">Select Product</option>
-                                      {products.map((p) => (
-                                        <option key={p.id} value={p.id}>
-                                          {p.name}
-                                        </option>
-                                      ))}
-                                      {!newProduct && (
-                                        <option value="add_new">
-                                          + Add New Product
-                                        </option>
-                                      )}
-                                    </select>
+                                  <option value="">Select Product</option>
+
+                                  {products.map((p) => (
+                                    <option key={p.id} value={p.id}>
+                                      {p.name}
+                                    </option>
+                                  ))}
+
+                                  {!newProduct && (
+                                    <option value="add_new">
+                                      + Add New Product
+                                    </option>
                                   )}
                                 </Field>
                                 <ErrorMessage
@@ -555,7 +654,10 @@ const CreateEditPurchaseBill = () => {
                                   {gstRates.map((element) => {
                                     return (
                                       <>
-                                        <option value={element.id} key="1">
+                                        <option
+                                          key={element.id}
+                                          value={element.id}
+                                        >
                                           {element.rate}
                                         </option>
                                       </>
@@ -600,7 +702,11 @@ const CreateEditPurchaseBill = () => {
                               </div>
                             </div>
 
-                            <button type="button" onClick={() => remove(index)}>
+                            <button
+                              className="mt-6"
+                              type="button"
+                              onClick={() => remove(index)}
+                            >
                               Remove Line
                             </button>
                           </div>
