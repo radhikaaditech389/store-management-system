@@ -20,7 +20,7 @@ const CreateStore = () => {
   }, [id]);
 
   const [editingData, setEditingData] = useState(
-    location.state?.storeData || null
+    location.state?.storeData || null,
   );
 
   const fetchStore = async () => {
@@ -45,9 +45,16 @@ const CreateStore = () => {
       .matches(/^[0-9]{10}$/, "Phone must be exactly 10 digits")
       .required("Phone number is required"),
     contact_person_name: Yup.string().required(
-      "Contact person name is required"
+      "Contact person name is required",
     ),
     gstin: Yup.string().required("GSTIN is required"),
+    username: Yup.string().required("Username is required"),
+    password: Yup.string()
+      .required("Password is required")
+      .min(6, "Password must be at least 6 characters"),
+    password_confirmation: Yup.string()
+      .required("Confirm password is required")
+      .oneOf([Yup.ref("password")], "Passwords must match"),
     logo: Yup.mixed().when([], {
       is: () => !isEdit,
       then: () =>
@@ -58,7 +65,7 @@ const CreateStore = () => {
             "The logo must be an image (jpeg, png, jpg)",
             (value) =>
               value &&
-              ["image/jpeg", "image/png", "image/jpg"].includes(value.type)
+              ["image/jpeg", "image/png", "image/jpg"].includes(value.type),
           ),
       otherwise: () => Yup.mixed().nullable(),
     }),
@@ -88,6 +95,8 @@ const CreateStore = () => {
       formData.append("contact_person_name", values.contact_person_name);
       formData.append("gstin", values.gstin);
       formData.append("tagline", values.tagline || "");
+      formData.append("username", values.username);
+      formData.append("password", values.password);
 
       if (values.logo instanceof File) {
         formData.append("logo", values.logo);
@@ -103,7 +112,7 @@ const CreateStore = () => {
             headers: {
               Authorization: `Bearer ${user_data?.token}`,
             },
-          }
+          },
         );
       } else {
         response = await axios.post(`${BASE_URL}/api/stores`, formData, {
@@ -371,7 +380,7 @@ const CreateStore = () => {
                               ? URL.createObjectURL(values.logo)
                               : `${process.env.REACT_APP_API_BASE_URL.replace(
                                   "/api",
-                                  ""
+                                  "",
                                 )}/storage/${values.logo}`
                           }
                           alt="Logo Preview"
@@ -379,6 +388,63 @@ const CreateStore = () => {
                           style={{ width: "310px", height: "110px" }} // smaller preview
                         />
                       )}
+                    </div>
+                  </fieldset>
+
+                  {/* username */}
+                  <fieldset className="name">
+                    <div className="body-title">
+                      Username <span className="tf-color-1">*</span>
+                    </div>
+                    <div className="field-wrapper">
+                      <Field
+                        type="text"
+                        name="username"
+                        placeholder="Enter username"
+                      />
+                      <ErrorMessage
+                        name="username"
+                        component="p"
+                        className="error-text"
+                      />
+                    </div>
+                  </fieldset>
+
+                  {/* password */}
+                  <fieldset className="name">
+                    <div className="body-title">
+                      Password <span className="tf-color-1">*</span>
+                    </div>
+                    <div className="field-wrapper">
+                      <Field
+                        type="text"
+                        name="password"
+                        placeholder="Enter password"
+                      />
+                      <ErrorMessage
+                        name="password"
+                        component="p"
+                        className="error-text"
+                      />
+                    </div>
+                  </fieldset>
+
+                  {/* confirm-password */}
+                  <fieldset className="name">
+                    <div className="body-title">
+                      Confirm Password <span className="tf-color-1">*</span>
+                    </div>
+                    <div className="field-wrapper">
+                      <Field
+                        type="text"
+                        name="password_confirmation"
+                        placeholder="Re-enter password"
+                      />
+                      <ErrorMessage
+                        name="password_confirmation"
+                        component="p"
+                        className="error-text"
+                      />
                     </div>
                   </fieldset>
 
@@ -394,8 +460,8 @@ const CreateStore = () => {
                           ? "Updating..."
                           : "Creating..."
                         : editingData
-                        ? "Update"
-                        : "Save"}
+                          ? "Update"
+                          : "Save"}
                     </button>
                   </div>
                 </Form>
