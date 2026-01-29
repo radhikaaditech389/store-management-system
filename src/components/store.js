@@ -21,11 +21,11 @@ const Store = () => {
       storeData: row,
     });
   };
+
   const handleDeleteConfirm = (id) => {
-    if (window.confirm("Are you sure you want to delete this store?")) {
-      handleDelete(id);
-    }
+    handleDelete(id);
   };
+  
   const handleDelete = (id) => {
     Swal.fire({
       title: "Are you sure?",
@@ -45,13 +45,13 @@ const Store = () => {
           });
 
           toast.success(
-            response.data?.message || "Store deleted successfully!"
+            response.data?.message || "Store deleted successfully!",
           );
 
           fetchStore();
         } catch (error) {
           toast.error(
-            error.response?.data?.message || "Failed to delete the store."
+            error.response?.data?.message || "Failed to delete the store.",
           );
         }
       }
